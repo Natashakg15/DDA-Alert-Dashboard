@@ -4,81 +4,279 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDA Daily BI Checks — 2026-06-10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+  /* ── Spot CI 2025 — THERMOLINE ── */
   :root {
-    --green: #22c55e; --green-bg: #f0fdf4; --green-border: #bbf7d0;
-    --red: #ef4444; --red-bg: #fef2f2; --red-border: #fecaca;
-    --amber: #f59e0b; --amber-bg: #fffbeb; --amber-border: #fde68a;
-    --manual: #6366f1; --manual-bg: #eef2ff; --manual-border: #c7d2fe;
-    --pending: #d97706; --pending-bg: #fffbeb; --pending-border: #fde68a;
-    --error: #dc2626; --error-bg: #fff1f2; --error-border: #fecdd3;
-    --gray: #6b7280; --gray-bg: #f9fafb; --card-radius: 10px;
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --inkcore:    #0e0e0e;
+    --zero-white: #ffffff;
+    --hypermint:  #13f460;
+    --sonic-blue: #2d40e9;
+    --ultraviolet:#52bec0;
+    --highvolt:   #f44610;
+
+    /* semantic mappings */
+    --pass:       var(--hypermint);
+    --pass-text:  #0a3d1f;
+    --fail:       var(--highvolt);
+    --fail-text:  #fff;
+    --warn:       #f5c400;
+    --warn-text:  #3d2f00;
+    --pending:    var(--ultraviolet);
+    --pending-text: #0c2e2e;
+    --manual:     var(--sonic-blue);
+    --manual-text:#fff;
+    --error:      var(--highvolt);
+
+    --card-radius: 8px;
+    --font-header: 'At Hauss Std Retina', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-body:   'Helvetica Now', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font); background: #f1f5f9; color: #1e293b; padding: 24px; }
-  header { background: #1e293b; color: white; border-radius: var(--card-radius); padding: 24px 32px; margin-bottom: 24px; }
-  header h1 { font-size: 1.6rem; font-weight: 700; }
-  header .meta { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
-  .overall { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px;
-    padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 1rem; }
-  .overall.green { background: var(--green-bg); color: #15803d; border: 1.5px solid var(--green-border); }
-  .overall.red { background: var(--red-bg); color: #b91c1c; border: 1.5px solid var(--red-border); }
-  .overall.amber { background: var(--amber-bg); color: #92400e; border: 1.5px solid var(--amber-border); }
-  .summary-bar { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .summary-pill { padding: 8px 18px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
-  .summary-pill.green { background: var(--green-bg); color: #15803d; border: 1px solid var(--green-border); }
-  .summary-pill.red { background: var(--red-bg); color: #b91c1c; border: 1px solid var(--red-border); }
-  .summary-pill.amber { background: var(--amber-bg); color: #92400e; border: 1px solid var(--amber-border); }
-  .summary-pill.gray { background: var(--gray-bg); color: #374151; border: 1px solid #e5e7eb; }
-  .summary-pill.pending { background: var(--pending-bg); color: #92400e; border: 1px solid var(--pending-border); }
-  h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-    color: #64748b; margin: 28px 0 12px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
-  .card { border-radius: var(--card-radius); border: 1.5px solid #e2e8f0; background: white;
-    overflow: hidden; transition: box-shadow 0.15s; }
-  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
-  .card.red { border-color: var(--red-border); background: var(--red-bg); }
-  .card.amber { border-color: var(--amber-border); background: var(--amber-bg); }
-  .card.green { border-color: var(--green-border); background: var(--green-bg); }
-  .card.manual { border-color: var(--manual-border); background: var(--manual-bg); }
-  .card.pending { border-color: var(--pending-border); background: var(--pending-bg); }
-  .card.error { border-color: var(--error-border); background: var(--error-bg); }
-  .card-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px;
-    border-bottom: 1px solid rgba(0,0,0,0.06); }
-  .card-title { font-weight: 600; font-size: 0.95rem; }
-  .card-body { padding: 14px 16px; font-size: 0.85rem; }
-  .badge { padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
-  .badge.green { background: var(--green); color: white; }
-  .badge.red { background: var(--red); color: white; }
-  .badge.amber { background: var(--amber); color: white; }
-  .badge.manual { background: var(--manual); color: white; }
-  .badge.pending { background: var(--pending); color: white; }
-  .badge.error { background: var(--error); color: white; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--inkcore);
+    color: var(--zero-white);
+    padding: 32px 28px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  header h1 {
+    font-family: var(--font-header);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--zero-white);
+  }
+  header h1 span { color: var(--hypermint); }
+  header .meta {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .overall {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .overall.green  { background: var(--hypermint); color: var(--pass-text); }
+  .overall.red    { background: var(--highvolt);  color: var(--zero-white); }
+  .overall.amber  { background: var(--warn);      color: var(--warn-text); }
+  .overall-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+
+  /* ── SUMMARY PILLS ── */
+  .summary-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .summary-pill {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .summary-pill.green   { background: rgba(19,244,96,0.12);  color: var(--hypermint);  border-color: rgba(19,244,96,0.25); }
+  .summary-pill.red     { background: rgba(244,70,16,0.12);  color: #ff7d5c;           border-color: rgba(244,70,16,0.3); }
+  .summary-pill.amber   { background: rgba(245,196,0,0.12);  color: #f5c400;           border-color: rgba(245,196,0,0.25); }
+  .summary-pill.gray    { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }
+  .summary-pill.pending { background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }
+
+  /* ── SECTION HEADINGS ── */
+  h2 {
+    font-family: var(--font-header);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.3);
+    margin: 32px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    overflow: hidden;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }
+
+  .card.green  { border-color: rgba(19,244,96,0.3);  background: rgba(19,244,96,0.05); }
+  .card.red    { border-color: rgba(244,70,16,0.4);  background: rgba(244,70,16,0.06); }
+  .card.amber  { border-color: rgba(245,196,0,0.3);  background: rgba(245,196,0,0.05); }
+  .card.pending { border-color: rgba(82,190,192,0.3); background: rgba(82,190,192,0.05); }
+  .card.manual { border-color: rgba(45,64,233,0.4);  background: rgba(45,64,233,0.06); }
+  .card.error  { border-color: rgba(244,70,16,0.5);  background: rgba(244,70,16,0.08); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .card-title {
+    font-family: var(--font-header);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--zero-white);
+    letter-spacing: 0.01em;
+  }
+  .card-body {
+    padding: 14px 16px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+    font-family: var(--font-header);
+  }
+  .badge.green   { background: var(--hypermint);  color: var(--pass-text); }
+  .badge.red     { background: var(--highvolt);   color: var(--zero-white); }
+  .badge.amber   { background: var(--warn);       color: var(--warn-text); }
+  .badge.manual  { background: var(--sonic-blue); color: var(--zero-white); }
+  .badge.pending { background: var(--ultraviolet);color: var(--inkcore); }
+  .badge.error   { background: var(--highvolt);   color: var(--zero-white); }
+
+  /* ── KV TABLE ── */
   table.kv { width: 100%; border-collapse: collapse; margin-top: 8px; }
-  table.kv td { padding: 4px 6px; vertical-align: top; }
-  table.kv td.key { color: var(--gray); white-space: nowrap; padding-right: 12px; font-size: 0.8rem; }
-  table.detail { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
-  table.detail th { background: #f1f5f9; padding: 5px 8px; text-align: left; font-weight: 600; }
-  table.detail td { padding: 5px 8px; border-top: 1px solid #f1f5f9; }
-  table.detail tr.row-red td { background: #fff5f5; }
-  ul.flags { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
-  ul.flags li { background: rgba(239,68,68,0.08); border-left: 3px solid var(--red);
-    padding: 6px 10px; border-radius: 4px; color: #7f1d1d; font-size: 0.82rem; }
-  .note { color: var(--manual); font-style: italic; margin-bottom: 6px; }
-  .error-msg { color: var(--error); font-weight: 600; margin-bottom: 6px; }
-  footer { margin-top: 40px; text-align: center; font-size: 0.78rem; color: #94a3b8; }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  table.kv td { padding: 5px 6px; vertical-align: top; }
+  table.kv td.key {
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+    padding-right: 16px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  table.kv td strong { color: var(--zero-white); font-weight: 600; }
+
+  /* ── DETAIL TABLE ── */
+  table.detail { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; }
+  table.detail th {
+    background: rgba(255,255,255,0.06);
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.5);
+  }
+  table.detail td { padding: 6px 8px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.75); }
+  table.detail tr.row-red td { background: rgba(244,70,16,0.08); }
+
+  /* ── FLAGS ── */
+  ul.flags { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  ul.flags li {
+    background: rgba(244,70,16,0.1);
+    border-left: 3px solid var(--highvolt);
+    padding: 7px 12px;
+    border-radius: 3px;
+    color: #ffb8a0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .note { color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }
+  .error-msg { color: #ff7d5c; font-weight: 600; margin-bottom: 6px; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .footer-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--hypermint);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 20px 16px; }
+    header h1 { font-size: 1.5rem; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>DDA Daily BI Checks</h1>
-  <div class="meta">Run: 2026-06-10 â€” Generated via Snowflake MCP &nbsp;|&nbsp; Date: 2026-06-10 &nbsp;|&nbsp; Auto-generated by GitHub Actions</div>
-  <div class="overall red">
-    ✗ &nbsp; FAILURES DETECTED
+  <div class="header-top">
+    <div>
+      <h1>DDA <span>Daily BI</span> Checks</h1>
+      <div class="meta">Run: 2026-06-10 â€” Generated via Snowflake MCP &nbsp;·&nbsp; 2026-06-10 &nbsp;·&nbsp; Snowflake MCP</div>
+    </div>
+    <div class="overall red">
+      <span class="overall-dot"></span>
+      FAILURES DETECTED
+    </div>
   </div>
 </header>
 
@@ -86,11 +284,11 @@
   <span class="summary-pill green">3 Passed</span>
   <span class="summary-pill red">1 Failed</span>
   <span class="summary-pill amber">0 Warnings</span>
-  <span class="summary-pill gray">3 Manual checks</span>
-  <span class="summary-pill pending">3 Pending MCP access</span>
+  <span class="summary-pill pending">3 Pending</span>
+  <span class="summary-pill gray">3 Manual</span>
 </div>
 
-<h2>Automated Checks (Snowflake)</h2>
+<h2>Automated Checks — Snowflake</h2>
 <div class="grid">
   
     <div class="card green">
@@ -157,7 +355,7 @@
     
 </div>
 
-<h2>Manual Checks (Telco / Dashboards)</h2>
+<h2>Manual Checks — Telco / Dashboards</h2>
 <div class="grid">
   
     <div class="card manual">
@@ -187,8 +385,8 @@
 </div>
 
 <footer>
-  Uconnect DDA Dashboard &mdash; refreshed daily via GitHub Actions &mdash;
-  Data source: Snowflake UCONNECT_DW
+  <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
+  <span>Refreshed daily 07:00 SAST &mdash; Claude MCP</span>
 </footer>
 
 </body>
