@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDA Daily BI Checks — 2026-06-10</title>
+<style>
+  :root {
+    --green: #22c55e; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+    --red: #ef4444; --red-bg: #fef2f2; --red-border: #fecaca;
+    --amber: #f59e0b; --amber-bg: #fffbeb; --amber-border: #fde68a;
+    --manual: #6366f1; --manual-bg: #eef2ff; --manual-border: #c7d2fe;
+    --pending: #d97706; --pending-bg: #fffbeb; --pending-border: #fde68a;
+    --error: #dc2626; --error-bg: #fff1f2; --error-border: #fecdd3;
+    --gray: #6b7280; --gray-bg: #f9fafb; --card-radius: 10px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: #f1f5f9; color: #1e293b; padding: 24px; }
+  header { background: #1e293b; color: white; border-radius: var(--card-radius); padding: 24px 32px; margin-bottom: 24px; }
+  header h1 { font-size: 1.6rem; font-weight: 700; }
+  header .meta { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+  .overall { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px;
+    padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 1rem; }
+  .overall.green { background: var(--green-bg); color: #15803d; border: 1.5px solid var(--green-border); }
+  .overall.red { background: var(--red-bg); color: #b91c1c; border: 1.5px solid var(--red-border); }
+  .overall.amber { background: var(--amber-bg); color: #92400e; border: 1.5px solid var(--amber-border); }
+  .summary-bar { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .summary-pill { padding: 8px 18px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
+  .summary-pill.green { background: var(--green-bg); color: #15803d; border: 1px solid var(--green-border); }
+  .summary-pill.red { background: var(--red-bg); color: #b91c1c; border: 1px solid var(--red-border); }
+  .summary-pill.amber { background: var(--amber-bg); color: #92400e; border: 1px solid var(--amber-border); }
+  .summary-pill.gray { background: var(--gray-bg); color: #374151; border: 1px solid #e5e7eb; }
+  .summary-pill.pending { background: var(--pending-bg); color: #92400e; border: 1px solid var(--pending-border); }
+  h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; margin: 28px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
+  .card { border-radius: var(--card-radius); border: 1.5px solid #e2e8f0; background: white;
+    overflow: hidden; transition: box-shadow 0.15s; }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .card.red { border-color: var(--red-border); background: var(--red-bg); }
+  .card.amber { border-color: var(--amber-border); background: var(--amber-bg); }
+  .card.green { border-color: var(--green-border); background: var(--green-bg); }
+  .card.manual { border-color: var(--manual-border); background: var(--manual-bg); }
+  .card.pending { border-color: var(--pending-border); background: var(--pending-bg); }
+  .card.error { border-color: var(--error-border); background: var(--error-bg); }
+  .card-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .card-title { font-weight: 600; font-size: 0.95rem; }
+  .card-body { padding: 14px 16px; font-size: 0.85rem; }
+  .badge { padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
+  .badge.green { background: var(--green); color: white; }
+  .badge.red { background: var(--red); color: white; }
+  .badge.amber { background: var(--amber); color: white; }
+  .badge.manual { background: var(--manual); color: white; }
+  .badge.pending { background: var(--pending); color: white; }
+  .badge.error { background: var(--error); color: white; }
+  table.kv { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.kv td { padding: 4px 6px; vertical-align: top; }
+  table.kv td.key { color: var(--gray); white-space: nowrap; padding-right: 12px; font-size: 0.8rem; }
+  table.detail { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
+  table.detail th { background: #f1f5f9; padding: 5px 8px; text-align: left; font-weight: 600; }
+  table.detail td { padding: 5px 8px; border-top: 1px solid #f1f5f9; }
+  table.detail tr.row-red td { background: #fff5f5; }
+  ul.flags { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  ul.flags li { background: rgba(239,68,68,0.08); border-left: 3px solid var(--red);
+    padding: 6px 10px; border-radius: 4px; color: #7f1d1d; font-size: 0.82rem; }
+  .note { color: var(--manual); font-style: italic; margin-bottom: 6px; }
+  .error-msg { color: var(--error); font-weight: 600; margin-bottom: 6px; }
+  footer { margin-top: 40px; text-align: center; font-size: 0.78rem; color: #94a3b8; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DDA Daily BI Checks</h1>
+  <div class="meta">Run: 2026-06-10 Generated via Snowflake MCP &nbsp;|&nbsp; Date: 2026-06-10 &nbsp;|&nbsp; Auto-generated by GitHub Actions</div>
+  <div class="overall red">
+    ✗ &nbsp; FAILURES DETECTED
+  </div>
+</header>
+
+<div class="summary-bar">
+  <span class="summary-pill green">1 Passed</span>
+  <span class="summary-pill red">3 Failed</span>
+  <span class="summary-pill amber">0 Warnings</span>
+  <span class="summary-pill gray">3 Manual checks</span>
+  <span class="summary-pill pending">3 Pending MCP access</span>
+</div>
+
+<h2>Automated Checks (Snowflake)</h2>
+<div class="grid">
+  
+    <div class="card red">
+        <div class="card-header">
+            <span class="badge red">FAIL</span>
+            <span class="card-title">Cell C Recharges</span>
+        </div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>today_count</td><td><strong>29</strong></td></tr><tr><td class='key'>yesterday_count</td><td><strong>16,783</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>17,114</strong></td></tr><tr><td class='key'>today_revenue_sum</td><td><strong>40</strong></td></tr></table><ul class="flags"><li>Today (29) is 99.8% less than yesterday (16,783) â€” exceeds 60% drop threshold</li><li>Today (29) is 99.8% less than same day last month (17,114) â€” exceeds 20% drop threshold</li><li>Note: figures may reflect a partial day if run before end of business</li></ul></div>
+    </div>
+    
+    <div class="card red">
+        <div class="card-header">
+            <span class="badge red">FAIL</span>
+            <span class="card-title">Active 1</span>
+        </div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>today_count</td><td><strong>25</strong></td></tr><tr><td class='key'>yesterday_count</td><td><strong>1,925</strong></td></tr></table><ul class="flags"><li>Active 1 today (25) is 98.7% less than yesterday (1,925) â€” exceeds 60% drop threshold</li><li>Note: figures may reflect a partial day if run before end of business</li></ul></div>
+    </div>
+    
+    <div class="card green">
+        <div class="card-header">
+            <span class="badge green">PASS</span>
+            <span class="card-title">DIM Subscriber Alignment</span>
+        </div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>DIM_SUBSCRIBERS_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>MERGE_TABLE_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>ACTIVE_SUBSCRIPTIONS_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_today</td><td><strong>25</strong></td></tr><tr><td class='key'>MERGE_TABLE_today</td><td><strong>25</strong></td></tr><tr><td class='key'>ACTIVE_SUBSCRIPTIONS_today</td><td><strong>25</strong></td></tr><tr><td class='key'>spread_yesterday</td><td><strong>0</strong></td></tr><tr><td class='key'>spread_today</td><td><strong>0</strong></td></tr></table></div>
+    </div>
+    
+    <div class="card red">
+        <div class="card-header">
+            <span class="badge red">FAIL</span>
+            <span class="card-title">Terminations (>60 day usage)</span>
+        </div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>29,821</strong></td></tr></table><ul class="flags"><li>SIMs with usage >60 days ago: 29,821 â€” significantly exceeds 3,000 threshold</li></ul></div>
+    </div>
+    
+  
+</div>
+
+<h2>Pending MCP Access</h2>
+<div class="grid">
+  
+    <div class="card pending">
+        <div class="card-header">
+            <span class="badge pending">PENDING</span>
+            <span class="card-title">Wholesale Usage</span>
+        </div>
+        <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE</p></div>
+    </div>
+    
+    <div class="card pending">
+        <div class="card-header">
+            <span class="badge pending">PENDING</span>
+            <span class="card-title">SmartConnect vs Datawarehouse</span>
+        </div>
+        <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT</p></div>
+    </div>
+    
+    <div class="card pending">
+        <div class="card-header">
+            <span class="badge pending">PENDING</span>
+            <span class="card-title">CDRs (Wholesale)</span>
+        </div>
+        <div class="card-body"><p class="note">Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON</p></div>
+    </div>
+    
+</div>
+
+<h2>Manual Checks (Telco / Dashboards)</h2>
+<div class="grid">
+  
+    <div class="card manual">
+        <div class="card-header">
+            <span class="badge manual">MANUAL</span>
+            <span class="card-title">Cell C Recharges â€” Telco Dashboard Alignment</span>
+        </div>
+        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard â€” App, V Redemptions & Subs</p></div>
+    </div>
+    
+    <div class="card manual">
+        <div class="card-header">
+            <span class="badge manual">MANUAL</span>
+            <span class="card-title">Wholesale Usage â€” Telco Dashboard</span>
+        </div>
+        <div class="card-body"><p class="note">Cross-check usage totals on Telco dashboard</p></div>
+    </div>
+    
+    <div class="card manual">
+        <div class="card-header">
+            <span class="badge manual">MANUAL</span>
+            <span class="card-title">CDR PowerBI Dashboard</span>
+        </div>
+        <div class="card-body"><p class="note">Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2</p></div>
+    </div>
+    
+</div>
+
+<footer>
+  Uconnect DDA Dashboard &mdash; refreshed daily via GitHub Actions &mdash;
+  Data source: Snowflake UCONNECT_DW
+</footer>
+
+</body>
+</html>

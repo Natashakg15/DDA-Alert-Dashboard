@@ -1,0 +1,99 @@
+{
+  "run_date": "2026-06-10",
+  "run_time": "2026-06-10 Generated via Snowflake MCP",
+  "automated": [
+    {
+      "check": "Cell C Recharges",
+      "status": "red",
+      "values": {
+        "today_count": 29,
+        "yesterday_count": 16783,
+        "same_day_last_month_count": 17114,
+        "today_revenue_sum": 40
+      },
+      "flags": [
+        "Today (29) is 99.8% less than yesterday (16,783) — exceeds 60% drop threshold",
+        "Today (29) is 99.8% less than same day last month (17,114) — exceeds 20% drop threshold",
+        "Note: figures may reflect a partial day if run before end of business"
+      ]
+    },
+    {
+      "check": "Active 1",
+      "status": "red",
+      "values": {
+        "today_count": 25,
+        "yesterday_count": 1925
+      },
+      "flags": [
+        "Active 1 today (25) is 98.7% less than yesterday (1,925) — exceeds 60% drop threshold",
+        "Note: figures may reflect a partial day if run before end of business"
+      ]
+    },
+    {
+      "check": "DIM Subscriber Alignment",
+      "status": "green",
+      "values": {
+        "DIM_SUBSCRIBERS_yesterday": 1925,
+        "MERGE_TABLE_yesterday": 1925,
+        "ACTIVE_SUBSCRIPTIONS_yesterday": 1925,
+        "DIM_SUBSCRIBERS_today": 25,
+        "MERGE_TABLE_today": 25,
+        "ACTIVE_SUBSCRIPTIONS_today": 25,
+        "spread_yesterday": 0,
+        "spread_today": 0
+      },
+      "flags": []
+    },
+    {
+      "check": "Terminations (>60 day usage)",
+      "status": "red",
+      "values": {
+        "sims_over_60_days": 29821
+      },
+      "flags": [
+        "SIMs with usage >60 days ago: 29,821 — significantly exceeds 3,000 threshold"
+      ]
+    }
+  ],
+  "pending": [
+    {
+      "check": "Wholesale Usage",
+      "status": "pending",
+      "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE",
+      "flags": []
+    },
+    {
+      "check": "SmartConnect vs Datawarehouse",
+      "status": "pending",
+      "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT",
+      "flags": []
+    },
+    {
+      "check": "CDRs (Wholesale)",
+      "status": "pending",
+      "note": "Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON",
+      "flags": []
+    }
+  ],
+  "manual": [
+    {
+      "check": "Cell C Recharges — Telco Dashboard Alignment",
+      "status": "manual",
+      "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs",
+      "flags": []
+    },
+    {
+      "check": "Wholesale Usage — Telco Dashboard",
+      "status": "manual",
+      "note": "Cross-check usage totals on Telco dashboard",
+      "flags": []
+    },
+    {
+      "check": "CDR PowerBI Dashboard",
+      "status": "manual",
+      "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2",
+      "flags": []
+    }
+  ],
+  "errors": []
+}

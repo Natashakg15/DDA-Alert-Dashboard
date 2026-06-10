@@ -20,6 +20,8 @@ def status_badge(status):
         return '<span class="badge amber">WARN</span>'
     elif status == "manual":
         return '<span class="badge manual">MANUAL</span>'
+    elif status == "pending":
+        return '<span class="badge pending">PENDING</span>'
     elif status == "error":
         return '<span class="badge error">ERROR</span>'
     return '<span class="badge">UNKNOWN</span>'
@@ -104,6 +106,7 @@ def build_html(data):
     run_date = data.get("run_date", "unknown")
     run_time = data.get("run_time", "unknown")
     automated = data.get("automated", [])
+    pending = data.get("pending", [])
     manual = data.get("manual", [])
     errors = data.get("errors", [])
 
@@ -117,6 +120,7 @@ def build_html(data):
 
     auto_cards = "".join(render_check_card(c) for c in automated)
     error_cards = "".join(render_check_card({**c, "status": "error"}) for c in errors)
+    pending_cards = "".join(render_check_card(c) for c in pending)
     manual_cards = "".join(render_check_card(c) for c in manual)
 
     return f"""<!DOCTYPE html>
@@ -131,6 +135,7 @@ def build_html(data):
     --red: #ef4444; --red-bg: #fef2f2; --red-border: #fecaca;
     --amber: #f59e0b; --amber-bg: #fffbeb; --amber-border: #fde68a;
     --manual: #6366f1; --manual-bg: #eef2ff; --manual-border: #c7d2fe;
+    --pending: #d97706; --pending-bg: #fffbeb; --pending-border: #fde68a;
     --error: #dc2626; --error-bg: #fff1f2; --error-border: #fecdd3;
     --gray: #6b7280; --gray-bg: #f9fafb; --card-radius: 10px;
     --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -151,6 +156,7 @@ def build_html(data):
   .summary-pill.red {{ background: var(--red-bg); color: #b91c1c; border: 1px solid var(--red-border); }}
   .summary-pill.amber {{ background: var(--amber-bg); color: #92400e; border: 1px solid var(--amber-border); }}
   .summary-pill.gray {{ background: var(--gray-bg); color: #374151; border: 1px solid #e5e7eb; }}
+  .summary-pill.pending {{ background: var(--pending-bg); color: #92400e; border: 1px solid var(--pending-border); }}
   h2 {{ font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
     color: #64748b; margin: 28px 0 12px; }}
   .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }}
@@ -161,6 +167,7 @@ def build_html(data):
   .card.amber {{ border-color: var(--amber-border); background: var(--amber-bg); }}
   .card.green {{ border-color: var(--green-border); background: var(--green-bg); }}
   .card.manual {{ border-color: var(--manual-border); background: var(--manual-bg); }}
+  .card.pending {{ border-color: var(--pending-border); background: var(--pending-bg); }}
   .card.error {{ border-color: var(--error-border); background: var(--error-bg); }}
   .card-header {{ display: flex; align-items: center; gap: 10px; padding: 14px 16px;
     border-bottom: 1px solid rgba(0,0,0,0.06); }}
@@ -172,6 +179,7 @@ def build_html(data):
   .badge.red {{ background: var(--red); color: white; }}
   .badge.amber {{ background: var(--amber); color: white; }}
   .badge.manual {{ background: var(--manual); color: white; }}
+  .badge.pending {{ background: var(--pending); color: white; }}
   .badge.error {{ background: var(--error); color: white; }}
   table.kv {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
   table.kv td {{ padding: 4px 6px; vertical-align: top; }}
@@ -204,12 +212,18 @@ def build_html(data):
   <span class="summary-pill red">{fails} Failed</span>
   <span class="summary-pill amber">{warns} Warnings</span>
   <span class="summary-pill gray">{len(manual)} Manual checks</span>
+  <span class="summary-pill pending">{len(pending)} Pending MCP access</span>
 </div>
 
 <h2>Automated Checks (Snowflake)</h2>
 <div class="grid">
   {auto_cards}
   {error_cards}
+</div>
+
+<h2>Pending MCP Access</h2>
+<div class="grid">
+  {pending_cards}
 </div>
 
 <h2>Manual Checks (Telco / Dashboards)</h2>
