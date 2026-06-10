@@ -41,10 +41,14 @@ def rows(cur, sql, params=None):
 # Individual check helpers
 # ---------------------------------------------------------------------------
 
+# Always compare completed days — never use today (incomplete)
+# "current" = yesterday (last completed day)
+# "previous" = day before yesterday
 TODAY = date.today()
-YESTERDAY = TODAY - timedelta(days=1)
-TWO_DAYS_AGO = TODAY - timedelta(days=2)
-SAME_DAY_LAST_MONTH = TODAY.replace(day=TODAY.day) - timedelta(days=30)
+CURRENT_DAY = TODAY - timedelta(days=1)       # yesterday — last completed day
+PREVIOUS_DAY = TODAY - timedelta(days=2)      # day before — comparison baseline
+CDR_CHECK_DATE = TODAY - timedelta(days=2)    # CDR recon checked 2 days back
+SAME_DAY_LAST_MONTH = CURRENT_DAY - timedelta(days=30)
 
 
 def check_cell_c_recharges(cur):

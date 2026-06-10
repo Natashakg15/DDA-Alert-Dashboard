@@ -1,33 +1,30 @@
 {
   "run_date": "2026-06-10",
-  "run_time": "2026-06-10 Generated via Snowflake MCP",
+  "run_time": "2026-06-10 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-06-09) vs day before (2026-06-08). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "today_count": 29,
         "yesterday_count": 16783,
-        "same_day_last_month_count": 17114,
-        "today_revenue_sum": 40
+        "day_before_count": 18101,
+        "same_day_last_month_count": 16191,
+        "yesterday_revenue_sum": 17019,
+        "pct_vs_day_before": "92.7% (down 7.3%)",
+        "pct_vs_same_day_last_month": "103.7% (up 3.7%)"
       },
-      "flags": [
-        "Today (29) is 99.8% less than yesterday (16,783) — exceeds 60% drop threshold",
-        "Today (29) is 99.8% less than same day last month (17,114) — exceeds 20% drop threshold",
-        "Note: figures may reflect a partial day if run before end of business"
-      ]
+      "flags": []
     },
     {
       "check": "Active 1",
-      "status": "red",
+      "status": "green",
       "values": {
-        "today_count": 25,
-        "yesterday_count": 1925
+        "yesterday_count": 1925,
+        "day_before_count": 1765,
+        "pct_vs_day_before": "109.1% (up 9.1%)"
       },
-      "flags": [
-        "Active 1 today (25) is 98.7% less than yesterday (1,925) — exceeds 60% drop threshold",
-        "Note: figures may reflect a partial day if run before end of business"
-      ]
+      "flags": []
     },
     {
       "check": "DIM Subscriber Alignment",
@@ -36,11 +33,10 @@
         "DIM_SUBSCRIBERS_yesterday": 1925,
         "MERGE_TABLE_yesterday": 1925,
         "ACTIVE_SUBSCRIPTIONS_yesterday": 1925,
-        "DIM_SUBSCRIBERS_today": 25,
-        "MERGE_TABLE_today": 25,
-        "ACTIVE_SUBSCRIPTIONS_today": 25,
         "spread_yesterday": 0,
-        "spread_today": 0
+        "DIM_SUBSCRIBERS_day_before": 1765,
+        "MERGE_TABLE_day_before": 1765,
+        "spread_day_before": 0
       },
       "flags": []
     },
@@ -48,10 +44,11 @@
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "sims_over_60_days": 29821
+        "sims_over_60_days": 29821,
+        "threshold": 3000
       },
       "flags": [
-        "SIMs with usage >60 days ago: 29,821 — significantly exceeds 3,000 threshold"
+        "29,821 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
       ]
     }
   ],
