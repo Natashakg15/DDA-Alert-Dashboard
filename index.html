@@ -17,7 +17,6 @@
     --ultraviolet:#52bec0;
     --highvolt:   #f44610;
 
-    /* semantic mappings */
     --pass:       var(--hypermint);
     --pass-text:  #0a3d1f;
     --fail:       var(--highvolt);
@@ -45,7 +44,6 @@
     min-height: 100vh;
   }
 
-  /* ── HEADER ── */
   header {
     display: flex;
     flex-direction: column;
@@ -94,7 +92,6 @@
   .overall.amber  { background: var(--warn);      color: var(--warn-text); }
   .overall-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }
 
-  /* ── SUMMARY PILLS ── */
   .summary-bar {
     display: flex;
     gap: 10px;
@@ -116,7 +113,6 @@
   .summary-pill.gray    { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }
   .summary-pill.pending { background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }
 
-  /* ── SECTION HEADINGS ── */
   h2 {
     font-family: var(--font-header);
     font-size: 0.72rem;
@@ -129,14 +125,12 @@
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
-  /* ── GRID ── */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 14px;
   }
 
-  /* ── CARDS ── */
   .card {
     border-radius: var(--card-radius);
     border: 1px solid rgba(255,255,255,0.08);
@@ -173,7 +167,6 @@
     color: rgba(255,255,255,0.75);
   }
 
-  /* ── BADGES ── */
   .badge {
     padding: 3px 10px;
     border-radius: 3px;
@@ -191,7 +184,6 @@
   .badge.pending { background: var(--ultraviolet);color: var(--inkcore); }
   .badge.error   { background: var(--highvolt);   color: var(--zero-white); }
 
-  /* ── KV TABLE ── */
   table.kv { width: 100%; border-collapse: collapse; margin-top: 8px; }
   table.kv td { padding: 5px 6px; vertical-align: top; }
   table.kv td.key {
@@ -204,22 +196,6 @@
   }
   table.kv td strong { color: var(--zero-white); font-weight: 600; }
 
-  /* ── DETAIL TABLE ── */
-  table.detail { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; }
-  table.detail th {
-    background: rgba(255,255,255,0.06);
-    padding: 6px 8px;
-    text-align: left;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.5);
-  }
-  table.detail td { padding: 6px 8px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.75); }
-  table.detail tr.row-red td { background: rgba(244,70,16,0.08); }
-
-  /* ── FLAGS ── */
   ul.flags { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
   ul.flags li {
     background: rgba(244,70,16,0.1);
@@ -232,9 +208,7 @@
   }
 
   .note { color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }
-  .error-msg { color: #ff7d5c; font-weight: 600; margin-bottom: 6px; }
 
-  /* ── FOOTER ── */
   footer {
     margin-top: 48px;
     padding-top: 20px;
@@ -271,7 +245,7 @@
   <div class="header-top">
     <div>
       <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">Run: 2026-06-10 â€” Generated via Snowflake MCP &nbsp;·&nbsp; 2026-06-10 &nbsp;·&nbsp; Snowflake MCP</div>
+      <div class="meta">Run: 2026-06-11 â€” Generated via Snowflake MCP &nbsp;&middot;&nbsp; 2026-06-10 &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
     <div class="overall red">
       <span class="overall-dot"></span>
@@ -281,8 +255,8 @@
 </header>
 
 <div class="summary-bar">
-  <span class="summary-pill green">3 Passed</span>
-  <span class="summary-pill red">1 Failed</span>
+  <span class="summary-pill green">1 Passed</span>
+  <span class="summary-pill red">3 Failed</span>
   <span class="summary-pill amber">0 Warnings</span>
   <span class="summary-pill pending">3 Pending</span>
   <span class="summary-pill gray">3 Manual</span>
@@ -291,39 +265,37 @@
 <h2>Automated Checks — Snowflake</h2>
 <div class="grid">
   
-    <div class="card green">
+    <div class="card red">
         <div class="card-header">
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
             <span class="card-title">Cell C Recharges</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>16,783</strong></td></tr><tr><td class='key'>day_before_count</td><td><strong>18,101</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>16,191</strong></td></tr><tr><td class='key'>yesterday_revenue_sum</td><td><strong>17,019</strong></td></tr><tr><td class='key'>pct_vs_day_before</td><td><strong>92.7% (down 7.3%)</strong></td></tr><tr><td class='key'>pct_vs_same_day_last_month</td><td><strong>103.7% (up 3.7%)</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>29</strong></td></tr><tr><td class='key'>day_before_count</td><td><strong>16,783</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>16,191</strong></td></tr><tr><td class='key'>yesterday_revenue_sum</td><td><strong>497</strong></td></tr><tr><td class='key'>pct_vs_day_before</td><td><strong>0.2% (down 99.8%)</strong></td></tr><tr><td class='key'>pct_vs_same_day_last_month</td><td><strong>0.2% (down 99.8%)</strong></td></tr></table><ul class="flags"><li>Only 29 recharges on 2026-06-10 vs 16,783 the day before â€” 99.8% drop. Data may still be loading.</li></ul></div>
     </div>
-    
+  
     <div class="card green">
         <div class="card-header">
             <span class="badge green">PASS</span>
             <span class="card-title">Active 1</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>1,925</strong></td></tr><tr><td class='key'>day_before_count</td><td><strong>1,765</strong></td></tr><tr><td class='key'>pct_vs_day_before</td><td><strong>109.1% (up 9.1%)</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>sims_active_last_1_day</td><td><strong>142,879</strong></td></tr><tr><td class='key'>total_sims_in_view</td><td><strong>452,265</strong></td></tr><tr><td class='key'>note</td><td><strong>Snapshot view â€” no prior-day historical comparison available</strong></td></tr></table></div>
     </div>
-    
-    <div class="card green">
+  
+    <div class="card red">
         <div class="card-header">
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
             <span class="card-title">DIM Subscriber Alignment</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>DIM_SUBSCRIBERS_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>MERGE_TABLE_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>ACTIVE_SUBSCRIPTIONS_yesterday</td><td><strong>1,925</strong></td></tr><tr><td class='key'>spread_yesterday</td><td><strong>0</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_day_before</td><td><strong>1,765</strong></td></tr><tr><td class='key'>MERGE_TABLE_day_before</td><td><strong>1,765</strong></td></tr><tr><td class='key'>spread_day_before</td><td><strong>0</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>DIM_SUBSCRIBERS</td><td><strong>452,263</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE</td><td><strong>466,946</strong></td></tr><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS</td><td><strong>452,265</strong></td></tr><tr><td class='key'>spread</td><td><strong>14,683</strong></td></tr></table><ul class="flags"><li>Spread of 14,683 between UCONNECT_MAY_MERGE (466,946) and DIM_SUBSCRIBERS (452,263) â€” exceeds threshold of 15</li></ul></div>
     </div>
-    
+  
     <div class="card red">
         <div class="card-header">
             <span class="badge red">FAIL</span>
             <span class="card-title">Terminations (>60 day usage)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>29,821</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>29,821 SIMs with no usage in over 60 days â€” significantly exceeds the 3,000 threshold</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>29,779</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>29,779 SIMs with no usage in over 60 days â€” significantly exceeds the 3,000 threshold</li></ul></div>
     </div>
-    
-  
 </div>
 
 <h2>Pending MCP Access</h2>
@@ -336,7 +308,7 @@
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE</p></div>
     </div>
-    
+  
     <div class="card pending">
         <div class="card-header">
             <span class="badge pending">PENDING</span>
@@ -344,7 +316,7 @@
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT</p></div>
     </div>
-    
+  
     <div class="card pending">
         <div class="card-header">
             <span class="badge pending">PENDING</span>
@@ -352,7 +324,6 @@
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON</p></div>
     </div>
-    
 </div>
 
 <h2>Manual Checks — Telco / Dashboards</h2>
@@ -365,7 +336,7 @@
         </div>
         <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard â€” App, V Redemptions & Subs</p></div>
     </div>
-    
+  
     <div class="card manual">
         <div class="card-header">
             <span class="badge manual">MANUAL</span>
@@ -373,7 +344,7 @@
         </div>
         <div class="card-body"><p class="note">Cross-check usage totals on Telco dashboard</p></div>
     </div>
-    
+  
     <div class="card manual">
         <div class="card-header">
             <span class="badge manual">MANUAL</span>
@@ -381,12 +352,11 @@
         </div>
         <div class="card-body"><p class="note">Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2</p></div>
     </div>
-    
 </div>
 
 <footer>
   <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
-  <span>Refreshed daily 07:00 SAST &mdash; Claude MCP</span>
+  <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
 </footer>
 
 </body>
