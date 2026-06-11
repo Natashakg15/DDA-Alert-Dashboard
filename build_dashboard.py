@@ -1,129 +1,92 @@
-"""
-Reads results.json and renders dashboard.html.
-Run after checks.py has produced results.json.
-"""
-
 import json
-import sys
-from pathlib import Path
 
-RESULTS_FILE = Path("results.json")
-OUTPUT_FILE = Path("index.html")
+with open("results.json") as f:
+    data = json.load(f)
+
+automated = data.get("automated", [])
+pending   = data.get("pending",   [])
+manual    = data.get("manual",    [])
+errors    = data.get("errors",    [])
+
+passed   = sum(1 for c in automated if c["status"] == "green")
+failed   = sum(1 for c in automated if c["status"] == "red")
+warnings = sum(1 for c in automated if c["status"] == "amber")
+
+if failed:
+    overall_cls   = "red"
+    overall_label = "FAILURES DETECTED"
+elif warnings:
+    overall_cls   = "amber"
+    overall_label = "WARNINGS"
+else:
+    overall_cls   = "green"
+    overall_label = "ALL CHECKS PASSED"
+
+run_date = data.get("run_date", "")
+run_time = data.get("run_time", "")
 
 
-def status_badge(status):
-    if status == "green":
-        return '<span class="badge green">PASS</span>'
-    elif status == "red":
-        return '<span class="badge red">FAIL</span>'
-    elif status == "amber":
-        return '<span class="badge amber">WARN</span>'
-    elif status == "manual":
-        return '<span class="badge manual">MANUAL</span>'
-    elif status == "pending":
-        return '<span class="badge pending">PENDING</span>'
-    elif status == "error":
-        return '<span class="badge error">ERROR</span>'
-    return '<span class="badge">UNKNOWN</span>'
+def fmt(v):
+    if isinstance(v, int):
+        return f"{v:,}"
+    if isinstance(v, float):
+        return f"{v:,.2f}"
+    return str(v)
 
 
-def render_flags(flags):
+def kv_table(values: dict) -> str:
+    rows = "".join(
+        f"<tr><td class='key'>{k}</td><td><strong>{fmt(v)}</strong></td></tr>"
+        for k, v in values.items()
+    )
+    return f"<table class='kv'>{rows}</table>"
+
+
+def flag_list(flags: list) -> str:
     if not flags:
         return ""
     items = "".join(f"<li>{f}</li>" for f in flags)
     return f'<ul class="flags">{items}</ul>'
 
 
-def render_kv(d, indent=0):
-    if not d:
-        return ""
-    rows = []
-    for k, v in d.items():
-        if isinstance(v, list):
-            sub = render_list_of_dicts(v) if v and isinstance(v[0], dict) else f"<code>{v}</code>"
-            rows.append(f"<tr><td class='key'>{k}</td><td>{sub}</td></tr>")
-        elif isinstance(v, dict):
-            rows.append(f"<tr><td class='key'>{k}</td><td>{render_kv(v)}</td></tr>")
-        else:
-            display = f"{v:,}" if isinstance(v, (int, float)) and v is not None else v
-            rows.append(f"<tr><td class='key'>{k}</td><td><strong>{display}</strong></td></tr>")
-    return f"<table class='kv'>{''.join(rows)}</table>"
-
-
-def render_list_of_dicts(items):
-    if not items:
-        return ""
-    cols = list(items[0].keys())
-    header = "".join(f"<th>{c}</th>" for c in cols)
-    body_rows = []
-    for item in items:
-        row_status = item.get("status", "")
-        cls = f"row-{row_status}" if row_status else ""
-        cells = []
-        for c in cols:
-            val = item[c]
-            if c == "status":
-                cells.append(f"<td>{status_badge(val)}</td>")
-            elif c == "flags":
-                cells.append(f"<td>{render_flags(val)}</td>")
-            elif isinstance(val, (int, float)) and val is not None:
-                cells.append(f"<td>{val:,}</td>")
-            else:
-                cells.append(f"<td>{val}</td>")
-        body_rows.append(f"<tr class='{cls}'>{''.join(cells)}</tr>")
-    return f"<table class='detail'><thead><tr>{header}</tr></thead><tbody>{''.join(body_rows)}</tbody></table>"
-
-
-def render_check_card(check):
-    name = check.get("check", "Unknown")
-    status = check.get("status", "unknown")
-    flags = check.get("flags", [])
+def card(check: dict) -> str:
+    status = check.get("status", "green")
+    title  = check.get("check", "")
     values = check.get("values", {})
-    note = check.get("note", "")
-    error = check.get("error", "")
+    flags  = check.get("flags",  [])
+    note   = check.get("note",   "")
+
+    badge_label = {
+        "green":   "PASS",
+        "red":     "FAIL",
+        "amber":   "WARN",
+        "pending": "PENDING",
+        "manual":  "MANUAL",
+        "error":   "ERROR",
+    }.get(status, status.upper())
 
     body = ""
     if note:
         body += f'<p class="note">{note}</p>'
-    if error:
-        body += f'<p class="error-msg">Error: {error}</p>'
     if values:
-        body += render_kv(values)
-    body += render_flags(flags)
+        body += kv_table(values)
+    body += flag_list(flags)
 
     return f"""
     <div class="card {status}">
         <div class="card-header">
-            {status_badge(status)}
-            <span class="card-title">{name}</span>
+            <span class="badge {status}">{badge_label}</span>
+            <span class="card-title">{title}</span>
         </div>
         <div class="card-body">{body}</div>
-    </div>
-    """
+    </div>"""
 
 
-def build_html(data):
-    run_date = data.get("run_date", "unknown")
-    run_time = data.get("run_time", "unknown")
-    automated = data.get("automated", [])
-    pending = data.get("pending", [])
-    manual = data.get("manual", [])
-    errors = data.get("errors", [])
+auto_cards    = "\n  ".join(card(c) for c in automated)
+pending_cards = "\n  ".join(card(c) for c in pending)
+manual_cards  = "\n  ".join(card(c) for c in manual)
 
-    total = len(automated) + len(errors)
-    fails = sum(1 for c in automated if c.get("status") == "red") + len(errors)
-    warns = sum(1 for c in automated if c.get("status") == "amber")
-    passes = sum(1 for c in automated if c.get("status") == "green")
-
-    overall = "green" if fails == 0 and warns == 0 else ("amber" if fails == 0 else "red")
-    overall_label = "ALL CLEAR" if fails == 0 and warns == 0 else ("WARNINGS" if fails == 0 else "FAILURES DETECTED")
-
-    auto_cards = "".join(render_check_card(c) for c in automated)
-    error_cards = "".join(render_check_card({**c, "status": "error"}) for c in errors)
-    pending_cards = "".join(render_check_card(c) for c in pending)
-    manual_cards = "".join(render_check_card(c) for c in manual)
-
-    return f"""<!DOCTYPE html>
+html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -142,7 +105,6 @@ def build_html(data):
     --ultraviolet:#52bec0;
     --highvolt:   #f44610;
 
-    /* semantic mappings */
     --pass:       var(--hypermint);
     --pass-text:  #0a3d1f;
     --fail:       var(--highvolt);
@@ -170,7 +132,6 @@ def build_html(data):
     min-height: 100vh;
   }}
 
-  /* ── HEADER ── */
   header {{
     display: flex;
     flex-direction: column;
@@ -219,7 +180,6 @@ def build_html(data):
   .overall.amber  {{ background: var(--warn);      color: var(--warn-text); }}
   .overall-dot {{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }}
 
-  /* ── SUMMARY PILLS ── */
   .summary-bar {{
     display: flex;
     gap: 10px;
@@ -241,7 +201,6 @@ def build_html(data):
   .summary-pill.gray    {{ background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }}
   .summary-pill.pending {{ background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }}
 
-  /* ── SECTION HEADINGS ── */
   h2 {{
     font-family: var(--font-header);
     font-size: 0.72rem;
@@ -254,14 +213,12 @@ def build_html(data):
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }}
 
-  /* ── GRID ── */
   .grid {{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 14px;
   }}
 
-  /* ── CARDS ── */
   .card {{
     border-radius: var(--card-radius);
     border: 1px solid rgba(255,255,255,0.08);
@@ -298,7 +255,6 @@ def build_html(data):
     color: rgba(255,255,255,0.75);
   }}
 
-  /* ── BADGES ── */
   .badge {{
     padding: 3px 10px;
     border-radius: 3px;
@@ -316,7 +272,6 @@ def build_html(data):
   .badge.pending {{ background: var(--ultraviolet);color: var(--inkcore); }}
   .badge.error   {{ background: var(--highvolt);   color: var(--zero-white); }}
 
-  /* ── KV TABLE ── */
   table.kv {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
   table.kv td {{ padding: 5px 6px; vertical-align: top; }}
   table.kv td.key {{
@@ -329,22 +284,6 @@ def build_html(data):
   }}
   table.kv td strong {{ color: var(--zero-white); font-weight: 600; }}
 
-  /* ── DETAIL TABLE ── */
-  table.detail {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; }}
-  table.detail th {{
-    background: rgba(255,255,255,0.06);
-    padding: 6px 8px;
-    text-align: left;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.5);
-  }}
-  table.detail td {{ padding: 6px 8px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.75); }}
-  table.detail tr.row-red td {{ background: rgba(244,70,16,0.08); }}
-
-  /* ── FLAGS ── */
   ul.flags {{ list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }}
   ul.flags li {{
     background: rgba(244,70,16,0.1);
@@ -357,9 +296,7 @@ def build_html(data):
   }}
 
   .note {{ color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }}
-  .error-msg {{ color: #ff7d5c; font-weight: 600; margin-bottom: 6px; }}
 
-  /* ── FOOTER ── */
   footer {{
     margin-top: 48px;
     padding-top: 20px;
@@ -396,9 +333,9 @@ def build_html(data):
   <div class="header-top">
     <div>
       <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">Run: {run_time} &nbsp;·&nbsp; {run_date} &nbsp;·&nbsp; Snowflake MCP</div>
+      <div class="meta">Run: {run_time} &nbsp;&middot;&nbsp; {run_date} &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
-    <div class="overall {overall}">
+    <div class="overall {overall_cls}">
       <span class="overall-dot"></span>
       {overall_label}
     </div>
@@ -406,9 +343,9 @@ def build_html(data):
 </header>
 
 <div class="summary-bar">
-  <span class="summary-pill green">{passes} Passed</span>
-  <span class="summary-pill red">{fails} Failed</span>
-  <span class="summary-pill amber">{warns} Warnings</span>
+  <span class="summary-pill green">{passed} Passed</span>
+  <span class="summary-pill red">{failed} Failed</span>
+  <span class="summary-pill amber">{warnings} Warnings</span>
   <span class="summary-pill pending">{len(pending)} Pending</span>
   <span class="summary-pill gray">{len(manual)} Manual</span>
 </div>
@@ -416,7 +353,6 @@ def build_html(data):
 <h2>Automated Checks — Snowflake</h2>
 <div class="grid">
   {auto_cards}
-  {error_cards}
 </div>
 
 <h2>Pending MCP Access</h2>
@@ -431,22 +367,13 @@ def build_html(data):
 
 <footer>
   <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
-  <span>Refreshed daily 07:00 SAST &mdash; Claude MCP</span>
+  <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
 </footer>
 
 </body>
 </html>"""
 
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html)
 
-def main():
-    if not RESULTS_FILE.exists():
-        print("results.json not found — run checks.py first", file=sys.stderr)
-        sys.exit(1)
-    data = json.loads(RESULTS_FILE.read_text())
-    html = build_html(data)
-    OUTPUT_FILE.write_text(html, encoding="utf-8")
-    print(f"Dashboard written to {OUTPUT_FILE}")
-
-
-if __name__ == "__main__":
-    main()
+print(f"build_dashboard.py complete — index.html written ({run_date})")
