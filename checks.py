@@ -23,12 +23,17 @@ cur = conn.cursor()
 today      = datetime.date.today()
 yesterday  = today - datetime.timedelta(days=1)
 day_before = today - datetime.timedelta(days=2)
-same_day_lm = yesterday.replace(month=yesterday.month - 1 if yesterday.month > 1 else 12,
-                                 year=yesterday.year if yesterday.month > 1 else yesterday.year - 1)
+lm_month   = yesterday.month - 1 if yesterday.month > 1 else 12
+lm_year    = yesterday.year if yesterday.month > 1 else yesterday.year - 1
+same_day_lm = yesterday.replace(month=lm_month, year=lm_year)
 
 def q(sql, *args):
     cur.execute(sql, args)
     return cur.fetchall()
+
+def scalar(sql, *args):
+    rows = q(sql, *args)
+    return rows[0][0] if rows else 0
 
 def pct(a, b):
     if not b:
@@ -42,12 +47,9 @@ automated = []
 
 # ── Cell C Recharges ──────────────────────────────────────────────────────────
 rows = q("""
-    SELECT
-        RECHARGE_DATE,
-        COUNT(*)          AS cnt,
-        SUM(RECHARGE_AMOUNT) AS rev
+    SELECT DATE(TRANSACTION_DATE) AS dt, COUNT(*) AS cnt, SUM(VALUE) AS rev
     FROM UCONNECT_DW.ANALYTICS.VW_CELLC_RECHARGES
-    WHERE RECHARGE_DATE IN (%s, %s, %s)
+    WHERE DATE(TRANSACTION_DATE) IN (%s, %s, %s)
     GROUP BY 1
 """, str(yesterday), str(day_before), str(same_day_lm))
 
@@ -78,110 +80,77 @@ automated.append({
     "flags": flags,
 })
 
-# ── Active 1 ──────────────────────────────────────────────────────────────────
+# ── Active 1 (snapshot view) ──────────────────────────────────────────────────
 rows = q("""
-    SELECT USAGE_DATE, COUNT(DISTINCT MSISDN) AS cnt
+    SELECT
+        COUNT(*)                                                          AS total,
+        SUM(CASE WHEN USAGE_0_30_DAYS = '1' THEN 1 ELSE 0 END)          AS active_30,
+        SUM(CASE WHEN USAGE_31_60_DAYS = '1' THEN 1 ELSE 0 END)         AS semi_active,
+        SUM(CASE WHEN USAGE_GREATER_THAN_60_DAYS = '1' THEN 1 ELSE 0 END) AS over_60,
+        SUM(CASE WHEN DAYS_SINCE_LAST_USAGE = 'SIM Never Used' THEN 1 ELSE 0 END) AS never_used
     FROM UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS
-    WHERE USAGE_DATE IN (%s, %s)
-    GROUP BY 1
-""", str(yesterday), str(day_before))
+""")
+total, active_30, semi_active, over_60, never_used = rows[0]
 
-by_date = {str(r[0]): r[1] for r in rows}
-yest_cnt = by_date.get(str(yesterday), 0)
-db_cnt   = by_date.get(str(day_before), 0)
+used_yesterday = scalar("""
+    SELECT COUNT(*)
+    FROM UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS
+    WHERE TRY_TO_NUMBER(DAYS_SINCE_LAST_USAGE) <= 1
+""")
 
 flags = []
-if yest_cnt == 0:
-    flags.append("No active subscriptions recorded for yesterday")
-elif db_cnt and yest_cnt / db_cnt < 0.40:
-    flags.append(f"{yest_cnt:,} active — >60% drop vs day before ({db_cnt:,})")
-elif db_cnt and yest_cnt > db_cnt * 2:
-    flags.append(f"Anomalous spike: {yest_cnt:,} vs {db_cnt:,} day before")
+if total == 0:
+    flags.append("Snapshot view returned 0 records — data may be missing")
 
 automated.append({
-    "check": "Active 1",
+    "check": "Active 1 (Snapshot)",
     "status": "red" if flags else "green",
     "values": {
-        "yesterday_count":  yest_cnt,
-        "day_before_count": db_cnt,
-        "pct_vs_day_before": pct(yest_cnt, db_cnt),
+        "total_sims_in_view":     int(total),
+        "active_0_30_days":       int(active_30),
+        "semi_active_31_60_days": int(semi_active),
+        "inactive_over_60_days":  int(over_60),
+        "never_used":             int(never_used),
+        "used_in_last_1_day":     int(used_yesterday),
     },
     "flags": flags,
 })
 
 # ── DIM Subscriber Alignment ──────────────────────────────────────────────────
-def active_count(date):
-    r = q("""
-        SELECT COUNT(DISTINCT MSISDN)
-        FROM UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS
-        WHERE USAGE_DATE = %s
-    """, str(date))
-    return r[0][0] if r else 0
+dim_active = scalar("""
+    SELECT COUNT(*) FROM UCONNECT_DW.ANALYTICS.DIM_SUBSCRIBERS
+    WHERE TERMINATION_DATE IS NULL OR TERMINATION_DATE > CURRENT_DATE
+""")
+mrg_active = scalar("""
+    SELECT COUNT(*) FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE
+    WHERE TERMINATION_DATE IS NULL OR TERMINATION_DATE > CURRENT_DATE
+""")
+act_snapshot = int(total)
 
-def dim_count(date):
-    r = q("""
-        SELECT COUNT(*)
-        FROM UCONNECT_DW.ANALYTICS.DIM_SUBSCRIBERS
-        WHERE DATE(CREATED_AT) <= %s
-          AND (DATE(DELETED_AT) > %s OR DELETED_AT IS NULL)
-    """, str(date), str(date))
-    return r[0][0] if r else 0
-
-def merge_count(date):
-    r = q("""
-        SELECT COUNT(DISTINCT MSISDN)
-        FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE
-        WHERE DATE(CREATED_AT) <= %s
-          AND (DATE(DELETED_AT) > %s OR DELETED_AT IS NULL)
-    """, str(date), str(date))
-    return r[0][0] if r else 0
-
-dim_y  = dim_count(yesterday)
-mrg_y  = merge_count(yesterday)
-act_y  = active_count(yesterday)
-dim_db = dim_count(day_before)
-mrg_db = merge_count(day_before)
-
-spread_y  = max(dim_y, mrg_y, act_y) - min(dim_y, mrg_y, act_y)
-spread_db = max(dim_db, mrg_db) - min(dim_db, mrg_db)
+spread = max(act_snapshot, dim_active, mrg_active) - min(act_snapshot, dim_active, mrg_active)
 
 flags = []
-counts = {"DIM_SUBSCRIBERS": dim_y, "MERGE_TABLE": mrg_y, "ACTIVE_SUBSCRIPTIONS": act_y}
+counts = {"VW_ACTIVE_SUBSCRIPTIONS": act_snapshot, "DIM_SUBSCRIBERS": dim_active, "UCONNECT_MAY_MERGE": mrg_active}
 non_zero = [v for v in counts.values() if v > 0]
 if non_zero and any(v == 0 for v in counts.values()):
     flags.append("One or more tables returned 0 while others have data")
-if spread_y > 15:
-    flags.append(f"Spread of {spread_y:,} across subscriber tables exceeds threshold of 15")
+if spread > 15:
+    flags.append(f"Spread of {spread:,} across subscriber tables — MERGE ({mrg_active:,}) vs VW_ACTIVE ({act_snapshot:,})")
 
 automated.append({
     "check": "DIM Subscriber Alignment",
     "status": "red" if flags else "green",
     "values": {
-        "DIM_SUBSCRIBERS_yesterday":     dim_y,
-        "MERGE_TABLE_yesterday":         mrg_y,
-        "ACTIVE_SUBSCRIPTIONS_yesterday": act_y,
-        "spread_yesterday":              spread_y,
-        "DIM_SUBSCRIBERS_day_before":    dim_db,
-        "MERGE_TABLE_day_before":        mrg_db,
-        "spread_day_before":             spread_db,
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": act_snapshot,
+        "DIM_SUBSCRIBERS_active":           int(dim_active),
+        "UCONNECT_MAY_MERGE_active":        int(mrg_active),
+        "spread":                           int(spread),
     },
     "flags": flags,
 })
 
 # ── Terminations (>60 day usage) ──────────────────────────────────────────────
-cutoff = today - datetime.timedelta(days=60)
-rows = q("""
-    SELECT COUNT(DISTINCT MSISDN)
-    FROM UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS
-    WHERE USAGE_DATE < %s
-      AND MSISDN NOT IN (
-          SELECT DISTINCT MSISDN
-          FROM UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS
-          WHERE USAGE_DATE >= %s
-      )
-""", str(cutoff), str(cutoff))
-
-sims_over_60 = rows[0][0] if rows else 0
+sims_over_60 = int(over_60)
 threshold = 3000
 flags = []
 if sims_over_60 > threshold:
@@ -245,7 +214,7 @@ manual = [
 
 output = {
     "run_date": str(yesterday),
-    "run_time": str(today),
+    "run_time": str(today) + " — GitHub Actions",
     "comparison_note": (
         f"All comparisons use completed days: yesterday ({yesterday}) vs "
         f"day before ({day_before}). Today is excluded as it is an incomplete day."
