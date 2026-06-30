@@ -25,6 +25,13 @@ else:
 run_date = data.get("run_date", "")
 run_time = data.get("run_time", "")
 
+# Format display date as "30 June 2026" from run_time (e.g. "2026-06-30 — ...")
+import datetime
+try:
+    display_date = datetime.date.fromisoformat(run_time.split(" — ")[0]).strftime("%-d %B %Y")
+except Exception:
+    display_date = run_time.split(" — ")[0]
+
 
 def fmt(v):
     if isinstance(v, int):
@@ -91,7 +98,7 @@ html = f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — {run_date}</title>
+<title>DDA Daily BI Checks — {display_date}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -332,8 +339,8 @@ html = f"""<!DOCTYPE html>
 <header>
   <div class="header-top">
     <div>
-      <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">Run: {run_time} &nbsp;&middot;&nbsp; {run_date} &nbsp;&middot;&nbsp; Snowflake</div>
+      <h1>DDA <span>Daily BI</span> Checks &mdash; {display_date}</h1>
+      <div class="meta">Data as of {run_date} &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
     <div class="overall {overall_cls}">
       <span class="overall-dot"></span>
