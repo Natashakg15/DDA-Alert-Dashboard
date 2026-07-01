@@ -1,6 +1,6 @@
 {
   "run_date": "2026-06-29",
-  "run_time": "2026-06-30 — Generated via Snowflake MCP",
+  "run_time": "2026-06-30 Generated via Snowflake MCP",
   "comparison_note": "All comparisons use completed days: yesterday (2026-06-29) vs day before (2026-06-28). Today is excluded as it is an incomplete day.",
   "automated": [
     {
@@ -20,12 +20,12 @@
       "check": "Active 1 (Snapshot)",
       "status": "green",
       "values": {
-        "total_sims_in_view": 428851,
-        "active_0_30_days": 318495,
-        "semi_active_31_60_days": 24871,
-        "inactive_over_60_days": 27773,
-        "never_used": 57712,
-        "used_in_last_1_day": 142409
+        "total_sims_in_view": 430304,
+        "active_0_30_days": 318927,
+        "semi_active_31_60_days": 24863,
+        "inactive_over_60_days": 28346,
+        "never_used": 58168,
+        "used_in_last_1_day": 148164
       },
       "flags": []
     },
@@ -33,24 +33,24 @@
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 428851,
-        "DIM_SUBSCRIBERS_active": 431959,
-        "UCONNECT_MAY_MERGE_active": 444938,
-        "spread": 16087
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 430304,
+        "DIM_SUBSCRIBERS_active": 433631,
+        "UCONNECT_MAY_MERGE_active": 446610,
+        "spread": 16306
       },
       "flags": [
-        "Spread of 16,087 across subscriber tables — MERGE table (444,938) is 16,087 higher than VW_ACTIVE_SUBSCRIPTIONS (428,851)"
+        "Spread of 16,306 across subscriber tables — MERGE table (446,610) is 16,306 higher than VW_ACTIVE_SUBSCRIPTIONS (430,304)"
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "sims_over_60_days": 27773,
+        "sims_over_60_days": 28346,
         "threshold": 3000
       },
       "flags": [
-        "27,773 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
+        "28,346 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
       ]
     }
   ],
