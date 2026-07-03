@@ -1,18 +1,18 @@
 {
-  "run_date": "2026-07-01",
-  "run_time": "2026-07-02 Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-07-01) vs day before (2026-06-30). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-07-02",
+  "run_time": "2026-07-03 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-07-02) vs day before (2026-07-01). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_count": 19606,
-        "day_before_count": 19029,
-        "same_day_last_month_count": 18541,
-        "yesterday_revenue_sum": 312977,
-        "pct_vs_day_before": "103.0% (up 3.0%)",
-        "pct_vs_same_day_last_month": "105.7% (up 5.7%)"
+        "yesterday_count": 20594,
+        "day_before_count": 19606,
+        "same_day_last_month_count": 19411,
+        "yesterday_revenue_sum": 330906,
+        "pct_vs_day_before": "105.0% (up 5.0%)",
+        "pct_vs_same_day_last_month": "106.1% (up 6.1%)"
       },
       "flags": []
     },
@@ -20,12 +20,10 @@
       "check": "Active 1 (Snapshot)",
       "status": "green",
       "values": {
-        "total_sims_in_view": 432992,
-        "active_0_30_days": 312434,
-        "semi_active_31_60_days": 31636,
-        "inactive_over_60_days": 28858,
-        "never_used": 60064,
-        "used_in_last_1_day": 144592
+        "total_sims_in_view": 434119,
+        "active_0_30_days": 304434,
+        "inactive_over_60_days": 28199,
+        "used_in_last_1_day": 144576
       },
       "flags": []
     },
@@ -33,24 +31,24 @@
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 432992,
-        "DIM_SUBSCRIBERS_active": 432990,
-        "UCONNECT_MAY_MERGE_active": 445150,
-        "spread": 12160
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 434119,
+        "DIM_SUBSCRIBERS_active": 434117,
+        "UCONNECT_MAY_MERGE_active": 446280,
+        "spread": 12163
       },
       "flags": [
-        "Spread of 12,160 across subscriber tables — MERGE (445,150) vs VW_ACTIVE (432,992)"
+        "Spread of 12,163 across subscriber tables — MERGE (446,280) vs DIM_SUBSCRIBERS (434,117)"
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "sims_over_60_days": 28858,
+        "sims_over_60_days": 28199,
         "threshold": 3000
       },
       "flags": [
-        "28,858 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
+        "28,199 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
       ]
     }
   ],
