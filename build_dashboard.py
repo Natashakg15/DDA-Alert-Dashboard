@@ -1,6 +1,6 @@
 import json
 
-with open("results.json") as f:
+with open("results.json", encoding="utf-8") as f:
     data = json.load(f)
 
 automated = data.get("automated", [])

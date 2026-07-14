@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-07-08</title>
+<title>DDA Daily BI Checks — 2026-07-13</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -245,7 +245,7 @@
   <div class="header-top">
     <div>
       <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">9 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-08 &nbsp;&middot;&nbsp; Snowflake</div>
+      <div class="meta">14 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-13 &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
     <div class="overall red">
       <span class="overall-dot"></span>
@@ -255,8 +255,8 @@
 </header>
 
 <div class="summary-bar">
-  <span class="summary-pill green">2 Passed</span>
-  <span class="summary-pill red">2 Failed</span>
+  <span class="summary-pill green">1 Passed</span>
+  <span class="summary-pill red">3 Failed</span>
   <span class="summary-pill amber">0 Warnings</span>
   <span class="summary-pill pending">3 Pending</span>
   <span class="summary-pill gray">3 Manual</span>
@@ -265,12 +265,12 @@
 <h2>Automated Checks — Snowflake</h2>
 <div class="grid">
   
-    <div class="card green">
+    <div class="card red">
         <div class="card-header">
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
             <span class="card-title">Cell C Recharges</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>18,170</strong></td></tr><tr><td class='key'>day_before_count</td><td><strong>19,363</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>18,101</strong></td></tr><tr><td class='key'>yesterday_revenue_sum</td><td><strong>277,101</strong></td></tr><tr><td class='key'>pct_vs_day_before</td><td><strong>93.8% (down 6.2%)</strong></td></tr><tr><td class='key'>pct_vs_same_day_last_month</td><td><strong>100.4% (up 0.4%)</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>10,650</strong></td></tr><tr><td class='key'>day_before_count</td><td><strong>14,962</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>17,374</strong></td></tr><tr><td class='key'>yesterday_revenue_sum</td><td><strong>excluded — data anomaly (see flags)</strong></td></tr><tr><td class='key'>pct_vs_day_before</td><td><strong>71.2% (down 28.8%)</strong></td></tr><tr><td class='key'>pct_vs_same_day_last_month</td><td><strong>61.3% (down 38.7%)</strong></td></tr></table><ul class="flags"><li>Revenue sum excluded — a single transaction on 2026-07-13 recorded VALUE = R262,144,000 in VW_CELLC_RECHARGES, skewing the daily total (MIN=R2, AVG=R108,319 vs a normal ~R15). Needs data-team follow-up before revenue is trusted again.</li><li>>20% drop in recharge count vs same day last month (17,374 → 10,650)</li></ul></div>
     </div>
   
     <div class="card green">
@@ -278,7 +278,7 @@
             <span class="badge green">PASS</span>
             <span class="card-title">Active 1 (Snapshot)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>445,821</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>296,567</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>31,596</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>142,930</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>454,025</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>298,144</strong></td></tr><tr><td class='key'>semi_active_31_60_days</td><td><strong>53,960</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>34,489</strong></td></tr><tr><td class='key'>never_used</td><td><strong>67,432</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>142,291</strong></td></tr></table></div>
     </div>
   
     <div class="card red">
@@ -286,7 +286,7 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">DIM Subscriber Alignment</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>445,821</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>445,819</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active</td><td><strong>457,976</strong></td></tr><tr><td class='key'>spread</td><td><strong>12,157</strong></td></tr></table><ul class="flags"><li>Spread of 12,157 across subscriber tables â€” MERGE (457,976) vs DIM_SUBSCRIBERS (445,819)</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>454,025</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>454,023</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active</td><td><strong>466,139</strong></td></tr><tr><td class='key'>spread</td><td><strong>12,116</strong></td></tr></table><ul class="flags"><li>Spread of 12,116 across subscriber tables — MERGE (466,139) vs DIM_SUBSCRIBERS (454,023)</li></ul></div>
     </div>
   
     <div class="card red">
@@ -294,7 +294,7 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">Terminations (>60 day usage)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>31,596</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>31,596 SIMs with no usage in over 60 days â€” significantly exceeds the 3,000 threshold</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>34,489</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>34,489 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold</li></ul></div>
     </div>
 </div>
 
@@ -332,15 +332,15 @@
     <div class="card manual">
         <div class="card-header">
             <span class="badge manual">MANUAL</span>
-            <span class="card-title">Cell C Recharges â€” Telco Dashboard Alignment</span>
+            <span class="card-title">Cell C Recharges — Telco Dashboard Alignment</span>
         </div>
-        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard â€” App, V Redemptions & Subs</p></div>
+        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs</p></div>
     </div>
   
     <div class="card manual">
         <div class="card-header">
             <span class="badge manual">MANUAL</span>
-            <span class="card-title">Wholesale Usage â€” Telco Dashboard</span>
+            <span class="card-title">Wholesale Usage — Telco Dashboard</span>
         </div>
         <div class="card-body"><p class="note">Cross-check usage totals on Telco dashboard</p></div>
     </div>
