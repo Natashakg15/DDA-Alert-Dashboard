@@ -1,3 +1,6 @@
+# Not run by CI — the live board is refreshed via a local scheduled task
+# that queries through the Snowflake MCP connection instead of direct
+# credentials. Kept here as a reference for the check logic/thresholds.
 import os
 import json
 import datetime

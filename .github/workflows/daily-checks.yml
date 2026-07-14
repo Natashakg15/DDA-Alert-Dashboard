@@ -1,61 +1,28 @@
-name: DDA Daily BI Checks
+name: Deploy DDA Dashboard
 
 on:
-  schedule:
-    # Runs at 07:00 SAST (UTC+2) = 05:00 UTC, Monday–Friday
-    - cron: "0 5 * * 1-5"
-  workflow_dispatch:   # allow manual trigger from GitHub UI
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "results.json"
+  workflow_dispatch:
 
 permissions:
-  contents: write       # needed to push results.json + index.html to gh-pages
+  contents: write
 
 jobs:
-  run-checks:
+  deploy:
     runs-on: ubuntu-latest
-    environment: production   # optional: gate secrets to this environment
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run Snowflake checks
-        env:
-          SNOWFLAKE_ACCOUNT:   ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_USER:      ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD:  ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-          SNOWFLAKE_ROLE:      ${{ secrets.SNOWFLAKE_ROLE }}
-        run: python checks.py
-
-      - name: Stamp run time into results.json
-        run: |
-          python - <<'EOF'
-          import json, datetime
-          data = json.load(open("results.json"))
-          data["run_time"] = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-          json.dump(data, open("results.json","w"), indent=2, default=str)
-          EOF
-
-      - name: Build dashboard HTML
-        run: python build_dashboard.py
-
-      # ---------------------------------------------------------------
-      # Deploy to GitHub Pages (gh-pages branch)
-      # ---------------------------------------------------------------
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .          # deploy root — index.html + results.json
+          publish_dir: .
           publish_branch: gh-pages
           keep_files: false
-          commit_message: "chore: update DDA dashboard [${{ github.run_number }}]"
+          commit_message: "chore: deploy DDA dashboard [${{ github.run_number }}]"
