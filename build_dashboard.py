@@ -1,7 +1,6 @@
 import json
-import datetime
 
-with open("results.json", encoding="utf-8") as f:
+with open("results.json") as f:
     data = json.load(f)
 
 automated = data.get("automated", [])
@@ -26,6 +25,7 @@ else:
 run_date = data.get("run_date", "")
 run_time = data.get("run_time", "")
 
+import datetime
 try:
     display_date = datetime.date.fromisoformat(run_time.split()[0]).strftime("%d %B %Y").lstrip("0")
 except Exception:
@@ -33,17 +33,11 @@ except Exception:
 
 
 def fmt(v):
-    if isinstance(v, bool):
-        return str(v)
     if isinstance(v, int):
         return f"{v:,}"
     if isinstance(v, float):
         return f"{v:,.2f}"
     return str(v)
-
-
-def numeric_values(values: dict):
-    return [(k, v) for k, v in values.items() if isinstance(v, (int, float)) and not isinstance(v, bool)]
 
 
 def kv_table(values: dict) -> str:
@@ -61,84 +55,42 @@ def flag_list(flags: list) -> str:
     return f'<ul class="flags">{items}</ul>'
 
 
-STATUS_DOT = {
-    "green": "var(--hypermint)",
-    "red": "var(--highvolt)",
-    "amber": "var(--warn)",
-    "pending": "var(--ultraviolet)",
-    "manual": "var(--sonic-blue)",
-    "error": "var(--highvolt)",
-}
-
-BADGE_LABEL = {
-    "green": "PASS",
-    "red": "FAIL",
-    "amber": "WARN",
-    "pending": "PENDING",
-    "manual": "MANUAL",
-    "error": "ERROR",
-}
-
-
-def check_row(check: dict) -> str:
+def card(check: dict) -> str:
     status = check.get("status", "green")
     title  = check.get("check", "")
     values = check.get("values", {})
     flags  = check.get("flags",  [])
     note   = check.get("note",   "")
-    nums   = numeric_values(values)
 
-    headline = ""
-    if len(nums) >= 2:
-        headline = f"<strong>{fmt(nums[0][1])}</strong><span class='vs'>/ {fmt(nums[1][1])}</span>"
-    elif len(nums) == 1:
-        headline = f"<strong>{fmt(nums[0][1])}</strong>"
+    badge_label = {
+        "green":   "PASS",
+        "red":     "FAIL",
+        "amber":   "WARN",
+        "pending": "PENDING",
+        "manual":  "MANUAL",
+        "error":   "ERROR",
+    }.get(status, status.upper())
 
-    detail = ""
-    if values:
-        detail += kv_table(values)
+    body = ""
     if note:
-        detail += f'<p class="note">{note}</p>'
-    detail += flag_list(flags)
-
-    has_detail = bool(detail.strip())
+        body += f'<p class="note">{note}</p>'
+    if values:
+        body += kv_table(values)
+    body += flag_list(flags)
 
     return f"""
-    <details class="check-row {'has-flags' if flags else ''}" {"open" if flags else ""}>
-      <summary>
-        <span class="row-dot" style="background:{STATUS_DOT.get(status, '#999')}"></span>
-        <span class="row-title">{title}</span>
-        <span class="row-headline">{headline}</span>
-        <span class="badge {status}">{BADGE_LABEL.get(status, status.upper())}</span>
-        {'<span class="chevron">&rsaquo;</span>' if has_detail else ''}
-      </summary>
-      {f'<div class="row-detail">{detail}</div>' if has_detail else ''}
-    </details>"""
-
-
-def note_row(check: dict) -> str:
-    status = check.get("status", "manual")
-    title  = check.get("check", "")
-    note   = check.get("note", "")
-    return f"""
-    <div class="check-row static">
-      <span class="row-dot" style="background:{STATUS_DOT.get(status, '#999')}"></span>
-      <span class="row-title">{title}</span>
-      <span class="row-note">{note}</span>
-      <span class="badge {status}">{BADGE_LABEL.get(status, status.upper())}</span>
+    <div class="card {status}">
+        <div class="card-header">
+            <span class="badge {status}">{badge_label}</span>
+            <span class="card-title">{title}</span>
+        </div>
+        <div class="card-body">{body}</div>
     </div>"""
 
 
-auto_rows    = "\n      ".join(check_row(c) for c in automated)
-pending_rows = "\n      ".join(note_row(c) for c in pending)
-manual_rows  = "\n      ".join(note_row(c) for c in manual)
-
-attention = [c for c in automated if c.get("status") in ("red", "amber") and c.get("flags")]
-attention_html = "".join(
-    f'<li><span class="row-dot" style="background:{STATUS_DOT.get(c["status"])}"></span>'
-    f'<strong>{c["check"]}</strong> &mdash; {c["flags"][0]}</li>'
-    for c in attention
-) or '<li class="all-clear">No flags on automated checks.</li>'
+auto_cards    = "\n  ".join(card(c) for c in automated)
+pending_cards = "\n  ".join(card(c) for c in pending)
+manual_cards  = "\n  ".join(card(c) for c in manual)
 
 html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -159,16 +111,19 @@ html = f"""<!DOCTYPE html>
     --ultraviolet:#52bec0;
     --highvolt:   #f44610;
 
+    --pass:       var(--hypermint);
+    --pass-text:  #0a3d1f;
+    --fail:       var(--highvolt);
+    --fail-text:  #fff;
     --warn:       #f5c400;
     --warn-text:  #3d2f00;
+    --pending:    var(--ultraviolet);
+    --pending-text: #0c2e2e;
+    --manual:     var(--sonic-blue);
+    --manual-text:#fff;
+    --error:      var(--highvolt);
 
-    --page-bg:    #f2f3f5;
-    --panel-bg:   #ffffff;
-    --panel-border: #e3e5e9;
-    --text-dark:  #14151a;
-    --text-muted: #6c6f78;
-
-    --card-radius: 10px;
+    --card-radius: 8px;
     --font-header: 'At Hauss Std Retina', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-body:   'Helvetica Now', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }}
@@ -177,279 +132,192 @@ html = f"""<!DOCTYPE html>
 
   body {{
     font-family: var(--font-body);
-    background: var(--page-bg);
-    color: var(--text-dark);
+    background: var(--inkcore);
+    color: var(--zero-white);
+    padding: 32px 28px;
     min-height: 100vh;
   }}
 
-  /* ── Top bar ── */
-  .topbar {{
-    background: var(--panel-bg);
-    border-bottom: 1px solid var(--panel-border);
-    padding: 18px 32px 0;
-  }}
-  .topbar-row {{
+  header {{
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+  }}
+  .header-top {{
+    display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
-    padding-bottom: 16px;
+    gap: 16px;
   }}
-  .brand {{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }}
-  .brand-mark {{
-    background: var(--inkcore);
+  header h1 {{
+    font-family: var(--font-header);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--zero-white);
-    font-family: var(--font-header);
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 6px 14px;
-    border-radius: 6px;
   }}
-  .brand-title {{
-    font-family: var(--font-header);
-    font-weight: 700;
-    font-size: 1.3rem;
-    letter-spacing: -0.01em;
-  }}
-  .topbar-right {{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }}
-  .refreshed {{
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }}
-  .refreshed-dot {{
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--hypermint);
-  }}
-  .overall-pill {{
-    font-family: var(--font-header);
-    font-weight: 700;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 999px;
-  }}
-  .overall-pill.green {{ background: rgba(19,244,96,0.15); color: #0a7a35; }}
-  .overall-pill.red   {{ background: rgba(244,70,16,0.12); color: var(--highvolt); }}
-  .overall-pill.amber {{ background: rgba(245,196,0,0.15); color: #8a6d00; }}
-
-  /* ── Tabs ── */
-  .tabnav {{
-    display: flex;
-    gap: 28px;
-    overflow-x: auto;
-  }}
-  .tab-btn {{
-    background: none;
-    border: none;
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 0.92rem;
-    color: var(--text-muted);
-    padding: 10px 2px 12px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-  }}
-  .tab-btn.active {{
-    color: var(--highvolt);
-    border-bottom-color: var(--highvolt);
-  }}
-  .tab-btn:hover {{ color: var(--text-dark); }}
-  .tab-btn.active:hover {{ color: var(--highvolt); }}
-
-  main {{ padding: 28px 32px 48px; max-width: 1400px; margin: 0 auto; }}
-  .tab-panel {{ display: none; }}
-  .tab-panel.active {{ display: block; }}
-
-  /* ── Hero KPI tiles ── */
-  .hero-grid {{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 28px;
-  }}
-  .tile {{
-    background: var(--inkcore);
-    color: var(--zero-white);
-    border-radius: var(--card-radius);
-    padding: 20px 22px;
-  }}
-  .tile-label {{
-    font-family: var(--font-header);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 10px;
-  }}
-  .tile-value {{
-    font-family: var(--font-header);
-    font-size: 1.9rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }}
-  .tile-value.accent {{ color: var(--highvolt); }}
-  .tile-value.good   {{ color: var(--hypermint); }}
-  .tile-sub {{
+  header h1 span {{ color: var(--hypermint); }}
+  header .meta {{
     font-size: 0.78rem;
     color: rgba(255,255,255,0.4);
-    margin-top: 6px;
-  }}
-
-  /* ── Attention list (overview) ── */
-  .attention-card {{
-    background: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    border-radius: var(--card-radius);
-    padding: 18px 22px;
-    margin-bottom: 28px;
-  }}
-  .attention-card h3 {{
-    font-family: var(--font-header);
-    font-size: 0.78rem;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    margin-top: 2px;
+  }}
+  .overall {{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 0.85rem;
     letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 12px;
+    text-transform: uppercase;
+    flex-shrink: 0;
   }}
-  .attention-card ul {{ list-style: none; display: flex; flex-direction: column; gap: 8px; }}
-  .attention-card li {{ display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }}
-  .attention-card .row-dot {{ flex-shrink: 0; }}
-  .attention-card .all-clear {{ color: var(--text-muted); font-style: italic; }}
+  .overall.green  {{ background: var(--hypermint); color: var(--pass-text); }}
+  .overall.red    {{ background: var(--highvolt);  color: var(--zero-white); }}
+  .overall.amber  {{ background: var(--warn);      color: var(--warn-text); }}
+  .overall-dot {{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }}
 
-  /* ── Numbered section cards ── */
-  .section-grid {{
+  .summary-bar {{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }}
+  .summary-pill {{
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }}
+  .summary-pill.green   {{ background: rgba(19,244,96,0.12);  color: var(--hypermint);  border-color: rgba(19,244,96,0.25); }}
+  .summary-pill.red     {{ background: rgba(244,70,16,0.12);  color: #ff7d5c;           border-color: rgba(244,70,16,0.3); }}
+  .summary-pill.amber   {{ background: rgba(245,196,0,0.12);  color: #f5c400;           border-color: rgba(245,196,0,0.25); }}
+  .summary-pill.gray    {{ background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }}
+  .summary-pill.pending {{ background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }}
+
+  h2 {{
+    font-family: var(--font-header);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.3);
+    margin: 32px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }}
+
+  .grid {{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 20px;
-    align-items: start;
-  }}
-  .section-card {{
-    background: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    border-left: 4px solid var(--section-accent, var(--highvolt));
-    border-radius: var(--card-radius);
-    overflow: hidden;
-  }}
-  .section-header {{
-    display: flex;
-    align-items: baseline;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 14px;
-    padding: 20px 22px 14px;
   }}
-  .section-num {{
-    font-family: var(--font-header);
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #e5e6e9;
-    line-height: 1;
-  }}
-  .section-title {{
-    font-family: var(--font-header);
-    font-size: 1.05rem;
-    font-weight: 700;
-  }}
-  .section-body {{ padding: 0 8px 8px; }}
 
-  .check-row {{
-    display: block;
-    border-top: 1px solid var(--panel-border);
+  .card {{
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    overflow: hidden;
+    transition: border-color 0.15s, background 0.15s;
   }}
-  .check-row summary {{
-    list-style: none;
+  .card:hover {{ background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }}
+
+  .card.green  {{ border-color: rgba(19,244,96,0.3);  background: rgba(19,244,96,0.05); }}
+  .card.red    {{ border-color: rgba(244,70,16,0.4);  background: rgba(244,70,16,0.06); }}
+  .card.amber  {{ border-color: rgba(245,196,0,0.3);  background: rgba(245,196,0,0.05); }}
+  .card.pending {{ border-color: rgba(82,190,192,0.3); background: rgba(82,190,192,0.05); }}
+  .card.manual {{ border-color: rgba(45,64,233,0.4);  background: rgba(45,64,233,0.06); }}
+  .card.error  {{ border-color: rgba(244,70,16,0.5);  background: rgba(244,70,16,0.08); }}
+
+  .card-header {{
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 14px;
-    cursor: pointer;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
   }}
-  .check-row summary::-webkit-details-marker {{ display: none; }}
-  .check-row.static {{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 14px;
+  .card-title {{
+    font-family: var(--font-header);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--zero-white);
+    letter-spacing: 0.01em;
   }}
-  .row-dot {{ width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }}
-  .row-title {{ font-size: 0.88rem; font-weight: 600; flex: 1; min-width: 0; }}
-  .row-headline {{ font-size: 0.9rem; color: var(--text-dark); white-space: nowrap; }}
-  .row-headline .vs {{ color: var(--text-muted); font-weight: 400; margin-left: 3px; }}
-  .row-note {{ font-size: 0.78rem; color: var(--text-muted); text-align: right; flex: 1; }}
-  .chevron {{ color: var(--text-muted); font-size: 1.1rem; transition: transform 0.15s; }}
-  .check-row[open] .chevron {{ transform: rotate(90deg); }}
-
-  .row-detail {{ padding: 0 14px 16px 32px; }}
+  .card-body {{
+    padding: 14px 16px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+  }}
 
   .badge {{
-    padding: 3px 9px;
+    padding: 3px 10px;
     border-radius: 3px;
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     flex-shrink: 0;
     font-family: var(--font-header);
   }}
-  .badge.green   {{ background: rgba(19,244,96,0.15);  color: #0a7a35; }}
+  .badge.green   {{ background: var(--hypermint);  color: var(--pass-text); }}
   .badge.red     {{ background: var(--highvolt);   color: var(--zero-white); }}
   .badge.amber   {{ background: var(--warn);       color: var(--warn-text); }}
-  .badge.manual  {{ background: rgba(45,64,233,0.12); color: var(--sonic-blue); }}
-  .badge.pending {{ background: rgba(82,190,192,0.15); color: #1c7577; }}
+  .badge.manual  {{ background: var(--sonic-blue); color: var(--zero-white); }}
+  .badge.pending {{ background: var(--ultraviolet);color: var(--inkcore); }}
   .badge.error   {{ background: var(--highvolt);   color: var(--zero-white); }}
 
-  table.kv {{ width: 100%; border-collapse: collapse; margin-top: 6px; }}
-  table.kv td {{ padding: 4px 6px; vertical-align: top; }}
+  table.kv {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
+  table.kv td {{ padding: 5px 6px; vertical-align: top; }}
   table.kv td.key {{
-    color: var(--text-muted);
+    color: rgba(255,255,255,0.35);
     white-space: nowrap;
     padding-right: 16px;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
   }}
-  table.kv td strong {{ color: var(--text-dark); font-weight: 600; font-size: 0.85rem; }}
+  table.kv td strong {{ color: var(--zero-white); font-weight: 600; }}
 
-  ul.flags {{ list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }}
+  ul.flags {{ list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }}
   ul.flags li {{
-    background: rgba(244,70,16,0.06);
+    background: rgba(244,70,16,0.1);
     border-left: 3px solid var(--highvolt);
     padding: 7px 12px;
     border-radius: 3px;
-    color: #9c3414;
-    font-size: 0.78rem;
+    color: #ffb8a0;
+    font-size: 0.8rem;
     line-height: 1.4;
   }}
 
-  .note {{ color: #1c7577; font-style: italic; margin: 6px 0; font-size: 0.78rem; }}
+  .note {{ color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }}
 
-  /* ── Footer bar ── */
-  .footer-bar {{
-    background: var(--inkcore);
-    color: rgba(255,255,255,0.6);
-    padding: 16px 32px;
+  footer {{
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }}
-  .footer-bar .footer-dot {{
+  .footer-dot {{
     display: inline-block;
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -459,126 +327,54 @@ html = f"""<!DOCTYPE html>
   }}
 
   @media (max-width: 640px) {{
-    .topbar {{ padding: 14px 16px 0; }}
-    main {{ padding: 20px 16px 40px; }}
-    .brand-title {{ font-size: 1.05rem; }}
-    .footer-bar {{ padding: 14px 16px; flex-direction: column; align-items: flex-start; }}
+    .grid {{ grid-template-columns: 1fr; }}
+    body {{ padding: 20px 16px; }}
+    header h1 {{ font-size: 1.5rem; }}
   }}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-row">
-    <div class="brand">
-      <span class="brand-mark">Spot&trade;</span>
-      <span class="brand-title">DDA Daily BI Checks</span>
+<header>
+  <div class="header-top">
+    <div>
+      <h1>DDA <span>Daily BI</span> Checks</h1>
+      <div class="meta">{display_date} &nbsp;&middot;&nbsp; Data as of {run_date} &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
-    <div class="topbar-right">
-      <span class="overall-pill {overall_cls}">{overall_label}</span>
-      <span class="refreshed"><span class="refreshed-dot"></span>{display_date} &middot; Data as of {run_date} &middot; Snowflake</span>
+    <div class="overall {overall_cls}">
+      <span class="overall-dot"></span>
+      {overall_label}
     </div>
   </div>
-  <div class="tabnav">
-    <button class="tab-btn active" data-tab="overview">Overview</button>
-    <button class="tab-btn" data-tab="automated">Automated Checks</button>
-    <button class="tab-btn" data-tab="pending">Pending Access</button>
-    <button class="tab-btn" data-tab="manual">Manual Checks</button>
-  </div>
+</header>
+
+<div class="summary-bar">
+  <span class="summary-pill green">{passed} Passed</span>
+  <span class="summary-pill red">{failed} Failed</span>
+  <span class="summary-pill amber">{warnings} Warnings</span>
+  <span class="summary-pill pending">{len(pending)} Pending</span>
+  <span class="summary-pill gray">{len(manual)} Manual</span>
 </div>
 
-<main>
+<h2>Automated Checks — Snowflake</h2>
+<div class="grid">
+  {auto_cards}
+</div>
 
-  <section class="tab-panel active" id="tab-overview">
-    <div class="hero-grid">
-      <div class="tile">
-        <div class="tile-label">Automated Checks</div>
-        <div class="tile-value {'accent' if failed else 'good'}">{passed}/{len(automated)}</div>
-        <div class="tile-sub">passed</div>
-      </div>
-      <div class="tile">
-        <div class="tile-label">Failed</div>
-        <div class="tile-value {'accent' if failed else 'good'}">{failed}</div>
-        <div class="tile-sub">{'requires attention' if failed else 'none'}</div>
-      </div>
-      <div class="tile">
-        <div class="tile-label">Warnings</div>
-        <div class="tile-value">{warnings}</div>
-        <div class="tile-sub">{'review flagged items' if warnings else 'none'}</div>
-      </div>
-      <div class="tile">
-        <div class="tile-label">Pending MCP Access</div>
-        <div class="tile-value">{len(pending)}</div>
-        <div class="tile-sub">awaiting grant</div>
-      </div>
-      <div class="tile">
-        <div class="tile-label">Manual Verifications</div>
-        <div class="tile-value">{len(manual)}</div>
-        <div class="tile-sub">cross-check dashboards</div>
-      </div>
-    </div>
+<h2>Pending MCP Access</h2>
+<div class="grid">
+  {pending_cards}
+</div>
 
-    <div class="attention-card">
-      <h3>Needs Attention</h3>
-      <ul>
-        {attention_html}
-      </ul>
-    </div>
-  </section>
+<h2>Manual Checks — Telco / Dashboards</h2>
+<div class="grid">
+  {manual_cards}
+</div>
 
-  <section class="tab-panel" id="tab-automated">
-    <div class="section-card" style="--section-accent: var(--highvolt);">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <span class="section-title">Automated Checks &mdash; Snowflake</span>
-      </div>
-      <div class="section-body">
-        {auto_rows}
-      </div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-pending">
-    <div class="section-card" style="--section-accent: var(--ultraviolet);">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <span class="section-title">Pending MCP Access</span>
-      </div>
-      <div class="section-body">
-        {pending_rows}
-      </div>
-    </div>
-  </section>
-
-  <section class="tab-panel" id="tab-manual">
-    <div class="section-card" style="--section-accent: var(--sonic-blue);">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <span class="section-title">Manual Checks &mdash; Telco / Dashboards</span>
-      </div>
-      <div class="section-body">
-        {manual_rows}
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<div class="footer-bar">
+<footer>
   <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
   <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
-</div>
-
-<script>
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {{
-    btn.addEventListener('click', function() {{
-      document.querySelectorAll('.tab-btn').forEach(function(b) {{ b.classList.remove('active'); }});
-      document.querySelectorAll('.tab-panel').forEach(function(p) {{ p.classList.remove('active'); }});
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    }});
-  }});
-</script>
+</footer>
 
 </body>
 </html>"""
