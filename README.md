@@ -80,7 +80,7 @@ You can also trigger manually from the Actions tab at any time.
 
 | Metric | Red condition |
 |---|---|
-| Cell C Recharges | No recharges today, OR >60% drop vs yesterday, OR >20% drop vs same day last month |
+| Cell C Recharges | No recharges yesterday, OR >20% drop vs same-day-last-month or same-day-2-months-ago (count or value), OR MTD vs prior-month MTD varies >10% (count or value), OR same-day-last-month vs same-day-2-months-ago varies >5% (count or value), OR abnormal 3-month MTD trend (>25% single-month swing, or >20% sustained same-direction move) |
 | Wholesale Usage | No usage today, OR >60% drop total/per type vs yesterday, OR >20% drop vs same day last month, OR type missing |
 | Active 1 | No count today, OR >60% drop vs yesterday, OR anomalous (>2× yesterday) |
 | SmartConnect vs DW | Difference >10 total, OR SC > merge for any retail tenant |
