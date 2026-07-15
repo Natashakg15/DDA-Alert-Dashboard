@@ -1,34 +1,48 @@
 {
-  "run_date": "2026-07-13",
-  "run_time": "2026-07-14 — Generated via Snowflake MCP (manual run)",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-07-13) vs day before (2026-07-12). Today is excluded as it is an incomplete day. Cell C Recharges revenue sum excluded from this run due to a data anomaly — see flags.",
+  "run_date": "2026-07-14",
+  "run_time": "2026-07-15 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-07-14) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges compares yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length).",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "red",
       "values": {
-        "yesterday_count": 10650,
-        "day_before_count": 14962,
-        "same_day_last_month_count": 17374,
-        "yesterday_revenue_sum": "excluded — data anomaly (see flags)",
-        "pct_vs_day_before": "71.2% (down 28.8%)",
-        "pct_vs_same_day_last_month": "61.3% (down 38.7%)"
+        "yesterday_count": 4766,
+        "yesterday_value": 70718,
+        "same_day_last_month_count": 14377,
+        "same_day_last_month_value": 219065,
+        "same_day_two_months_ago_count": 15425,
+        "same_day_two_months_ago_value": 251136,
+        "mtd_count": 241766,
+        "mtd_value": 3682098,
+        "prev_mtd_count": 251091,
+        "prev_mtd_value": 3758986,
+        "pct_mtd_vs_prev_count": "96.3% (down 3.7%)",
+        "pct_mtd_vs_prev_value": "98.0% (down 2.0%)",
+        "pct_same_day_lm_vs_2lm_count": "93.2% (down 6.8%)",
+        "pct_same_day_lm_vs_2lm_value": "87.2% (down 12.8%)",
+        "three_month_trend_count": "247,626 → 251,091 → 241,766 (legs: +1.4%, -3.7%)",
+        "three_month_trend_value": "R3,746,134 → R3,758,986 → R3,682,098 (legs: +0.3%, -2.0%)"
       },
       "flags": [
-        "Revenue sum excluded — a single transaction on 2026-07-13 recorded VALUE = R262,144,000 in VW_CELLC_RECHARGES, skewing the daily total (MIN=R2, AVG=R108,319 vs a normal ~R15). Needs data-team follow-up before revenue is trusted again.",
-        ">20% drop in recharge count vs same day last month (17,374 → 10,650)"
+        "4,766 recharges — >20% drop vs same day last month (14,377)",
+        "4,766 recharges — >20% drop vs same day two months ago (15,425)",
+        "R70,718 revenue — >20% drop vs same day last month (R219,065)",
+        "R70,718 revenue — >20% drop vs same day two months ago (R251,136)",
+        "Same-day last-month vs two-months-ago count: down 6.8% — exceeds 5% threshold",
+        "Same-day last-month vs two-months-ago value: down 12.8% — exceeds 5% threshold"
       ]
     },
     {
       "check": "Active 1 (Snapshot)",
       "status": "green",
       "values": {
-        "total_sims_in_view": 454025,
-        "active_0_30_days": 298144,
-        "semi_active_31_60_days": 53960,
-        "inactive_over_60_days": 34489,
-        "never_used": 67432,
-        "used_in_last_1_day": 142291
+        "total_sims_in_view": 456929,
+        "active_0_30_days": 299224,
+        "semi_active_31_60_days": 53644,
+        "inactive_over_60_days": 35056,
+        "never_used": 69005,
+        "used_in_last_1_day": 156736
       },
       "flags": []
     },
@@ -36,24 +50,24 @@
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 454025,
-        "DIM_SUBSCRIBERS_active": 454023,
-        "UCONNECT_MAY_MERGE_active": 466139,
-        "spread": 12116
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 456929,
+        "DIM_SUBSCRIBERS_active": 456927,
+        "UCONNECT_MAY_MERGE_active": 469044,
+        "spread": 12117
       },
       "flags": [
-        "Spread of 12,116 across subscriber tables — MERGE (466,139) vs DIM_SUBSCRIBERS (454,023)"
+        "Spread of 12,117 across subscriber tables — MERGE (469,044) vs DIM_SUBSCRIBERS (456,927)"
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "sims_over_60_days": 34489,
+        "sims_over_60_days": 35056,
         "threshold": 3000
       },
       "flags": [
-        "34,489 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
+        "35,056 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
       ]
     }
   ],
