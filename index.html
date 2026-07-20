@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-07-14</title>
+<title>DDA Daily BI Checks — 2026-07-19</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -245,7 +245,7 @@
   <div class="header-top">
     <div>
       <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">15 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-14 &nbsp;&middot;&nbsp; Snowflake</div>
+      <div class="meta">20 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-19 &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
     <div class="overall red">
       <span class="overall-dot"></span>
@@ -270,7 +270,7 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">Cell C Recharges</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>4,766</strong></td></tr><tr><td class='key'>yesterday_value</td><td><strong>70,718</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>14,377</strong></td></tr><tr><td class='key'>same_day_last_month_value</td><td><strong>219,065</strong></td></tr><tr><td class='key'>same_day_two_months_ago_count</td><td><strong>15,425</strong></td></tr><tr><td class='key'>same_day_two_months_ago_value</td><td><strong>251,136</strong></td></tr><tr><td class='key'>mtd_count</td><td><strong>241,766</strong></td></tr><tr><td class='key'>mtd_value</td><td><strong>3,682,098</strong></td></tr><tr><td class='key'>prev_mtd_count</td><td><strong>251,091</strong></td></tr><tr><td class='key'>prev_mtd_value</td><td><strong>3,758,986</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_count</td><td><strong>96.3% (down 3.7%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_value</td><td><strong>98.0% (down 2.0%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_count</td><td><strong>93.2% (down 6.8%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_value</td><td><strong>87.2% (down 12.8%)</strong></td></tr><tr><td class='key'>three_month_trend_count</td><td><strong>247,626 → 251,091 → 241,766 (legs: +1.4%, -3.7%)</strong></td></tr><tr><td class='key'>three_month_trend_value</td><td><strong>R3,746,134 → R3,758,986 → R3,682,098 (legs: +0.3%, -2.0%)</strong></td></tr></table><ul class="flags"><li>4,766 recharges — >20% drop vs same day last month (14,377)</li><li>4,766 recharges — >20% drop vs same day two months ago (15,425)</li><li>R70,718 revenue — >20% drop vs same day last month (R219,065)</li><li>R70,718 revenue — >20% drop vs same day two months ago (R251,136)</li><li>Same-day last-month vs two-months-ago count: down 6.8% — exceeds 5% threshold</li><li>Same-day last-month vs two-months-ago value: down 12.8% — exceeds 5% threshold</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>0</strong></td></tr><tr><td class='key'>yesterday_value</td><td><strong>0</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>18,267</strong></td></tr><tr><td class='key'>same_day_last_month_value</td><td><strong>276,874</strong></td></tr><tr><td class='key'>same_day_two_months_ago_count</td><td><strong>14,799</strong></td></tr><tr><td class='key'>same_day_two_months_ago_value</td><td><strong>224,339</strong></td></tr><tr><td class='key'>mtd_count</td><td><strong>314,765</strong></td></tr><tr><td class='key'>mtd_value</td><td><strong>4,786,875</strong></td></tr><tr><td class='key'>prev_mtd_count</td><td><strong>336,138</strong></td></tr><tr><td class='key'>prev_mtd_value</td><td><strong>5,060,625</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_count</td><td><strong>93.6% (down 6.4%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_value</td><td><strong>94.6% (down 5.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_count</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_value</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>three_month_trend_count</td><td><strong>331,317 → 336,138 → 314,765 (legs: +1.5%, -6.4%)</strong></td></tr><tr><td class='key'>three_month_trend_value</td><td><strong>R5,011,850 → R5,060,625 → R4,786,875 (legs: +1.0%, -5.4%)</strong></td></tr></table><ul class="flags"><li>0 recharges recorded for 2026-07-19 — total outage safety net triggered. Likely cause: data pipeline lag, not a real zero-transaction day — VW_CELLC_RECHARGES currently has no rows past 2026-07-17 (max transaction date), i.e. 2 days behind the 2026-07-19 run_date. Needs data-team follow-up to confirm the load has simply not caught up yet.</li><li>2026-07-19 recharge count (0) is >20% below same-day-last-month (2026-06-19: 18,267) and same-day-two-months-ago (2026-05-19: 14,799) — consistent with the same data lag.</li><li>2026-07-19 revenue (R0) is >20% below same-day-last-month (R276,874) and same-day-two-months-ago (R224,339) — consistent with the same data lag.</li><li>Same-day last-month vs two-months-ago count: up 23.4% (18,267 vs 14,799) — exceeds 5% threshold.</li><li>Same-day last-month vs two-months-ago value: up 23.4% (R276,874 vs R224,339) — exceeds 5% threshold.</li><li>Current MTD window (2026-07-01 to 2026-07-19) is affected by the same load lag — the underlying data only extends to 2026-07-17, so current MTD count/value likely understate the true month-to-date figures by roughly 2 days' worth of transactions. Read the MTD comparisons above with that caveat; they did not individually cross the 10% threshold, but that may be masking the shortfall.</li></ul></div>
     </div>
   
     <div class="card green">
@@ -278,7 +278,7 @@
             <span class="badge green">PASS</span>
             <span class="card-title">Active 1 (Snapshot)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>456,929</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>299,224</strong></td></tr><tr><td class='key'>semi_active_31_60_days</td><td><strong>53,644</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>35,056</strong></td></tr><tr><td class='key'>never_used</td><td><strong>69,005</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>156,736</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>453,483</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>298,797</strong></td></tr><tr><td class='key'>semi_active_31_60_days</td><td><strong>56,705</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>29,889</strong></td></tr><tr><td class='key'>never_used</td><td><strong>68,092</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>124,789</strong></td></tr></table></div>
     </div>
   
     <div class="card red">
@@ -286,7 +286,7 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">DIM Subscriber Alignment</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>456,929</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>456,927</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active</td><td><strong>469,044</strong></td></tr><tr><td class='key'>spread</td><td><strong>12,117</strong></td></tr></table><ul class="flags"><li>Spread of 12,117 across subscriber tables — MERGE (469,044) vs DIM_SUBSCRIBERS (456,927)</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>453,483</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>453,481</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active</td><td><strong>465,595</strong></td></tr><tr><td class='key'>spread</td><td><strong>12,114</strong></td></tr></table><ul class="flags"><li>Spread of 12,114 across subscriber tables — MERGE (465,595) vs DIM_SUBSCRIBERS (453,481) — exceeds the 15-record threshold.</li></ul></div>
     </div>
   
     <div class="card red">
@@ -294,7 +294,7 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">Terminations (>60 day usage)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>35,056</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>35,056 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>29,889</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>29,889 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold.</li></ul></div>
     </div>
 </div>
 

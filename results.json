@@ -1,48 +1,48 @@
 {
-  "run_date": "2026-07-14",
-  "run_time": "2026-07-15 — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-07-14) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges compares yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length).",
+  "run_date": "2026-07-19",
+  "run_time": "2026-07-20 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-07-19) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges compares yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length).",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "red",
       "values": {
-        "yesterday_count": 4766,
-        "yesterday_value": 70718,
-        "same_day_last_month_count": 14377,
-        "same_day_last_month_value": 219065,
-        "same_day_two_months_ago_count": 15425,
-        "same_day_two_months_ago_value": 251136,
-        "mtd_count": 241766,
-        "mtd_value": 3682098,
-        "prev_mtd_count": 251091,
-        "prev_mtd_value": 3758986,
-        "pct_mtd_vs_prev_count": "96.3% (down 3.7%)",
-        "pct_mtd_vs_prev_value": "98.0% (down 2.0%)",
-        "pct_same_day_lm_vs_2lm_count": "93.2% (down 6.8%)",
-        "pct_same_day_lm_vs_2lm_value": "87.2% (down 12.8%)",
-        "three_month_trend_count": "247,626 → 251,091 → 241,766 (legs: +1.4%, -3.7%)",
-        "three_month_trend_value": "R3,746,134 → R3,758,986 → R3,682,098 (legs: +0.3%, -2.0%)"
+        "yesterday_count": 0,
+        "yesterday_value": 0,
+        "same_day_last_month_count": 18267,
+        "same_day_last_month_value": 276874,
+        "same_day_two_months_ago_count": 14799,
+        "same_day_two_months_ago_value": 224339,
+        "mtd_count": 314765,
+        "mtd_value": 4786875,
+        "prev_mtd_count": 336138,
+        "prev_mtd_value": 5060625,
+        "pct_mtd_vs_prev_count": "93.6% (down 6.4%)",
+        "pct_mtd_vs_prev_value": "94.6% (down 5.4%)",
+        "pct_same_day_lm_vs_2lm_count": "123.4% (up 23.4%)",
+        "pct_same_day_lm_vs_2lm_value": "123.4% (up 23.4%)",
+        "three_month_trend_count": "331,317 → 336,138 → 314,765 (legs: +1.5%, -6.4%)",
+        "three_month_trend_value": "R5,011,850 → R5,060,625 → R4,786,875 (legs: +1.0%, -5.4%)"
       },
       "flags": [
-        "4,766 recharges — >20% drop vs same day last month (14,377)",
-        "4,766 recharges — >20% drop vs same day two months ago (15,425)",
-        "R70,718 revenue — >20% drop vs same day last month (R219,065)",
-        "R70,718 revenue — >20% drop vs same day two months ago (R251,136)",
-        "Same-day last-month vs two-months-ago count: down 6.8% — exceeds 5% threshold",
-        "Same-day last-month vs two-months-ago value: down 12.8% — exceeds 5% threshold"
+        "0 recharges recorded for 2026-07-19 — total outage safety net triggered. Likely cause: data pipeline lag, not a real zero-transaction day — VW_CELLC_RECHARGES currently has no rows past 2026-07-17 (max transaction date), i.e. 2 days behind the 2026-07-19 run_date. Needs data-team follow-up to confirm the load has simply not caught up yet.",
+        "2026-07-19 recharge count (0) is >20% below same-day-last-month (2026-06-19: 18,267) and same-day-two-months-ago (2026-05-19: 14,799) — consistent with the same data lag.",
+        "2026-07-19 revenue (R0) is >20% below same-day-last-month (R276,874) and same-day-two-months-ago (R224,339) — consistent with the same data lag.",
+        "Same-day last-month vs two-months-ago count: up 23.4% (18,267 vs 14,799) — exceeds 5% threshold.",
+        "Same-day last-month vs two-months-ago value: up 23.4% (R276,874 vs R224,339) — exceeds 5% threshold.",
+        "Current MTD window (2026-07-01 to 2026-07-19) is affected by the same load lag — the underlying data only extends to 2026-07-17, so current MTD count/value likely understate the true month-to-date figures by roughly 2 days' worth of transactions. Read the MTD comparisons above with that caveat; they did not individually cross the 10% threshold, but that may be masking the shortfall."
       ]
     },
     {
       "check": "Active 1 (Snapshot)",
       "status": "green",
       "values": {
-        "total_sims_in_view": 456929,
-        "active_0_30_days": 299224,
-        "semi_active_31_60_days": 53644,
-        "inactive_over_60_days": 35056,
-        "never_used": 69005,
-        "used_in_last_1_day": 156736
+        "total_sims_in_view": 453483,
+        "active_0_30_days": 298797,
+        "semi_active_31_60_days": 56705,
+        "inactive_over_60_days": 29889,
+        "never_used": 68092,
+        "used_in_last_1_day": 124789
       },
       "flags": []
     },
@@ -50,24 +50,24 @@
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 456929,
-        "DIM_SUBSCRIBERS_active": 456927,
-        "UCONNECT_MAY_MERGE_active": 469044,
-        "spread": 12117
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 453483,
+        "DIM_SUBSCRIBERS_active": 453481,
+        "UCONNECT_MAY_MERGE_active": 465595,
+        "spread": 12114
       },
       "flags": [
-        "Spread of 12,117 across subscriber tables — MERGE (469,044) vs DIM_SUBSCRIBERS (456,927)"
+        "Spread of 12,114 across subscriber tables — MERGE (465,595) vs DIM_SUBSCRIBERS (453,481) — exceeds the 15-record threshold."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "sims_over_60_days": 35056,
+        "sims_over_60_days": 29889,
         "threshold": 3000
       },
       "flags": [
-        "35,056 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold"
+        "29,889 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold."
       ]
     }
   ],
