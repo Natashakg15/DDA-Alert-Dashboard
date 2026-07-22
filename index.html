@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-07-19</title>
+<title>DDA Daily BI Checks — 2026-07-21</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -245,7 +245,7 @@
   <div class="header-top">
     <div>
       <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">20 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-19 &nbsp;&middot;&nbsp; Snowflake</div>
+      <div class="meta">22 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-21 &nbsp;&middot;&nbsp; Snowflake</div>
     </div>
     <div class="overall red">
       <span class="overall-dot"></span>
@@ -255,11 +255,11 @@
 </header>
 
 <div class="summary-bar">
-  <span class="summary-pill green">1 Passed</span>
-  <span class="summary-pill red">3 Failed</span>
-  <span class="summary-pill amber">0 Warnings</span>
+  <span class="summary-pill green">0 Passed</span>
+  <span class="summary-pill red">4 Failed</span>
+  <span class="summary-pill amber">1 Warnings</span>
   <span class="summary-pill pending">3 Pending</span>
-  <span class="summary-pill gray">3 Manual</span>
+  <span class="summary-pill gray">4 Manual</span>
 </div>
 
 <h2>Automated Checks — Snowflake</h2>
@@ -270,15 +270,23 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">Cell C Recharges</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>0</strong></td></tr><tr><td class='key'>yesterday_value</td><td><strong>0</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>18,267</strong></td></tr><tr><td class='key'>same_day_last_month_value</td><td><strong>276,874</strong></td></tr><tr><td class='key'>same_day_two_months_ago_count</td><td><strong>14,799</strong></td></tr><tr><td class='key'>same_day_two_months_ago_value</td><td><strong>224,339</strong></td></tr><tr><td class='key'>mtd_count</td><td><strong>314,765</strong></td></tr><tr><td class='key'>mtd_value</td><td><strong>4,786,875</strong></td></tr><tr><td class='key'>prev_mtd_count</td><td><strong>336,138</strong></td></tr><tr><td class='key'>prev_mtd_value</td><td><strong>5,060,625</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_count</td><td><strong>93.6% (down 6.4%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_value</td><td><strong>94.6% (down 5.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_count</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_value</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>three_month_trend_count</td><td><strong>331,317 → 336,138 → 314,765 (legs: +1.5%, -6.4%)</strong></td></tr><tr><td class='key'>three_month_trend_value</td><td><strong>R5,011,850 → R5,060,625 → R4,786,875 (legs: +1.0%, -5.4%)</strong></td></tr></table><ul class="flags"><li>0 recharges recorded for 2026-07-19 — total outage safety net triggered. Likely cause: data pipeline lag, not a real zero-transaction day — VW_CELLC_RECHARGES currently has no rows past 2026-07-17 (max transaction date), i.e. 2 days behind the 2026-07-19 run_date. Needs data-team follow-up to confirm the load has simply not caught up yet.</li><li>2026-07-19 recharge count (0) is >20% below same-day-last-month (2026-06-19: 18,267) and same-day-two-months-ago (2026-05-19: 14,799) — consistent with the same data lag.</li><li>2026-07-19 revenue (R0) is >20% below same-day-last-month (R276,874) and same-day-two-months-ago (R224,339) — consistent with the same data lag.</li><li>Same-day last-month vs two-months-ago count: up 23.4% (18,267 vs 14,799) — exceeds 5% threshold.</li><li>Same-day last-month vs two-months-ago value: up 23.4% (R276,874 vs R224,339) — exceeds 5% threshold.</li><li>Current MTD window (2026-07-01 to 2026-07-19) is affected by the same load lag — the underlying data only extends to 2026-07-17, so current MTD count/value likely understate the true month-to-date figures by roughly 2 days' worth of transactions. Read the MTD comparisons above with that caveat; they did not individually cross the 10% threshold, but that may be masking the shortfall.</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_count</td><td><strong>0</strong></td></tr><tr><td class='key'>yesterday_value</td><td><strong>0</strong></td></tr><tr><td class='key'>same_day_last_month_count</td><td><strong>18,267</strong></td></tr><tr><td class='key'>same_day_last_month_value</td><td><strong>276,874</strong></td></tr><tr><td class='key'>same_day_two_months_ago_count</td><td><strong>14,799</strong></td></tr><tr><td class='key'>same_day_two_months_ago_value</td><td><strong>224,339</strong></td></tr><tr><td class='key'>mtd_count</td><td><strong>314,765</strong></td></tr><tr><td class='key'>mtd_value</td><td><strong>4,786,875</strong></td></tr><tr><td class='key'>prev_mtd_count</td><td><strong>336,138</strong></td></tr><tr><td class='key'>prev_mtd_value</td><td><strong>5,060,625</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_count</td><td><strong>93.6% (down 6.4%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_value</td><td><strong>94.6% (down 5.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_count</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_value</td><td><strong>123.4% (up 23.4%)</strong></td></tr><tr><td class='key'>three_month_trend_count</td><td><strong>331,317 → 336,138 → 314,765 (legs: +1.5%, -6.4%)</strong></td></tr><tr><td class='key'>three_month_trend_value</td><td><strong>R5,011,850 → R5,060,625 → R4,786,875 (legs: +1.0%, -5.4%)</strong></td></tr></table><ul class="flags"><li>STALE — carried over from run_date 2026-07-19, not refreshed in this pass.</li><li>0 recharges recorded for 2026-07-19 — total outage safety net triggered. Likely cause: data pipeline lag, not a real zero-transaction day — VW_CELLC_RECHARGES currently has no rows past 2026-07-17 (max transaction date), i.e. 2 days behind the 2026-07-19 run_date. Needs data-team follow-up to confirm the load has simply not caught up yet.</li><li>2026-07-19 recharge count (0) is >20% below same-day-last-month (2026-06-19: 18,267) and same-day-two-months-ago (2026-05-19: 14,799) — consistent with the same data lag.</li><li>2026-07-19 revenue (R0) is >20% below same-day-last-month (R276,874) and same-day-two-months-ago (R224,339) — consistent with the same data lag.</li><li>Same-day last-month vs two-months-ago count: up 23.4% (18,267 vs 14,799) — exceeds 5% threshold.</li><li>Same-day last-month vs two-months-ago value: up 23.4% (R276,874 vs R224,339) — exceeds 5% threshold.</li><li>Current MTD window (2026-07-01 to 2026-07-19) is affected by the same load lag — the underlying data only extends to 2026-07-17, so current MTD count/value likely understate the true month-to-date figures by roughly 2 days' worth of transactions. Read the MTD comparisons above with that caveat; they did not individually cross the 10% threshold, but that may be masking the shortfall.</li></ul></div>
     </div>
   
-    <div class="card green">
+    <div class="card red">
         <div class="card-header">
-            <span class="badge green">PASS</span>
-            <span class="card-title">Active 1 (Snapshot)</span>
+            <span class="badge red">FAIL</span>
+            <span class="card-title">Sales (Last 30 Days)</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>453,483</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>298,797</strong></td></tr><tr><td class='key'>semi_active_31_60_days</td><td><strong>56,705</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>29,889</strong></td></tr><tr><td class='key'>never_used</td><td><strong>68,092</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>124,789</strong></td></tr></table></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>yesterday_qty</td><td><strong>5,471</strong></td></tr><tr><td class='key'>yesterday_value</td><td><strong>62,106.35</strong></td></tr><tr><td class='key'>same_day_last_month_qty</td><td><strong>18,692</strong></td></tr><tr><td class='key'>same_day_last_month_value</td><td><strong>215,860.27</strong></td></tr><tr><td class='key'>same_day_two_months_ago_qty</td><td><strong>21,023</strong></td></tr><tr><td class='key'>same_day_two_months_ago_value</td><td><strong>244,941.27</strong></td></tr><tr><td class='key'>mtd_qty</td><td><strong>476,093</strong></td></tr><tr><td class='key'>mtd_value</td><td><strong>7,887,898.49</strong></td></tr><tr><td class='key'>prev_mtd_qty</td><td><strong>525,817</strong></td></tr><tr><td class='key'>prev_mtd_value</td><td><strong>8,053,358.75</strong></td></tr><tr><td class='key'>pct_yesterday_vs_same_day_last_month_qty</td><td><strong>29.3% (down 70.7%)</strong></td></tr><tr><td class='key'>pct_yesterday_vs_same_day_last_month_value</td><td><strong>28.8% (down 71.2%)</strong></td></tr><tr><td class='key'>pct_yesterday_vs_same_day_2_months_ago_qty</td><td><strong>26.0% (down 74.0%)</strong></td></tr><tr><td class='key'>pct_yesterday_vs_same_day_2_months_ago_value</td><td><strong>25.4% (down 74.6%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_qty</td><td><strong>88.9% (down 11.1%)</strong></td></tr><tr><td class='key'>pct_same_day_lm_vs_2lm_value</td><td><strong>88.1% (down 11.9%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_qty</td><td><strong>90.5% (down 9.5%)</strong></td></tr><tr><td class='key'>pct_mtd_vs_prev_value</td><td><strong>97.9% (down 2.1%)</strong></td></tr><tr><td class='key'>three_month_trend_qty</td><td><strong>520,520 → 525,817 → 476,093 (legs: +1.0%, -9.5%)</strong></td></tr><tr><td class='key'>three_month_trend_value</td><td><strong>R7,823,018 → R8,053,359 → R7,887,898 (legs: +2.9%, -2.1%)</strong></td></tr></table><ul class="flags"><li>REVENUE_WHATSAPP_PURCHASES_VALUE/QUANTITY excluded from every sum above — MAX() ~1.7e19, orders of magnitude beyond every other revenue column, with an unresolved 'Unknown Policy!' on both columns per DESCRIBE TABLE. Needs data-team/Snowflake-admin follow-up before those two streams can be trusted or included.</li><li>Yesterday vs same day last month qty: down 70.7% (5,471 vs 18,692) — exceeds 20% threshold.</li><li>Yesterday vs same day last month value: down 71.2% (R62,106 vs R215,860) — exceeds 20% threshold.</li><li>Yesterday vs same day two months ago qty: down 74.0% (5,471 vs 21,023) — exceeds 20% threshold.</li><li>Yesterday vs same day two months ago value: down 74.6% (R62,106 vs R244,941) — exceeds 20% threshold.</li><li>Same-day last-month vs two-months-ago qty: down 11.1% (18,692 vs 21,023) — exceeds 5% threshold.</li><li>Same-day last-month vs two-months-ago value: down 11.9% (R215,860 vs R244,941) — exceeds 5% threshold.</li><li>Tenant breakdown (yesterday vs same day last month, value): uConnect: R211,711 → R55,310 (-73.9%); ME&YOU: R4,149 → R6,796 (+63.8%). This is a uConnect-specific drop, not an overall/ME&YOU issue — ME&YOU's small revenue base actually grew over the same window. MAX(TRANSACTION_DATE) confirms yesterday's data is not lagging (2026-07-21 is fully loaded, 4,533 rows), so this reads as a real business drop rather than a load-lag artifact — worth investigating directly rather than waiting for the next load.</li></ul></div>
+    </div>
+  
+    <div class="card red">
+        <div class="card-header">
+            <span class="badge red">FAIL</span>
+            <span class="card-title">Active 1</span>
+        </div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>total_sims_in_view</td><td><strong>453,396</strong></td></tr><tr><td class='key'>active_0_30_days</td><td><strong>300,929</strong></td></tr><tr><td class='key'>semi_active_31_60_days</td><td><strong>54,606</strong></td></tr><tr><td class='key'>inactive_over_60_days</td><td><strong>29,217</strong></td></tr><tr><td class='key'>never_used</td><td><strong>68,644</strong></td></tr><tr><td class='key'>used_in_last_1_day</td><td><strong>137,273</strong></td></tr><tr><td class='key'>never_used_vs_same_day_last_month</td><td><strong>N/A — snapshot history starts 2026-07-21</strong></td></tr><tr><td class='key'>new_subs_yesterday</td><td><strong>1,927</strong></td></tr><tr><td class='key'>new_subs_active1_yesterday</td><td><strong>308</strong></td></tr><tr><td class='key'>new_subs_active1_rate_yesterday</td><td><strong>16.0%</strong></td></tr><tr><td class='key'>new_subs_day_before</td><td><strong>1,746</strong></td></tr><tr><td class='key'>new_subs_active1_day_before</td><td><strong>362</strong></td></tr><tr><td class='key'>new_subs_active1_rate_day_before</td><td><strong>20.8%</strong></td></tr><tr><td class='key'>pct_new_subs_vs_day_before</td><td><strong>110.4% (up 10.4%)</strong></td></tr><tr><td class='key'>pct_new_subs_active1_vs_day_before</td><td><strong>85.1% (down 14.9%)</strong></td></tr><tr><td class='key'>cohort_2_4_days_active_yesterday</td><td><strong>925</strong></td></tr><tr><td class='key'>cohort_2_4_days_active_avg_prior_7d</td><td><strong>2,514</strong></td></tr><tr><td class='key'>pct_cohort_2_4_days_active_vs_7d_avg</td><td><strong>36.8% (down 63.2%)</strong></td></tr><tr><td class='key'>cohort_day30_total</td><td><strong>684</strong></td></tr><tr><td class='key'>cohort_day30_active7_count</td><td><strong>159</strong></td></tr><tr><td class='key'>cohort_day30_active7_rate</td><td><strong>23.2%</strong></td></tr><tr><td class='key'>cohort_day30_active7_same_period_last_month</td><td><strong>N/A — snapshot history starts 2026-07-21</strong></td></tr><tr><td class='key'>mtd_new_subs</td><td><strong>42,064</strong></td></tr><tr><td class='key'>mtd_new_subs_active1</td><td><strong>18,053</strong></td></tr><tr><td class='key'>mtd_active1_rate</td><td><strong>42.9%</strong></td></tr><tr><td class='key'>prev_mtd_new_subs</td><td><strong>39,998</strong></td></tr><tr><td class='key'>prev_mtd_new_subs_active1</td><td><strong>19,372</strong></td></tr><tr><td class='key'>prev_mtd_active1_rate</td><td><strong>48.4%</strong></td></tr><tr><td class='key'>pct_mtd_active1_vs_prev_mtd</td><td><strong>93.2% (down 6.8%)</strong></td></tr></table><ul class="flags"><li>Day 2-4 registration-activity cohort: down 63.2% vs trailing-7-day average (925 vs avg 2,514) — exceeds 60% drastic-drop threshold. Registration volume itself is also trending down over the same window (2026-07-14 to 2026-07-21: 3,972 → 4,630 new subs 2-4 days prior), so this may be a real activation slowdown rather than a data artifact — worth a follow-up look rather than dismissing as noise.</li></ul></div>
     </div>
   
     <div class="card red">
@@ -286,15 +294,15 @@
             <span class="badge red">FAIL</span>
             <span class="card-title">DIM Subscriber Alignment</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>453,483</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>453,481</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active</td><td><strong>465,595</strong></td></tr><tr><td class='key'>spread</td><td><strong>12,114</strong></td></tr></table><ul class="flags"><li>Spread of 12,114 across subscriber tables — MERGE (465,595) vs DIM_SUBSCRIBERS (453,481) — exceeds the 15-record threshold.</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>VW_ACTIVE_SUBSCRIPTIONS_snapshot</td><td><strong>453,396</strong></td></tr><tr><td class='key'>DIM_SUBSCRIBERS_active</td><td><strong>453,990</strong></td></tr><tr><td class='key'>UCONNECT_MAY_MERGE_active_uConnect_only</td><td><strong>453,992</strong></td></tr><tr><td class='key'>spread</td><td><strong>596</strong></td></tr><tr><td class='key'>duplicate_account_numbers</td><td><strong>2</strong></td></tr><tr><td class='key'>duplicate_account_number_rows</td><td><strong>4</strong></td></tr><tr><td class='key'>duplicate_iccids</td><td><strong>7</strong></td></tr><tr><td class='key'>duplicate_iccid_rows</td><td><strong>40</strong></td></tr></table><ul class="flags"><li>Spread of 596 across subscriber tables — MERGE (453,992) vs VW_ACTIVE (453,396) — exceeds the 15-record threshold. Much smaller than the previously-reported 12,114 spread, which was inflated by not filtering UCONNECT_MAY_MERGE to MASTER_TENANT = 'uConnect' (that filter is now applied, per 2026-07-22 request — ME&YOU rows excluded).</li><li>Duplicate ACCOUNT_NUMBER/ICCID check: 2 duplicated account numbers (4 rows) and 7 duplicated ICCIDs (40 rows) among active uConnect records — both well under the 100 threshold, no flag.</li></ul></div>
     </div>
   
-    <div class="card red">
+    <div class="card amber">
         <div class="card-header">
-            <span class="badge red">FAIL</span>
-            <span class="card-title">Terminations (>60 day usage)</span>
+            <span class="badge amber">WARN</span>
+            <span class="card-title">Terminations</span>
         </div>
-        <div class="card-body"><table class='kv'><tr><td class='key'>sims_over_60_days</td><td><strong>29,889</strong></td></tr><tr><td class='key'>threshold</td><td><strong>3,000</strong></td></tr></table><ul class="flags"><li>29,889 SIMs with no usage in over 60 days — significantly exceeds the 3,000 threshold.</li></ul></div>
+        <div class="card-body"><table class='kv'><tr><td class='key'>mtd_terminations</td><td><strong>18,639</strong></td></tr><tr><td class='key'>prev_mtd_terminations</td><td><strong>18,253</strong></td></tr><tr><td class='key'>two_months_ago_mtd_terminations</td><td><strong>1,088</strong></td></tr><tr><td class='key'>baseline_avg_last_2_months</td><td><strong>9,671</strong></td></tr><tr><td class='key'>threshold_baseline_plus_500</td><td><strong>10,171</strong></td></tr><tr><td class='key'>sims_over_60_days_no_usage_proxy</td><td><strong>29,217</strong></td></tr></table><ul class="flags"><li>No red flag on the MTD-vs-threshold rule (18,639 MTD terminations vs a 10,171 threshold — avg of 18,253 and 1,088 + 500), but termination dates look batch-applied within a month rather than flowing evenly day-by-day: 2026-05-01 to 05-21 had only 1,088 uConnect terminations, yet the FULL month of May had 26,879 (almost all backdated into the second half of the month). A day-of-month-cutoff MTD comparison, which works fine for recharges/sales, may not be a reliable read on this metric. Worth confirming with the data team whether termination processing runs in batches before trusting this trend either way.</li></ul></div>
     </div>
 </div>
 
@@ -351,6 +359,14 @@
             <span class="card-title">CDR PowerBI Dashboard</span>
         </div>
         <div class="card-body"><p class="note">Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2</p></div>
+    </div>
+  
+    <div class="card manual">
+        <div class="card-header">
+            <span class="badge manual">MANUAL</span>
+            <span class="card-title">QOS by Tenant & Store (Active 1, Day 2-4)</span>
+        </div>
+        <div class="card-body"><p class="note">Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.</p></div>
     </div>
 </div>
 
