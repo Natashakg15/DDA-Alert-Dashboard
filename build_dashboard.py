@@ -1,4 +1,5 @@
 import json
+import re
 
 with open("results.json", encoding="utf-8") as f:
     data = json.load(f)
@@ -37,15 +38,117 @@ def fmt(v):
         return f"{v:,}"
     if isinstance(v, float):
         return f"{v:,.2f}"
+    if v is None:
+        return "N/A"
     return str(v)
 
 
-def kv_table(values: dict) -> str:
-    rows = "".join(
-        f"<tr><td class='key'>{k}</td><td><strong>{fmt(v)}</strong></td></tr>"
+ACRONYMS = {"mtd", "qos", "iccid", "dim", "vw", "sims", "id", "2lm", "lm"}
+SMALL_WORDS = {"vs", "of", "in", "a"}
+
+
+def label(key: str) -> str:
+    """snake_case key -> human label, e.g. pct_mtd_vs_prev_count -> '% MTD vs Prev Count'."""
+    s = re.sub(r"([a-zA-Z])(\d)", r"\1 \2", key.replace("_", " "))
+    words = s.split()
+    out = []
+    for i, w in enumerate(words):
+        lw = w.lower()
+        if lw == "pct":
+            out.append("%")
+        elif lw in ACRONYMS:
+            out.append(lw.upper())
+        elif lw in SMALL_WORDS and i != 0:
+            out.append(lw)
+        else:
+            out.append(w[:1].upper() + w[1:])
+    return " ".join(out)
+
+
+# Declarative grouping so related stats sit together instead of one long flat list.
+# Any key present in a check's values but not listed here still renders, under "Other".
+CHECK_GROUPS = {
+    "Cell C Recharges": [
+        ("Yesterday", ["yesterday_count", "yesterday_value"]),
+        ("Same-Day History", ["same_day_last_month_count", "same_day_last_month_value",
+                               "same_day_two_months_ago_count", "same_day_two_months_ago_value",
+                               "pct_same_day_lm_vs_2lm_count", "pct_same_day_lm_vs_2lm_value"]),
+        ("Month to Date", ["mtd_count", "mtd_value", "prev_mtd_count", "prev_mtd_value",
+                            "pct_mtd_vs_prev_count", "pct_mtd_vs_prev_value"]),
+        ("3-Month Trend", ["three_month_trend_count", "three_month_trend_value"]),
+    ],
+    "Sales (Last 30 Days)": [
+        ("Yesterday", ["yesterday_qty", "yesterday_value"]),
+        ("Same-Day History", ["same_day_last_month_qty", "same_day_last_month_value",
+                               "same_day_two_months_ago_qty", "same_day_two_months_ago_value",
+                               "pct_yesterday_vs_same_day_last_month_qty", "pct_yesterday_vs_same_day_last_month_value",
+                               "pct_yesterday_vs_same_day_2_months_ago_qty", "pct_yesterday_vs_same_day_2_months_ago_value",
+                               "pct_same_day_lm_vs_2lm_qty", "pct_same_day_lm_vs_2lm_value"]),
+        ("Month to Date", ["mtd_qty", "mtd_value", "prev_mtd_qty", "prev_mtd_value",
+                            "pct_mtd_vs_prev_qty", "pct_mtd_vs_prev_value"]),
+        ("3-Month Trend", ["three_month_trend_qty", "three_month_trend_value"]),
+    ],
+    "Active 1": [
+        ("Snapshot", ["total_sims_in_view", "active_0_30_days", "semi_active_31_60_days",
+                      "inactive_over_60_days", "never_used", "used_in_last_1_day",
+                      "never_used_vs_same_day_last_month"]),
+        ("New-Subscriber Cohort", ["new_subs_yesterday", "new_subs_active1_yesterday",
+                                   "new_subs_active1_rate_yesterday", "new_subs_day_before",
+                                   "new_subs_active1_day_before", "new_subs_active1_rate_day_before",
+                                   "pct_new_subs_vs_day_before", "pct_new_subs_active1_vs_day_before"]),
+        ("Day 2-4 Registration Activity", ["cohort_2_4_days_active_yesterday",
+                                            "cohort_2_4_days_active_avg_prior_7d",
+                                            "pct_cohort_2_4_days_active_vs_7d_avg"]),
+        ("Day-30 Active-7 Retention", ["cohort_day30_total", "cohort_day30_active7_count",
+                                       "cohort_day30_active7_rate",
+                                       "cohort_day30_active7_same_period_last_month"]),
+        ("MTD Trend", ["mtd_new_subs", "mtd_new_subs_active1", "mtd_active1_rate",
+                       "prev_mtd_new_subs", "prev_mtd_new_subs_active1", "prev_mtd_active1_rate",
+                       "pct_mtd_active1_vs_prev_mtd"]),
+    ],
+    "DIM Subscriber Alignment": [
+        ("Table Alignment", ["VW_ACTIVE_SUBSCRIPTIONS_snapshot", "DIM_SUBSCRIBERS_active",
+                              "UCONNECT_MAY_MERGE_active_uConnect_only", "spread"]),
+        ("Duplicate Check (Active, uConnect)", ["duplicate_account_numbers",
+                                                 "duplicate_account_number_rows",
+                                                 "duplicate_iccids", "duplicate_iccid_rows"]),
+    ],
+    "Terminations": [
+        ("Terminations vs Threshold", ["mtd_terminations", "prev_mtd_terminations",
+                                        "two_months_ago_mtd_terminations",
+                                        "baseline_avg_last_2_months", "threshold_baseline_plus_500"]),
+        ("Legacy Proxy", ["sims_over_60_days_no_usage_proxy"]),
+    ],
+}
+
+
+def stat_grid(values: dict) -> str:
+    tiles = "".join(
+        f"<div class='stat'><div class='stat-label'>{label(k)}</div>"
+        f"<div class='stat-value'>{fmt(v)}</div></div>"
         for k, v in values.items()
     )
-    return f"<table class='kv'>{rows}</table>"
+    return f"<div class='stat-grid'>{tiles}</div>"
+
+
+def kv_table(check_name: str, values: dict) -> str:
+    groups = CHECK_GROUPS.get(check_name)
+    if not groups:
+        return stat_grid(values)
+
+    seen = set()
+    sections = []
+    for group_label, keys in groups:
+        present = {k: values[k] for k in keys if k in values}
+        seen.update(present)
+        if present:
+            sections.append(
+                f"<div class='stat-group'><h4>{group_label}</h4>{stat_grid(present)}</div>"
+            )
+    leftover = {k: v for k, v in values.items() if k not in seen}
+    if leftover:
+        sections.append(f"<div class='stat-group'><h4>Other</h4>{stat_grid(leftover)}</div>")
+    return "".join(sections)
 
 
 def flag_list(flags: list) -> str:
@@ -75,7 +178,7 @@ def card(check: dict) -> str:
     if note:
         body += f'<p class="note">{note}</p>'
     if values:
-        body += kv_table(values)
+        body += kv_table(title, values)
     body += flag_list(flags)
 
     return f"""
@@ -221,8 +324,9 @@ html = f"""<!DOCTYPE html>
 
   .grid {{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    gap: 16px;
+    align-items: start;
   }}
 
   .card {{
@@ -278,17 +382,41 @@ html = f"""<!DOCTYPE html>
   .badge.pending {{ background: var(--ultraviolet);color: var(--inkcore); }}
   .badge.error   {{ background: var(--highvolt);   color: var(--zero-white); }}
 
-  table.kv {{ width: 100%; border-collapse: collapse; margin-top: 8px; }}
-  table.kv td {{ padding: 5px 6px; vertical-align: top; }}
-  table.kv td.key {{
-    color: rgba(255,255,255,0.35);
-    white-space: nowrap;
-    padding-right: 16px;
-    font-size: 0.75rem;
+  .stat-group {{ margin-top: 14px; }}
+  .stat-group:first-child {{ margin-top: 0; }}
+  .stat-group h4 {{
+    font-family: var(--font-header);
+    font-size: 0.68rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
+    color: var(--ultraviolet);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
   }}
-  table.kv td strong {{ color: var(--zero-white); font-weight: 600; }}
+
+  .stat-grid {{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px 16px;
+  }}
+  .stat {{ min-width: 0; }}
+  .stat-label {{
+    color: rgba(255,255,255,0.4);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }}
+  .stat-value {{
+    color: var(--zero-white);
+    font-weight: 600;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    word-break: break-word;
+  }}
 
   ul.flags {{ list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }}
   ul.flags li {{
