@@ -18,5 +18,15 @@
     "never_used": 55524,
     "used_yesterday": 143798,
     "day30_active7_rate": 30.33
+  },
+  {
+    "date": "2026-07-27",
+    "total": 437265,
+    "active_30": 305262,
+    "semi_active": 56909,
+    "over_60": 14692,
+    "never_used": 60402,
+    "used_yesterday": 127608,
+    "day30_active7_rate": 25.14
   }
 ]
