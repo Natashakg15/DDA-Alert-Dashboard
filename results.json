@@ -1,7 +1,7 @@
 {
-  "run_date": "2026-07-22",
-  "run_time": "2026-07-23 — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-07-22) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges compares yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length).",
+  "run_date": "2026-07-27",
+  "run_time": "2026-07-28 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-07-27) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges compares yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length). Note: the automated refresh did not run 2026-07-23 through 2026-07-26 (last completed run was for 2026-07-22) — snapshot-log-dependent comparisons (never-used vs same day last month, day-30 Active-7 vs same period last month) show N/A for dates not yet in the log rather than guessed values.",
   "automated": [
     {
       "check": "Cell C Recharges",
@@ -9,194 +9,163 @@
       "values": {
         "yesterday_count": 0,
         "yesterday_value": 0,
-        "same_day_last_month_count": 16267,
-        "same_day_last_month_value": 258660,
-        "same_day_two_months_ago_count": 19356,
-        "same_day_two_months_ago_value": 300905,
+        "same_day_last_month_count": 20074,
+        "same_day_last_month_value": 309480,
+        "same_day_two_months_ago_count": 17774,
+        "same_day_two_months_ago_value": 281009,
         "mtd_count": 314765,
-        "mtd_value": 4786874,
-        "prev_mtd_count": 383753,
-        "prev_mtd_value": 5766435,
-        "pct_mtd_vs_prev_count": "82.0% (down 18.0%)",
-        "pct_mtd_vs_prev_value": "83.0% (down 17.0%)",
-        "pct_same_day_lm_vs_2lm_count": "84.0% (down 16.0%)",
-        "pct_same_day_lm_vs_2lm_value": "86.0% (down 14.0%)",
-        "three_month_trend_count": "381,055 → 383,753 → 314,765 (legs: +0.7%, -18.0%)",
-        "three_month_trend_value": "R5,779,702 → R5,766,435 → R4,786,875 (legs: -0.2%, -17.0%)"
+        "mtd_value": 4786874.82,
+        "prev_mtd_count": 481688,
+        "prev_mtd_value": 7295838.00,
+        "pct_mtd_vs_prev_count": "65.4% (down 34.6%)",
+        "pct_mtd_vs_prev_value": "65.6% (down 34.4%)",
+        "pct_same_day_lm_vs_2lm_count": "112.9% (up 12.9%)",
+        "pct_same_day_lm_vs_2lm_value": "110.1% (up 10.1%)",
+        "three_month_trend_count": "470,624 → 481,688 → 314,765 (legs: +2.4%, -34.6%)",
+        "three_month_trend_value": "R7,162,708 → R7,295,838 → R4,786,875 (legs: +1.9%, -34.4%)"
       },
       "flags": [
-        "0 recharges recorded for 2026-07-22 — total outage safety net triggered. Root cause: VW_CELLC_RECHARGES has NOT advanced — MAX(TRANSACTION_DATE) is still 2026-07-17, i.e. 5 days behind the 2026-07-22 run_date. This is the SAME stall first flagged on the 2026-07-19 run (when the lag was only 2 days) — the pipeline has made no further progress in 3 days. This is no longer a transient blip and needs urgent data-team escalation.",
-        "2026-07-22 recharge count (0) is >20% below same-day-last-month (2026-06-22: 16,267) and same-day-two-months-ago (2026-05-22: 19,356) — consistent with the same data lag.",
-        "2026-07-22 revenue (R0) is >20% below same-day-last-month (R258,660) and same-day-two-months-ago (R300,905) — consistent with the same data lag.",
-        "MTD vs prior-month MTD count: down 18.0% (314,765 vs 383,753) — exceeds 10% threshold. Affected by the same load lag: the underlying data only extends to 2026-07-17, so the current MTD figure understates the true month-to-date count by roughly 5 days' worth of transactions.",
-        "MTD vs prior-month MTD value: down 17.0% (R4,786,874 vs R5,766,435) — exceeds 10% threshold, same load-lag caveat as above.",
-        "Same-day last-month vs two-months-ago count: down 16.0% (16,267 vs 19,356) — exceeds 5% threshold.",
-        "Same-day last-month vs two-months-ago value: down 14.0% (R258,660 vs R300,905) — exceeds 5% threshold."
+        "0 recharges recorded for 2026-07-27 — total outage safety net triggered. Root cause unchanged: VW_CELLC_RECHARGES MAX(TRANSACTION_DATE) is still 2026-07-17 — now 10 days behind the 2026-07-27 run_date, up from 5 days behind at the 2026-07-22 run and 2 days at the 2026-07-19 run. This stall was first flagged 2026-07-19 and has made zero progress in over a week — this needs urgent data-team escalation, not another routine flag.",
+        "2026-07-27 recharge count (0) is >20% below same-day-last-month (2026-06-27: 20,074) and same-day-two-months-ago (2026-05-27: 17,774) — consistent with the same data lag.",
+        "2026-07-27 revenue (R0) is >20% below same-day-last-month (R309,480) and same-day-two-months-ago (R281,009) — consistent with the same data lag.",
+        "MTD vs prior-month MTD count: down 34.6% (314,765 vs 481,688) — exceeds 10% threshold. July's MTD count is frozen at the same 314,765 seen in the 07-22 run since no new data has loaded past 2026-07-17 — this is an artifact of the pipeline stall, not a real demand drop.",
+        "MTD vs prior-month MTD value: down 34.4% (R4,786,875 vs R7,295,838) — same load-lag caveat as above.",
+        "Same-day last-month vs two-months-ago count: up 12.9% (20,074 vs 17,774) — exceeds 5% threshold.",
+        "Same-day last-month vs two-months-ago value: up 10.1% (R309,480 vs R281,009) — exceeds 5% threshold.",
+        "Abnormal 3-month count trend: 470,624 → 481,688 → 314,765 (legs: +2.4%, -34.6%) — driven entirely by the stall freezing July's count, not a genuine trend.",
+        "Abnormal 3-month value trend: R7,162,708 → R7,295,838 → R4,786,875 (legs: +1.9%, -34.4%) — same stall-driven caveat."
       ]
     },
     {
       "check": "Sales (Last 30 Days)",
       "status": "red",
       "values": {
-        "yesterday_qty": 4872,
-        "yesterday_value": 50204.14,
-        "same_day_last_month_qty": 21174,
-        "same_day_last_month_value": 265933.95,
-        "same_day_two_months_ago_qty": 28806,
-        "same_day_two_months_ago_value": 338615.68,
-        "mtd_qty": 480971,
-        "mtd_value": 7938827.84,
-        "prev_mtd_qty": 546990,
-        "prev_mtd_value": 8318989.22,
-        "pct_yesterday_vs_same_day_last_month_qty": "23.0% (down 77.0%)",
-        "pct_yesterday_vs_same_day_last_month_value": "18.9% (down 81.1%)",
-        "pct_yesterday_vs_same_day_2_months_ago_qty": "16.9% (down 83.1%)",
-        "pct_yesterday_vs_same_day_2_months_ago_value": "14.8% (down 85.2%)",
-        "pct_same_day_lm_vs_2lm_qty": "73.5% (down 26.5%)",
-        "pct_same_day_lm_vs_2lm_value": "78.5% (down 21.5%)",
-        "pct_mtd_vs_prev_qty": "87.9% (down 12.1%)",
-        "pct_mtd_vs_prev_value": "95.4% (down 4.6%)",
-        "three_month_trend_qty": "549,372 → 546,990 → 480,971 (legs: -0.4%, -12.1%)",
-        "three_month_trend_value": "R8,162,743 → R8,318,989 → R7,938,828 (legs: +1.9%, -4.6%)"
+        "yesterday_qty": 5839,
+        "yesterday_value": 110097.97,
+        "same_day_last_month_qty": 30519,
+        "same_day_last_month_value": 365197.81,
+        "same_day_two_months_ago_qty": 31562,
+        "same_day_two_months_ago_value": 364180.05,
+        "mtd_qty": 520349,
+        "mtd_value": 10899052.50,
+        "prev_mtd_qty": 717723,
+        "prev_mtd_value": 10951915.28,
+        "pct_yesterday_vs_same_day_last_month_qty": "19.1% (down 80.9%)",
+        "pct_yesterday_vs_same_day_last_month_value": "30.1% (down 69.9%)",
+        "pct_yesterday_vs_same_day_2_months_ago_qty": "18.5% (down 81.5%)",
+        "pct_yesterday_vs_same_day_2_months_ago_value": "30.2% (down 69.8%)",
+        "pct_same_day_lm_vs_2lm_qty": "96.7% (down 3.3%)",
+        "pct_same_day_lm_vs_2lm_value": "100.3% (up 0.3%)",
+        "pct_mtd_vs_prev_qty": "72.5% (down 27.5%)",
+        "pct_mtd_vs_prev_value": "99.5% (down 0.5%)",
+        "three_month_trend_qty": "696,009 → 717,723 → 520,349 (legs: +3.1%, -27.5%)",
+        "three_month_trend_value": "R10,494,323 → R10,951,915 → R10,899,053 (legs: +4.4%, -0.5%)"
       },
       "flags": [
-        "REVENUE_WHATSAPP_PURCHASES_VALUE/QUANTITY excluded from every sum above — MAX() ~1.7e19, orders of magnitude beyond every other revenue column, with an unresolved 'Unknown Policy!' on both columns per DESCRIBE TABLE. Needs data-team/Snowflake-admin follow-up before those two streams can be trusted or included.",
-        "Yesterday vs same day last month qty: down 77.0% (4,872 vs 21,174) — exceeds 20% threshold.",
-        "Yesterday vs same day last month value: down 81.1% (R50,204 vs R265,934) — exceeds 20% threshold.",
-        "Yesterday vs same day two months ago qty: down 83.1% (4,872 vs 28,806) — exceeds 20% threshold.",
-        "Yesterday vs same day two months ago value: down 85.2% (R50,204 vs R338,616) — exceeds 20% threshold.",
-        "Same-day last-month vs two-months-ago qty: down 26.5% (21,174 vs 28,806) — exceeds 5% threshold.",
-        "Same-day last-month vs two-months-ago value: down 21.5% (R265,934 vs R338,616) — exceeds 5% threshold.",
-        "MTD vs prior-month MTD qty: down 12.1% (480,971 vs 546,990) — exceeds 10% threshold.",
-        "Tenant breakdown (yesterday vs same day last month, value): uConnect: R258,435 → R43,917 (-83.0%); ME&YOU: R7,499 → R6,287 (-16.2%). Drop is concentrated in uConnect but ME&YOU is down too this time (unlike 2026-07-21's report, where ME&YOU had grown). MAX(TRANSACTION_DATE) confirms 2026-07-22 is not lagging (data is present for that date), and the low row-count/revenue pattern is now sustained across at least 3 consecutive days — row counts of 5,532 (07-20), 4,533 (07-21), and 4,086 (07-22), all far below 2026-06-22's 18,800 — so this reads as a real, sustained multi-day revenue decline rather than a load-lag artifact, and it is worsening day over day. Needs urgent business-side investigation."
+        "REVENUE_WHATSAPP_PURCHASES_VALUE/QUANTITY excluded from every sum above — MAX() ~1.7e19, orders of magnitude beyond every other revenue column, with an unresolved 'Unknown Policy!' on both columns per DESCRIBE TABLE.",
+        "Yesterday vs same day last month qty: down 80.9% (5,839 vs 30,519) — exceeds 20% threshold.",
+        "Yesterday vs same day last month value: down 69.9% (R110,098 vs R365,198) — exceeds 20% threshold.",
+        "Yesterday vs same day two months ago qty: down 81.5% (5,839 vs 31,562) — exceeds 20% threshold.",
+        "Yesterday vs same day two months ago value: down 69.8% (R110,098 vs R364,180) — exceeds 20% threshold.",
+        "MTD vs prior-month MTD qty: down 27.5% (520,349 vs 717,723) — exceeds 10% threshold.",
+        "Abnormal 3-month qty trend: 696,009 → 717,723 → 520,349 (legs: +3.1%, -27.5%) — second leg exceeds 25%.",
+        "Tenant breakdown (yesterday vs same day last month, value): uConnect: R356,212 → R101,637 (-71.5%); ME&YOU: R8,985 → R8,461 (-5.8%). Drop is concentrated in uConnect.",
+        "Informational: subscription revenue bills in recurring batches around the 15th, 25th, and month-end (confirmed pattern across May/June/July) — this explains why MTD value looks roughly flat (down only 0.5%) despite qty being down 27.5%. However, the 2026-07-25 batch (R2,359,696 / 9,451 subscriptions) is ~3.4x the equivalent 2026-06-25 run (R689,620) and ~3.6x the 2026-05-25 run (R661,844). This isn't an order-of-magnitude anomaly (not excluded), but the multiple is unusual and worth data-team confirmation — it is currently masking the qty decline in the MTD value comparison.",
+        "The qty decline (yesterday, MTD, 3-month trend) is not explained by a pipeline lag — UCONNECT_MAY_MERGE_REVENUE's MAX(TRANSACTION_DATE) is 2026-07-30, ahead of the run_date, so this table is current. This reads as a genuine, sustained decline in transaction volume distinct from the Cell C Recharges pipeline stall above — worth cross-checking against the Telco dashboard and confirming whether it shares a root cause."
       ]
     },
     {
       "check": "Active 1",
-      "status": "green",
+      "status": "red",
       "values": {
-        "total_sims_in_view": 428723,
-        "active_0_30_days": 305938,
-        "semi_active_31_60_days": 54463,
-        "inactive_over_60_days": 12798,
-        "never_used": 55524,
-        "used_in_last_1_day": 143798,
-        "never_used_vs_same_day_last_month": "N/A — snapshot history starts 2026-07-21",
+        "total_sims_in_view": 437265,
+        "active_0_30_days": 305262,
+        "semi_active_31_60_days": 56909,
+        "inactive_over_60_days": 14692,
+        "never_used": 60402,
+        "used_in_last_1_day": 127608,
+        "never_used_vs_same_day_last_month": "N/A — no snapshot entry for 2026-06-27 (log currently covers 2026-07-21, 2026-07-22, 2026-07-27)",
 
-        "new_subs_yesterday": 3126,
-        "new_subs_active1_yesterday": 1471,
-        "new_subs_active1_rate_yesterday": "47.1%",
-        "new_subs_day_before": 1927,
-        "new_subs_active1_day_before": 741,
-        "new_subs_active1_rate_day_before": "38.5%",
-        "pct_new_subs_vs_day_before": "162.2% (up 62.2%)",
-        "pct_new_subs_active1_vs_day_before": "198.5% (up 98.5%)",
+        "new_subs_yesterday": 1681,
+        "new_subs_active1_yesterday": 1,
+        "new_subs_active1_rate_yesterday": "0.1%",
+        "new_subs_day_before": 240,
+        "new_subs_active1_day_before": 72,
+        "new_subs_active1_rate_day_before": "30.0%",
+        "pct_new_subs_vs_day_before": "700.4% (up 600.4%)",
+        "pct_new_subs_active1_vs_day_before": "1.4% (down 98.6%)",
 
-        "cohort_2_4_days_active_yesterday": 1665,
-        "cohort_2_4_days_active_avg_prior_7d": 3213,
-        "pct_cohort_2_4_days_active_vs_7d_avg": "51.8% (down 48.2%)",
+        "cohort_2_4_days_active_yesterday": 3586,
+        "cohort_2_4_days_active_avg_prior_7d": 3058.3,
+        "pct_cohort_2_4_days_active_vs_7d_avg": "117.3% (up 17.3%)",
 
-        "cohort_day30_total": 2041,
-        "cohort_day30_active7_count": 619,
-        "cohort_day30_active7_rate": "30.3%",
-        "cohort_day30_active7_same_period_last_month": "N/A — snapshot history starts 2026-07-21",
+        "cohort_day30_total": 1957,
+        "cohort_day30_active7_count": 492,
+        "cohort_day30_active7_rate": "25.1%",
+        "cohort_day30_active7_same_period_last_month": "N/A — no snapshot entry for 2026-05-27",
 
-        "mtd_new_subs": 45189,
-        "mtd_new_subs_active1": 23041,
-        "mtd_active1_rate": "51.0%",
-        "prev_mtd_new_subs": 42039,
-        "prev_mtd_new_subs_active1": 20234,
-        "prev_mtd_active1_rate": "48.1%",
-        "pct_mtd_active1_vs_prev_mtd": "113.9% (up 13.9%)"
+        "mtd_new_subs": 55158,
+        "mtd_new_subs_active1": 27249,
+        "mtd_active1_rate": "49.4%",
+        "prev_mtd_new_subs": 53971,
+        "prev_mtd_new_subs_active1": 25150,
+        "prev_mtd_active1_rate": "46.6%",
+        "pct_mtd_active1_vs_prev_mtd": "108.3% (up 8.3%)"
       },
       "flags": [
-        "Day 2-4 registration-activity cohort: down 48.2% vs trailing-7-day average (1,665 vs avg 3,213) — below the 60% drastic-drop threshold so not RED, but still well below normal and a partial continuation of the decline flagged on 2026-07-21 (which was down 63.2%). Underlying registration volumes for the 07-15 to 07-22 window show a clear rise-then-fall pattern (peaking 07-19 at 8,440 new subs in that cohort window, down to 3,604 by 07-22) — worth continued monitoring even though today's threshold isn't breached.",
-        "INFORMATIONAL (not a coded rule in this check): total SIMs in view dropped from 453,396 (2026-07-21 run) to 428,723 (this run) — a same-day drop of 24,673 (-5.4%). This isn't covered by this check's per-metric drastic-drop rules (cohort/registration-based, not total-count based) but is a materially large, sudden change. See the DIM Subscriber Alignment and Terminations checks below — it coincides with a large batch of terminations newly dated in May 2026 that appears to have just been loaded into the warehouse. Recommend confirming with the data team that this was an intentional backfill."
+        "New-subscriber Active-1 cohort collapse: subscribers created 2026-07-27 show only 1 Active-1 out of 1,681 new subs (0.1%), vs 72 of 240 (30.0%) the day before (2026-07-26) — a 98.6% drop in the Active-1 count, far exceeding the 60% drastic-drop threshold. New-subscriber volume itself is not down (1,681 vs 240 — actually up), so this looks like a lag in USAGE_0_30_DAYS being populated for the most recent day's cohort rather than a real drop in activations. Needs data-team confirmation of whether the usage flag is computed with a same-day lag.",
+        "Informational: total SIMs in view rose from 428,723 (2026-07-22 run) to 437,265 (this run), +8,542 (+2.0%) — normal recovery/growth, no flag needed, and consistent with the DIM Subscriber Alignment and Terminations checks below.",
+        "Day-30 Active-7 retention and never-used comparisons versus 'same period last month/two months ago' are N/A this run because the snapshot log has no entry for 2026-06-27 or 2026-05-27 — the automated refresh did not run 2026-07-23 through 2026-07-26, leaving a gap in the daily log. These comparisons will resume once enough consecutive daily runs have logged."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 428723,
-        "DIM_SUBSCRIBERS_active": 427698,
-        "UCONNECT_MAY_MERGE_active_uConnect_only": 427701,
-        "spread": 1025,
-        "duplicate_account_numbers": 3,
-        "duplicate_account_number_rows": 6,
-        "duplicate_iccids": 6,
-        "duplicate_iccid_rows": 38
+        "VW_ACTIVE_SUBSCRIPTIONS_snapshot": 437265,
+        "DIM_SUBSCRIBERS_active": 434192,
+        "UCONNECT_MAY_MERGE_active_uConnect_only": 434197,
+        "spread": 3073,
+        "duplicate_account_numbers": 5,
+        "duplicate_account_number_rows": 10,
+        "duplicate_iccids": 8,
+        "duplicate_iccid_rows": 42
       },
       "flags": [
-        "Spread of 1,025 across subscriber tables — VW_ACTIVE (428,723) vs MERGE (427,701) / DIM (427,698) — exceeds the 15-record threshold.",
-        "MAJOR: all three subscriber tables dropped in lockstep since the 2026-07-21 run — VW_ACTIVE_SUBSCRIPTIONS 453,396→428,723 (-24,673, -5.4%); DIM_SUBSCRIBERS 453,990→427,698 (-26,292, -5.8%); UCONNECT_MAY_MERGE (uConnect-only) 453,992→427,701 (-26,291, -5.8%). This lines up closely with the Terminations check below: the full-calendar-month May 2026 termination total (uConnect) jumped from 26,879 (as previously observed) to 44,676 in this run — a gain of 17,797 records now carrying a May TERMINATION_DATE, which reduces each of these 'still active' counts. Reads as a one-time backdated termination batch newly loaded/processed into the warehouse between the two runs, not an active data-integrity break — but needs data-team confirmation given the scale.",
-        "Duplicate ACCOUNT_NUMBER/ICCID check: 3 duplicated account numbers (6 rows) and 6 duplicated ICCIDs (38 rows) among active uConnect records — both well under the 100 threshold, no flag."
+        "Spread of 3,073 across subscriber tables — VW_ACTIVE_SUBSCRIPTIONS (437,265) vs DIM_SUBSCRIBERS (434,192) / UCONNECT_MAY_MERGE uConnect-only (434,197) — exceeds the 15-record threshold.",
+        "All three subscriber tables grew since the 2026-07-22 run: VW_ACTIVE_SUBSCRIPTIONS 428,723→437,265 (+8,542); DIM_SUBSCRIBERS 427,698→434,192 (+6,494); UCONNECT_MAY_MERGE uConnect-only 427,701→434,197 (+6,496). Growth is in-step this time (no lockstep drop), but the spread between tables widened from 1,025 to 3,073 over the same period — worth monitoring, though still small relative to total base size.",
+        "Duplicate ACCOUNT_NUMBER/ICCID check: 5 duplicated account numbers (10 rows) and 8 duplicated ICCIDs (42 rows) among active uConnect records — both well under the 100 threshold, no flag."
       ]
     },
     {
       "check": "Terminations",
       "status": "red",
       "values": {
-        "mtd_terminations": 19710,
-        "prev_mtd_terminations": 18255,
-        "two_months_ago_mtd_terminations": 22067,
-        "baseline_avg_last_2_months": 20161,
-        "threshold_baseline_plus_500": 20661,
-        "sims_over_60_days_no_usage_proxy": 12798
+        "mtd_terminations": 21130,
+        "prev_mtd_terminations": 55429,
+        "two_months_ago_mtd_terminations": 25384,
+        "baseline_avg_last_2_months": 40407,
+        "threshold_baseline_plus_500": 40907,
+        "sims_over_60_days_no_usage_proxy": 14692
       },
       "flags": [
-        "19,710 terminations MTD is below the (avg of last 2 months + 500) threshold of 20,661 — avg of 18,255 and 22,067 = 20,161.",
-        "MAJOR data-shape event, read the RED flag above with this caveat: the 2026-05 (two-months-ago) MTD figure used in this threshold's baseline jumped from 1,088 (as previously observed, through 05-21) to 22,067 (through 05-22, this run) — a 20,979 increase from a single additional day's cutoff. The FULL calendar month of May 2026 also grew, from 26,879 (previously observed) to 44,676 (this run, +17,797) — confirming a large batch of terminations dated in May was newly loaded/processed into UCONNECT_MAY_MERGE between the 2026-07-21 and 2026-07-22 runs, rather than terminations flowing in evenly. This means: (a) the baseline used above is artificially inflated by that backfill, so the RED flag may partly reflect a distorted two-months-ago comparison rather than a real slowdown in July termination processing, and (b) this same event is very likely the direct cause of the ~25-26k active-subscriber-count drop flagged in DIM Subscriber Alignment. Recommend confirming with the data team whether this was an intentional backfill before acting on either flag.",
-        "Full calendar month totals for context (uConnect): 2026-03: 19,826; 2026-04: 52,134; 2026-05: 44,676; 2026-06: 72,485; 2026-07 (partial, through 07-22): 19,710.",
-        "Known data-shape issue, still unresolved: termination dates continue to look batch-applied within a month rather than flowing evenly day-by-day, as evidenced again by this run's May jump — a day-of-month-cutoff MTD comparison, which works fine for recharges/sales, may not be a reliable read on this metric. Worth confirming with the data team whether termination processing runs in batches before trusting month-to-date trends here either way."
+        "21,130 terminations MTD is below the (avg of last 2 months + 500) threshold of 40,907 — avg of 55,429 and 25,384 = 40,407.",
+        "MAJOR data-shape event, read the RED flag above with this caveat: the June (prior-MTD, through 06-27) termination figure jumped from 18,255 (as observed in the 2026-07-22 run) to 55,429 (this run) — a 37,174 increase — even though the FULL calendar month of June total is essentially unchanged (72,485 previously vs 72,483 now). This means existing June-terminated records had their TERMINATION_DATE reassigned/corrected to earlier days within the month between the two runs, not that new terminations were added. This is the same 'batch-applied termination dates' issue previously flagged for May, now recurring for June, and it artificially inflates this run's baseline — so the RED flag above may reflect a distorted, inflated baseline rather than a genuine slowdown in July termination processing. Recommend confirming with the data team whether this was an intentional backfill/correction before acting on this flag.",
+        "Full calendar month totals for context (uConnect): 2026-03: 9,068; 2026-04: 52,134; 2026-05: 44,676; 2026-06: 72,483; 2026-07 (partial, through 07-27): 21,130.",
+        "Known data-shape issue, still unresolved: termination dates continue to look batch-applied/subject to retroactive correction within a month rather than flowing evenly day-by-day, as evidenced again by this run's June reshuffle. A day-of-month-cutoff MTD comparison, which works fine for recharges/sales, remains an unreliable read on this metric. Recommend escalating to the data team as a recurring, unresolved data-quality issue rather than continuing to re-flag it each run."
       ]
     }
   ],
   "pending": [
-    {
-      "check": "Wholesale Usage",
-      "status": "pending",
-      "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE",
-      "flags": []
-    },
-    {
-      "check": "SmartConnect vs Datawarehouse",
-      "status": "pending",
-      "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT",
-      "flags": []
-    },
-    {
-      "check": "CDRs (Wholesale)",
-      "status": "pending",
-      "note": "Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON",
-      "flags": []
-    }
+    {"check": "Wholesale Usage", "status": "pending", "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE", "flags": []},
+    {"check": "SmartConnect vs Datawarehouse", "status": "pending", "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT", "flags": []},
+    {"check": "CDRs (Wholesale)", "status": "pending", "note": "Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON", "flags": []}
   ],
   "manual": [
-    {
-      "check": "Cell C Recharges — Telco Dashboard Alignment",
-      "status": "manual",
-      "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs",
-      "flags": []
-    },
-    {
-      "check": "Wholesale Usage — Telco Dashboard",
-      "status": "manual",
-      "note": "Cross-check usage totals on Telco dashboard",
-      "flags": []
-    },
-    {
-      "check": "CDR PowerBI Dashboard",
-      "status": "manual",
-      "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2",
-      "flags": []
-    },
-    {
-      "check": "QOS by Tenant & Store (Active 1, Day 2-4)",
-      "status": "manual",
-      "note": "Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.",
-      "flags": []
-    }
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs", "flags": []},
+    {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
+    {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []},
+    {"check": "QOS by Tenant & Store (Active 1, Day 2-4)", "status": "manual", "note": "Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.", "flags": []}
   ],
   "errors": []
 }
