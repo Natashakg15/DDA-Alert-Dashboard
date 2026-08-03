@@ -3,33 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-07-29</title>
+<title>DDA Daily BI Checks — 2026-08-02</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Spot CI 2025 — THERMOLINE ── */
+  /* Spot CI 2025 -- THERMOLINE, laid out to match the Telco KPI Dashboard format */
   :root {
     --inkcore:    #0e0e0e;
+    --navy:       #10162b;
     --zero-white: #ffffff;
+    --page:       #f4f5f7;
     --hypermint:  #13f460;
     --sonic-blue: #2d40e9;
     --ultraviolet:#52bec0;
     --highvolt:   #f44610;
-
-    --pass:       var(--hypermint);
-    --pass-text:  #0a3d1f;
-    --fail:       var(--highvolt);
-    --fail-text:  #fff;
     --warn:       #f5c400;
-    --warn-text:  #3d2f00;
-    --pending:    var(--ultraviolet);
-    --pending-text: #0c2e2e;
-    --manual:     var(--sonic-blue);
-    --manual-text:#fff;
-    --error:      var(--highvolt);
 
-    --card-radius: 8px;
+    --ink:        #101114;
+    --ink-soft:   rgba(16,17,20,0.55);
+    --ink-faint:  rgba(16,17,20,0.32);
+    --border:     rgba(16,17,20,0.09);
+
+    --card-radius: 10px;
     --font-header: 'At Hauss Std Retina', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-body:   'Helvetica Now', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
@@ -38,367 +34,542 @@
 
   body {
     font-family: var(--font-body);
-    background: var(--inkcore);
-    color: var(--zero-white);
-    padding: 32px 28px;
+    background: var(--page);
+    color: var(--ink);
+    padding: 0 0 40px;
     min-height: 100vh;
   }
 
-  header {
+  .topbar {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding-bottom: 28px;
-    margin-bottom: 28px;
-  }
-  .header-top {
-    display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 16px;
+    padding: 16px 28px;
+    background: var(--zero-white);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }
-  header h1 {
-    font-family: var(--font-header);
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .spot-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--inkcore);
     color: var(--zero-white);
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    padding: 7px 12px;
+    border-radius: 6px;
   }
-  header h1 span { color: var(--hypermint); }
-  header .meta {
+  .spot-logo sup { font-size: 0.55em; }
+  .brand h1 {
+    font-family: var(--font-header);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .topbar .status-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-top: 2px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
   }
-  .overall {
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hypermint); flex-shrink: 0; }
+  .status-dot.red { background: var(--highvolt); }
+  .status-dot.amber { background: var(--warn); }
+
+  .tab-panel, footer { padding: 0 28px; }
+
+  /* ---- CSS-only tabs ---- */
+  .tabs-wrapper input[type="radio"] { display: none; }
+  .tabbar {
+    display: flex;
+    gap: 26px;
+    border-bottom: 1px solid var(--border);
+    background: var(--zero-white);
+    padding: 0 28px;
+    margin: 0 -28px 28px;
+    flex-wrap: wrap;
+  }
+  .tabbar label {
+    padding: 16px 2px;
+    font-family: var(--font-header);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    user-select: none;
+  }
+  .tab-panel { display: none; }
+  #tab-overview:checked ~ .tabbar label[for="tab-overview"],
+  #tab-auto:checked ~ .tabbar label[for="tab-auto"],
+  #tab-pending:checked ~ .tabbar label[for="tab-pending"],
+  #tab-manual:checked ~ .tabbar label[for="tab-manual"] {
+    color: var(--highvolt);
+    border-bottom-color: var(--highvolt);
+  }
+  #tab-overview:checked ~ #content-overview,
+  #tab-auto:checked ~ #content-auto,
+  #tab-pending:checked ~ #content-pending,
+  #tab-manual:checked ~ #content-manual { display: block; }
+
+  /* ---- KPI tile row ---- */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  .kpi-tile {
+    background: var(--navy);
+    border-radius: var(--card-radius);
+    padding: 18px 18px 16px;
+  }
+  .kpi-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-family: var(--font-header);
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--zero-white);
+    line-height: 1;
+  }
+  .kpi-value.good { color: var(--hypermint); }
+  .kpi-value.bad  { color: var(--highvolt); }
+  .kpi-value.warn { color: var(--warn); }
+  .kpi-sub {
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .overall-banner {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
-    border-radius: 4px;
+    padding: 9px 18px;
+    border-radius: 6px;
     font-family: var(--font-header);
     font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    flex-shrink: 0;
+    margin-bottom: 22px;
   }
-  .overall.green  { background: var(--hypermint); color: var(--pass-text); }
-  .overall.red    { background: var(--highvolt);  color: var(--zero-white); }
-  .overall.amber  { background: var(--warn);      color: var(--warn-text); }
-  .overall-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+  .overall-banner.green { background: rgba(19,244,96,0.14); color: #0a7d38; }
+  .overall-banner.red   { background: rgba(244,70,16,0.12); color: var(--highvolt); }
+  .overall-banner.amber { background: rgba(245,196,0,0.16); color: #8a6a00; }
 
-  .summary-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-  .summary-pill {
-    padding: 6px 16px;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border: 1px solid;
-  }
-  .summary-pill.green   { background: rgba(19,244,96,0.12);  color: var(--hypermint);  border-color: rgba(19,244,96,0.25); }
-  .summary-pill.red     { background: rgba(244,70,16,0.12);  color: #ff7d5c;           border-color: rgba(244,70,16,0.3); }
-  .summary-pill.amber   { background: rgba(245,196,0,0.12);  color: #f5c400;           border-color: rgba(245,196,0,0.25); }
-  .summary-pill.gray    { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }
-  .summary-pill.pending { background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }
-
-  h2 {
+  h2.section-title {
     font-family: var(--font-header);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.3);
-    margin: 32px 0 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
     gap: 16px;
     align-items: start;
   }
 
   .card {
+    position: relative;
     border-radius: var(--card-radius);
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    background: var(--zero-white);
     overflow: hidden;
-    transition: border-color 0.15s, background 0.15s;
+    padding-left: 5px;
+    box-shadow: 0 1px 2px rgba(16,17,20,0.04);
   }
-  .card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }
+  .card.accent-a { box-shadow: inset 4px 0 0 var(--highvolt); }
+  .card.accent-b { box-shadow: inset 4px 0 0 var(--sonic-blue); }
+  .card.accent-c { box-shadow: inset 4px 0 0 var(--ultraviolet); }
 
-  .card.green  { border-color: rgba(19,244,96,0.3);  background: rgba(19,244,96,0.05); }
-  .card.red    { border-color: rgba(244,70,16,0.4);  background: rgba(244,70,16,0.06); }
-  .card.amber  { border-color: rgba(245,196,0,0.3);  background: rgba(245,196,0,0.05); }
-  .card.pending { border-color: rgba(82,190,192,0.3); background: rgba(82,190,192,0.05); }
-  .card.manual { border-color: rgba(45,64,233,0.4);  background: rgba(45,64,233,0.06); }
-  .card.error  { border-color: rgba(244,70,16,0.5);  background: rgba(244,70,16,0.08); }
+  .card-number {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: rgba(16,17,20,0.06);
+    line-height: 1;
+  }
 
   .card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 16px 18px 12px;
   }
   .card-title {
     font-family: var(--font-header);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--zero-white);
-    letter-spacing: 0.01em;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
   }
   .card-body {
-    padding: 14px 16px;
+    padding: 0 18px 16px;
     font-size: 0.82rem;
-    color: rgba(255,255,255,0.75);
+    color: var(--ink-soft);
   }
 
   .badge {
     padding: 3px 10px;
     border-radius: 3px;
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     flex-shrink: 0;
     font-family: var(--font-header);
   }
-  .badge.green   { background: var(--hypermint);  color: var(--pass-text); }
-  .badge.red     { background: var(--highvolt);   color: var(--zero-white); }
-  .badge.amber   { background: var(--warn);       color: var(--warn-text); }
-  .badge.manual  { background: var(--sonic-blue); color: var(--zero-white); }
-  .badge.pending { background: var(--ultraviolet);color: var(--inkcore); }
-  .badge.error   { background: var(--highvolt);   color: var(--zero-white); }
+  .badge.green   { background: rgba(19,244,96,0.16);  color: #0a7d38; }
+  .badge.red     { background: var(--highvolt);       color: var(--zero-white); }
+  .badge.amber   { background: rgba(245,196,0,0.22);  color: #8a6a00; }
+  .badge.manual  { background: var(--sonic-blue);      color: var(--zero-white); }
+  .badge.pending { background: var(--ultraviolet);    color: var(--inkcore); }
+  .badge.error   { background: var(--highvolt);       color: var(--zero-white); }
 
-  .stat-group { margin-top: 14px; }
+  .stat-group { margin-top: 12px; }
   .stat-group:first-child { margin-top: 0; }
   .stat-group h4 {
     font-family: var(--font-header);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ultraviolet);
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    letter-spacing: 0.07em;
+    color: var(--sonic-blue);
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
   }
 
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px 16px;
+  .stat-rows { display: flex; flex-direction: column; }
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(16,17,20,0.05);
   }
-  .stat { min-width: 0; }
+  .stat-row:last-child { border-bottom: none; }
   .stat-label {
-    color: rgba(255,255,255,0.4);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 3px;
-    line-height: 1.3;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
   }
+  .stat-spacer { width: 60px; flex-shrink: 0; }
+  .spark { width: 60px; height: 22px; flex-shrink: 0; }
   .stat-value {
-    color: var(--zero-white);
+    color: var(--ink);
     font-weight: 600;
-    font-size: 0.88rem;
-    line-height: 1.35;
-    word-break: break-word;
+    font-size: 0.82rem;
+    text-align: right;
+    white-space: nowrap;
   }
 
   ul.flags { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
   ul.flags li {
-    background: rgba(244,70,16,0.1);
+    background: rgba(244,70,16,0.07);
     border-left: 3px solid var(--highvolt);
     padding: 7px 12px;
     border-radius: 3px;
-    color: #ffb8a0;
-    font-size: 0.8rem;
+    color: #9a3a1c;
+    font-size: 0.78rem;
     line-height: 1.4;
   }
 
-  .note { color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }
+  .note { color: var(--sonic-blue); font-style: italic; margin-bottom: 6px; font-size: 0.78rem; }
 
   footer {
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 40px;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.04em;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
     text-transform: uppercase;
-  }
-  .footer-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--hypermint);
-    margin-right: 8px;
-    vertical-align: middle;
   }
 
   @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }
-    body { padding: 20px 16px; }
-    header h1 { font-size: 1.5rem; }
+    .page { padding: 0 16px; }
+    .topbar { padding: 14px 16px; }
+    .tabbar { padding: 0 16px; margin: 0 -16px 22px; }
   }
+
+  svg.spark defs { display: none; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div>
-      <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">30 July 2026 &nbsp;&middot;&nbsp; Data as of 2026-07-29 &nbsp;&middot;&nbsp; Snowflake</div>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f44610" stop-opacity="0.28"></stop>
+      <stop offset="100%" stop-color="#f44610" stop-opacity="0"></stop>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="spot-logo">Spot<sup>TM</sup></span>
+    <h1>DDA Daily BI Checks</h1>
+  </div>
+  <div class="status-line">
+    <span class="status-dot red"></span>
+    3 August 2026 &nbsp;&middot;&nbsp; Data as of 2026-08-02 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
+  </div>
+</div>
+
+<div class="tabs-wrapper">
+  <input type="radio" name="tabs" id="tab-overview" checked>
+  <input type="radio" name="tabs" id="tab-auto">
+  <input type="radio" name="tabs" id="tab-pending">
+  <input type="radio" name="tabs" id="tab-manual">
+
+  <nav class="tabbar">
+    <label for="tab-overview">Overview</label>
+    <label for="tab-auto">Automated Checks</label>
+    <label for="tab-pending">Pending MCP Access</label>
+    <label for="tab-manual">Manual Checks</label>
+  </nav>
+
+  <div id="content-overview" class="tab-panel">
+    <div class="overall-banner red">FAILURES DETECTED</div>
+    <div class="kpi-row">
+  <div class="kpi-tile">
+    <div class="kpi-label">Checks Passed</div>
+    <div class="kpi-value good">0</div>
+    <div class="kpi-sub">of 5 automated checks</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Checks Failed</div>
+    <div class="kpi-value bad">5</div>
+    <div class="kpi-sub">red flags today</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Warnings</div>
+    <div class="kpi-value warn">0</div>
+    <div class="kpi-sub">amber flags today</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Pending MCP Access</div>
+    <div class="kpi-value neutral">3</div>
+    <div class="kpi-sub">tables awaiting connection</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Manual Cross-Checks</div>
+    <div class="kpi-value neutral">4</div>
+    <div class="kpi-sub">verify on Telco / PowerBI</div>
+  </div></div>
+    <h2 class="section-title">Automated Checks — Snowflake</h2>
+    <div class="grid">
+      
+    <div class="card accent-a">
+        <div class="card-number">01</div>
+        <div class="card-header">
+            <span class="card-title">Cell C Recharges</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday Count</span><span class="stat-spacer"></span><span class='stat-value'>16,879</span></div><div class='stat-row'><span class='stat-label'>Yesterday Value</span><span class="stat-spacer"></span><span class='stat-value'>242,614.57</span></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Same Day Last Month Count</span><span class="stat-spacer"></span><span class='stat-value'>20,594</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>330,906.00</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Count</span><span class="stat-spacer"></span><span class='stat-value'>19,411</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>305,170.00</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Count</span><span class="stat-spacer"></span><span class='stat-value'>106.1% (up 6.1%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Value</span><span class="stat-spacer"></span><span class='stat-value'>108.4% (up 8.4%)</span></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Count</span><span class="stat-spacer"></span><span class='stat-value'>37,686</span></div><div class='stat-row'><span class='stat-label'>MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>558,325.89</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Count</span><span class="stat-spacer"></span><span class='stat-value'>40,200</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>643,883.00</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Count</span><span class="stat-spacer"></span><span class='stat-value'>93.7% (down 6.3%)</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Value</span><span class="stat-spacer"></span><span class='stat-value'>86.7% (down 13.3%)</span></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Three Month Trend Count</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,16.5 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,16.5 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>37,952 → 40,200 → 37,686 (legs: +5.9%, -6.3%)</span></div><div class='stat-row'><span class='stat-label'>Three Month Trend Value</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,12.3 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,12.3 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>R593,213.00 → R643,883.00 → R558,325.89 (legs: +8.5%, -13.3%)</span></div></div></div><ul class="flags"><li>Yesterday (2026-08-02) recharge revenue was R242,614.57, down 26.7% vs same day last month (R330,906.00) and down 20.5% vs same day two months ago (R305,170.00) — both breach the 20% drop threshold (count did not breach: down 18.0% and 13.0% respectively).</li><li>MTD recharge revenue (R558,325.89) is down 13.3% vs prior-MTD (R643,883.00), breaching the ±10% variance threshold. MTD count variance was 6.3% — within tolerance.</li><li>Same-day-last-month vs same-day-two-months-ago count varies 6.1% (20,594 vs 19,411), breaching the ±5% threshold.</li><li>Same-day-last-month vs same-day-two-months-ago value varies 8.4% (R330,906.00 vs R305,170.00), breaching the ±5% threshold.</li><li>Revenue sanity check passed for all periods — AVG per recharge ranged R14.37–R16.07, MAX ranged R300–R549, both within normal bounds. No exclusions applied.</li></ul></div>
     </div>
-    <div class="overall red">
-      <span class="overall-dot"></span>
-      FAILURES DETECTED
+  
+    <div class="card accent-b">
+        <div class="card-number">02</div>
+        <div class="card-header">
+            <span class="card-title">Sales (Last 30 Days)</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday Qty</span><span class="stat-spacer"></span><span class='stat-value'>19,108</span></div><div class='stat-row'><span class='stat-label'>Yesterday Value</span><span class="stat-spacer"></span><span class='stat-value'>245,102.75</span></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Same Day Last Month Qty</span><span class="stat-spacer"></span><span class='stat-value'>26,553</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>357,170.12</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Qty</span><span class="stat-spacer"></span><span class='stat-value'>24,280</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>322,116.75</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day Last Month Qty</span><span class="stat-spacer"></span><span class='stat-value'>72.0% (down 28.0%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>68.6% (down 31.4%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day 2 Months Ago Qty</span><span class="stat-spacer"></span><span class='stat-value'>78.7% (down 21.3%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day 2 Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>76.1% (down 23.9%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Qty</span><span class="stat-spacer"></span><span class='stat-value'>109.4% (up 9.4%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Value</span><span class="stat-spacer"></span><span class='stat-value'>110.9% (up 10.9%)</span></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Qty</span><span class="stat-spacer"></span><span class='stat-value'>49,810</span></div><div class='stat-row'><span class='stat-label'>MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>757,074.45</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Qty</span><span class="stat-spacer"></span><span class='stat-value'>67,231</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>1,666,251.62</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Qty</span><span class="stat-spacer"></span><span class='stat-value'>74.1% (down 25.9%)</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Value</span><span class="stat-spacer"></span><span class='stat-value'>45.4% (down 54.6%)</span></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Three Month Trend Qty</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,6.9 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,6.9 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>63,643 → 67,231 → 49,810 (legs: +5.6%, -25.9%)</span></div><div class='stat-row'><span class='stat-label'>Three Month Trend Value</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,4.5 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,4.5 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>R1,632,991.31 → R1,666,251.62 → R757,074.45 (legs: +2.0%, -54.6%)</span></div></div></div><ul class="flags"><li>Yesterday qty/value dropped >20% vs BOTH historical points: qty 19,108 vs 26,553 last month (down 28.0%) and vs 24,280 two months ago (down 21.3%); value R245,102.75 vs R357,170.12 last month (down 31.4%) and vs R322,116.75 two months ago (down 23.9%).</li><li>MTD vs prior-MTD variance breaches ±10% for both metrics: qty down 25.9% (49,810 vs 67,231), value down 54.6% (R757,074.45 vs R1,666,251.62).</li><li>Same-day-last-month vs same-day-two-months-ago variance breaches ±5% for both metrics: qty up 9.4%, value up 10.9%.</li><li>3-month trend abnormal: value leg (prior-MTD → current-MTD) moved -54.6%, well past the 25% single-leg threshold; qty leg moved -25.9%, just past the threshold.</li><li>Tenant breakdown for yesterday vs same-day-last-month shows the drop is broad-based, not concentrated in one tenant: uConnect R241,985.31 → R350,447.88 (-30.9%); ME&YOU R3,117.44 → R6,722.24 (-53.6%).</li><li>Revenue sanity check passed — per-row AVG ranged R12.24–R34.53 and MAX ranged R434.78–R1,532.84 across all 6 periods checked (Jun 1–Aug 2), no order-of-magnitude outliers. No exclusions applied. WhatsApp purchase columns excluded from all sums per known masking-policy artifact.</li><li>2026-08-02 also has notably fewer underlying rows (15,998) than 2026-07-02 (28,711) or 2026-06-02 (24,589) in the source table, consistent with the Sunday vs weekday mismatch noted in comparison_note rather than a processing failure.</li></ul></div>
+    </div>
+  
+    <div class="card accent-c">
+        <div class="card-number">03</div>
+        <div class="card-header">
+            <span class="card-title">Active 1</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Snapshot</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Total SIMS in View</span><span class="stat-spacer"></span><span class='stat-value'>393,060</span></div><div class='stat-row'><span class='stat-label'>Active 0 30 Days</span><span class="stat-spacer"></span><span class='stat-value'>266,782</span></div><div class='stat-row'><span class='stat-label'>Semi Active 31 60 Days</span><span class="stat-spacer"></span><span class='stat-value'>38,836</span></div><div class='stat-row'><span class='stat-label'>Inactive Over 60 Days</span><span class="stat-spacer"></span><span class='stat-value'>20,465</span></div><div class='stat-row'><span class='stat-label'>Never Used</span><span class="stat-spacer"></span><span class='stat-value'>66,977</span></div><div class='stat-row'><span class='stat-label'>Used in Last 1 Day</span><span class="stat-spacer"></span><span class='stat-value'>127,276</span></div><div class='stat-row'><span class='stat-label'>Never Used vs Same Day Last Month</span><span class="stat-spacer"></span><span class='stat-value'>N/A — snapshot history starts 2026-07-21</span></div></div></div><div class='stat-group'><h4>New-Subscriber Cohort</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>New Subs Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>720</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>77</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Rate Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>10.7%</span></div><div class='stat-row'><span class='stat-label'>New Subs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>2,225</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Day Before</span><span class="stat-spacer"></span><span class='stat-value'>483</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Rate Day Before</span><span class="stat-spacer"></span><span class='stat-value'>21.7%</span></div><div class='stat-row'><span class='stat-label'>% New Subs vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>32.4% (down 67.6%)</span></div><div class='stat-row'><span class='stat-label'>% New Subs Active 1 vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>15.9% (down 84.1%)</span></div></div></div><div class='stat-group'><h4>Day 2-4 Registration Activity</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Cohort 2 4 Days Active Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>2,462</span></div><div class='stat-row'><span class='stat-label'>Cohort 2 4 Days Active Avg Prior 7d</span><span class="stat-spacer"></span><span class='stat-value'>4,109.00</span></div><div class='stat-row'><span class='stat-label'>% Cohort 2 4 Days Active vs 7d Avg</span><span class="stat-spacer"></span><span class='stat-value'>59.9% (down 40.1%)</span></div></div></div><div class='stat-group'><h4>Day-30 Active-7 Retention</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Cohort Day 30 Total</span><span class="stat-spacer"></span><span class='stat-value'>3,080</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Count</span><span class="stat-spacer"></span><span class='stat-value'>750</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Rate</span><span class="stat-spacer"></span><span class='stat-value'>24.4%</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Same Period Last Month</span><span class="stat-spacer"></span><span class='stat-value'>N/A — snapshot history starts 2026-07-21</span></div></div></div><div class='stat-group'><h4>MTD Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD New Subs</span><span class="stat-spacer"></span><span class='stat-value'>2,945</span></div><div class='stat-row'><span class='stat-label'>MTD New Subs Active 1</span><span class="stat-spacer"></span><span class='stat-value'>560</span></div><div class='stat-row'><span class='stat-label'>MTD Active 1 Rate</span><span class="stat-spacer"></span><span class='stat-value'>19.0%</span></div><div class='stat-row'><span class='stat-label'>Prev MTD New Subs</span><span class="stat-spacer"></span><span class='stat-value'>5,774</span></div><div class='stat-row'><span class='stat-label'>Prev MTD New Subs Active 1</span><span class="stat-spacer"></span><span class='stat-value'>2,583</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Active 1 Rate</span><span class="stat-spacer"></span><span class='stat-value'>44.7%</span></div><div class='stat-row'><span class='stat-label'>% MTD Active 1 vs Prev MTD</span><span class="stat-spacer"></span><span class='stat-value'>21.7% (down 78.3%)</span></div></div></div><ul class="flags"><li>New-subscriber volume dropped 67.6% vs day before (720 vs 2,225 on 2026-08-01) — breaches the 60% drastic-drop threshold. Likely partly explained by 08-02 being a Sunday vs 08-01 a Saturday, both lower-volume days, but the drop still trips the rule.</li><li>New-subscriber Active-1 count dropped 84.1% vs day before (77 vs 483), breaching the 60% threshold.</li><li>MTD Active-1 count among new subscribers dropped 78.3% vs prior-MTD (560 vs 2,583; rate 19.0% vs 44.7%), breaching the 60% threshold.</li><li>Day 2-4 registration-activity cohort (2,462) was 40.1% below the trailing 7-day average (4,109) — within the 60% tolerance, not flagged.</li><li>Day-30 Active-7 retention and never-used-vs-last-month comparisons are N/A: the snapshot log only goes back to 2026-07-21, so neither 2026-07-02 nor 2026-06-02 has a logged snapshot yet.</li></ul></div>
+    </div>
+  
+    <div class="card accent-a">
+        <div class="card-number">04</div>
+        <div class="card-header">
+            <span class="card-title">DIM Subscriber Alignment</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Table Alignment</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>VW ACTIVE SUBSCRIPTIONS Snapshot</span><span class="stat-spacer"></span><span class='stat-value'>393,060</span></div><div class='stat-row'><span class='stat-label'>DIM SUBSCRIBERS Active</span><span class="stat-spacer"></span><span class='stat-value'>387,940</span></div><div class='stat-row'><span class='stat-label'>UCONNECT MAY MERGE Active UConnect Only</span><span class="stat-spacer"></span><span class='stat-value'>387,946</span></div><div class='stat-row'><span class='stat-label'>Spread</span><span class="stat-spacer"></span><span class='stat-value'>5,120</span></div></div></div><div class='stat-group'><h4>Duplicate Check (Active, uConnect)</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Duplicate Account Numbers</span><span class="stat-spacer"></span><span class='stat-value'>6</span></div><div class='stat-row'><span class='stat-label'>Duplicate Account Number Rows</span><span class="stat-spacer"></span><span class='stat-value'>12</span></div><div class='stat-row'><span class='stat-label'>Duplicate Iccids</span><span class="stat-spacer"></span><span class='stat-value'>9</span></div><div class='stat-row'><span class='stat-label'>Duplicate ICCID Rows</span><span class="stat-spacer"></span><span class='stat-value'>44</span></div></div></div><ul class="flags"><li>Spread between VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (393,060) and the other two tables (DIM_SUBSCRIBERS 387,940; UCONNECT_MAY_MERGE uConnect-only 387,946) is 5,120 rows — well past the 15-row tolerance. DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE agree closely with each other (spread of 6), so the discrepancy sits with the active-subscriptions usage view.</li><li>Duplicate checks are clean: 6 duplicated ACCOUNT_NUMBERs (12 rows) and 9 duplicated ICCIDs (44 rows) among active uConnect-only records — both well under the 100 threshold.</li></ul></div>
+    </div>
+  
+    <div class="card accent-b">
+        <div class="card-number">05</div>
+        <div class="card-header">
+            <span class="card-title">Terminations</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Terminations vs Threshold</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>20</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>1,893</span></div><div class='stat-row'><span class='stat-label'>Two Months Ago MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>1,268</span></div><div class='stat-row'><span class='stat-label'>Baseline Avg Last 2 Months</span><span class="stat-spacer"></span><span class='stat-value'>1,580.50</span></div><div class='stat-row'><span class='stat-label'>Threshold Baseline Plus 500</span><span class="stat-spacer"></span><span class='stat-value'>2,080.50</span></div></div></div><div class='stat-group'><h4>Legacy Proxy</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>SIMS Over 60 Days No Usage Proxy</span><span class="stat-spacer"></span><span class='stat-value'>20,465</span></div></div></div><ul class="flags"><li>MTD terminations (20, covering 2026-08-01 to 2026-08-02) are below the threshold of baseline + 500 (1,580.5 + 500 = 2,080.5) — flags RED per the rule.</li><li>Known data-shape caveat: termination dates are batch-applied late in the month, not day-by-day. Full-calendar-month sanity check: July 2026 had 84,803 uConnect terminations total vs only 1,893 in its first 2 days; June 2026 had 72,486 total vs only 1,268 in its first 2 days. A near-zero count this early in August is consistent with that same batch pattern, not necessarily a processing outage — treat this RED with that context rather than as a standalone alarm.</li></ul></div>
+    </div>
     </div>
   </div>
-</header>
 
-<div class="summary-bar">
-  <span class="summary-pill green">0 Passed</span>
-  <span class="summary-pill red">5 Failed</span>
-  <span class="summary-pill amber">0 Warnings</span>
-  <span class="summary-pill pending">3 Pending</span>
-  <span class="summary-pill gray">4 Manual</span>
-</div>
-
-<h2>Automated Checks — Snowflake</h2>
-<div class="grid">
-  
-    <div class="card red">
+  <div id="content-auto" class="tab-panel">
+    <h2 class="section-title">Automated Checks — Snowflake</h2>
+    <div class="grid">
+      
+    <div class="card accent-a">
+        <div class="card-number">01</div>
         <div class="card-header">
-            <span class="badge red">FAIL</span>
             <span class="card-title">Cell C Recharges</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Yesterday Count</div><div class='stat-value'>16,632</div></div><div class='stat'><div class='stat-label'>Yesterday Value</div><div class='stat-value'>259,118.91</div></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Same Day Last Month Count</div><div class='stat-value'>18,902</div></div><div class='stat'><div class='stat-label'>Same Day Last Month Value</div><div class='stat-value'>293,167.00</div></div><div class='stat'><div class='stat-label'>Same Day Two Months Ago Count</div><div class='stat-value'>21,758</div></div><div class='stat'><div class='stat-label'>Same Day Two Months Ago Value</div><div class='stat-value'>358,639.00</div></div><div class='stat'><div class='stat-label'>% Same Day LM vs 2LM Count</div><div class='stat-value'>86.9% (down 13.1%)</div></div><div class='stat'><div class='stat-label'>% Same Day LM vs 2LM Value</div><div class='stat-value'>81.7% (down 18.3%)</div></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>MTD Count</div><div class='stat-value'>527,908</div></div><div class='stat'><div class='stat-label'>MTD Value</div><div class='stat-value'>7,987,143.18</div></div><div class='stat'><div class='stat-label'>Prev MTD Count</div><div class='stat-value'>517,781</div></div><div class='stat'><div class='stat-label'>Prev MTD Value</div><div class='stat-value'>7,860,309.00</div></div><div class='stat'><div class='stat-label'>% MTD vs Prev Count</div><div class='stat-value'>102.0% (up 2.0%)</div></div><div class='stat'><div class='stat-label'>% MTD vs Prev Value</div><div class='stat-value'>101.6% (up 1.6%)</div></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Three Month Trend Count</div><div class='stat-value'>510,064 → 517,781 → 527,908 (legs: +1.5%, +2.0%)</div></div><div class='stat'><div class='stat-label'>Three Month Trend Value</div><div class='stat-value'>R7,803,975 → R7,860,309 → R7,987,143 (legs: +0.7%, +1.6%)</div></div></div></div><ul class="flags"><li>Pipeline stall resolved: VW_CELLC_RECHARGES MAX(TRANSACTION_DATE) is now 2026-07-30, fully current. The 11+ day lag flagged continuously from 2026-07-19 through the 2026-07-28 run has cleared — yesterday (2026-07-29) recorded 16,632 recharges (R259,118.91), the first non-zero yesterday_count since the stall began.</li><li>Revenue sanity check passed for all periods: AVG per recharge ranged R15.13–R16.48 across all 6 windows, consistent with the historical ~R15/recharge norm — no exclusions needed.</li><li>2026-07-29 recharge count (16,632) is within 20% of same-day-last-month (2026-06-29: 18,902, down 12.0%) but is >20% below same-day-two-months-ago (2026-05-29: 21,758, down 23.6%) — flagged per rule 2.</li><li>2026-07-29 revenue (R259,119) is within 20% of same-day-last-month (R293,167, down 11.6%) but is >20% below same-day-two-months-ago (R358,639, down 27.7%) — flagged per rule 2.</li><li>MTD vs prior-month MTD: count up 2.0% (527,908 vs 517,781), value up 1.6% (R7,987,143 vs R7,860,309) — both within the 10% threshold, no flag.</li><li>Same-day last-month vs two-months-ago count: down 13.1% (18,902 vs 21,758) — exceeds the 5% threshold.</li><li>Same-day last-month vs two-months-ago value: down 18.3% (R293,167 vs R358,639) — exceeds the 5% threshold.</li><li>3-month trend (count and value) shows two consecutive small positive legs (+1.5%/+2.0% count, +0.7%/+1.6% value) — well under the 25%-per-leg / 20%-cumulative abnormal-trend thresholds, no flag.</li><li>Overall read: yesterday's absolute numbers (16,632 recharges, R259,119) look like a genuine recovery back toward May/June levels now that the pipeline stall has cleared. The two-months-ago comparison point (05-29) is now the main outlier rather than yesterday itself — recommend one more run to confirm this is a real, smaller step down rather than residual noise from the stall's recovery, before escalating further.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday Count</span><span class="stat-spacer"></span><span class='stat-value'>16,879</span></div><div class='stat-row'><span class='stat-label'>Yesterday Value</span><span class="stat-spacer"></span><span class='stat-value'>242,614.57</span></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Same Day Last Month Count</span><span class="stat-spacer"></span><span class='stat-value'>20,594</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>330,906.00</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Count</span><span class="stat-spacer"></span><span class='stat-value'>19,411</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>305,170.00</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Count</span><span class="stat-spacer"></span><span class='stat-value'>106.1% (up 6.1%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Value</span><span class="stat-spacer"></span><span class='stat-value'>108.4% (up 8.4%)</span></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Count</span><span class="stat-spacer"></span><span class='stat-value'>37,686</span></div><div class='stat-row'><span class='stat-label'>MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>558,325.89</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Count</span><span class="stat-spacer"></span><span class='stat-value'>40,200</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>643,883.00</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Count</span><span class="stat-spacer"></span><span class='stat-value'>93.7% (down 6.3%)</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Value</span><span class="stat-spacer"></span><span class='stat-value'>86.7% (down 13.3%)</span></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Three Month Trend Count</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,16.5 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,16.5 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>37,952 → 40,200 → 37,686 (legs: +5.9%, -6.3%)</span></div><div class='stat-row'><span class='stat-label'>Three Month Trend Value</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,12.3 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,12.3 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>R593,213.00 → R643,883.00 → R558,325.89 (legs: +8.5%, -13.3%)</span></div></div></div><ul class="flags"><li>Yesterday (2026-08-02) recharge revenue was R242,614.57, down 26.7% vs same day last month (R330,906.00) and down 20.5% vs same day two months ago (R305,170.00) — both breach the 20% drop threshold (count did not breach: down 18.0% and 13.0% respectively).</li><li>MTD recharge revenue (R558,325.89) is down 13.3% vs prior-MTD (R643,883.00), breaching the ±10% variance threshold. MTD count variance was 6.3% — within tolerance.</li><li>Same-day-last-month vs same-day-two-months-ago count varies 6.1% (20,594 vs 19,411), breaching the ±5% threshold.</li><li>Same-day-last-month vs same-day-two-months-ago value varies 8.4% (R330,906.00 vs R305,170.00), breaching the ±5% threshold.</li><li>Revenue sanity check passed for all periods — AVG per recharge ranged R14.37–R16.07, MAX ranged R300–R549, both within normal bounds. No exclusions applied.</li></ul></div>
     </div>
   
-    <div class="card red">
+    <div class="card accent-b">
+        <div class="card-number">02</div>
         <div class="card-header">
-            <span class="badge red">FAIL</span>
             <span class="card-title">Sales (Last 30 Days)</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Yesterday Qty</div><div class='stat-value'>19,432</div></div><div class='stat'><div class='stat-label'>Yesterday Value</div><div class='stat-value'>315,631.02</div></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Same Day Last Month Qty</div><div class='stat-value'>24,859</div></div><div class='stat'><div class='stat-label'>Same Day Last Month Value</div><div class='stat-value'>325,530.76</div></div><div class='stat'><div class='stat-label'>Same Day Two Months Ago Qty</div><div class='stat-value'>38,842</div></div><div class='stat'><div class='stat-label'>Same Day Two Months Ago Value</div><div class='stat-value'>460,252.47</div></div><div class='stat'><div class='stat-label'>% Yesterday vs Same Day Last Month Qty</div><div class='stat-value'>78.2% (down 21.8%)</div></div><div class='stat'><div class='stat-label'>% Yesterday vs Same Day Last Month Value</div><div class='stat-value'>97.0% (down 3.0%)</div></div><div class='stat'><div class='stat-label'>% Yesterday vs Same Day 2 Months Ago Qty</div><div class='stat-value'>50.0% (down 50.0%)</div></div><div class='stat'><div class='stat-label'>% Yesterday vs Same Day 2 Months Ago Value</div><div class='stat-value'>68.6% (down 31.4%)</div></div><div class='stat'><div class='stat-label'>% Same Day LM vs 2LM Qty</div><div class='stat-value'>64.0% (down 36.0%)</div></div><div class='stat'><div class='stat-label'>% Same Day LM vs 2LM Value</div><div class='stat-value'>70.7% (down 29.3%)</div></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>MTD Qty</div><div class='stat-value'>663,224</div></div><div class='stat'><div class='stat-label'>MTD Value</div><div class='stat-value'>11,247,510.85</div></div><div class='stat'><div class='stat-label'>Prev MTD Qty</div><div class='stat-value'>692,801</div></div><div class='stat'><div class='stat-label'>Prev MTD Value</div><div class='stat-value'>11,227,897.91</div></div><div class='stat'><div class='stat-label'>% MTD vs Prev Qty</div><div class='stat-value'>95.7% (down 4.3%)</div></div><div class='stat'><div class='stat-label'>% MTD vs Prev Value</div><div class='stat-value'>100.2% (up 0.2%)</div></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Three Month Trend Qty</div><div class='stat-value'>690,512 → 692,801 → 663,224 (legs: +0.3%, -4.3%)</div></div><div class='stat'><div class='stat-label'>Three Month Trend Value</div><div class='stat-value'>R11,120,323 → R11,227,898 → R11,247,511 (legs: +1.0%, +0.2%)</div></div></div></div><ul class="flags"><li>REVENUE_WHATSAPP_PURCHASES_VALUE/QUANTITY excluded from every sum above per standing instruction (MAX() ~1.7e19, unresolved 'Unknown Policy!').</li><li>Yesterday vs same day last month qty: down 21.8% (19,432 vs 24,859) — exceeds 20% threshold.</li><li>Yesterday vs same day last month value: down 3.0% (R315,631 vs R325,531) — within 20% threshold, no flag.</li><li>Yesterday vs same day two months ago qty: down 50.0% (19,432 vs 38,842) — exceeds 20% threshold.</li><li>Yesterday vs same day two months ago value: down 31.4% (R315,631 vs R460,252) — exceeds 20% threshold.</li><li>Same-day last-month vs two-months-ago qty: down 36.0% (24,859 vs 38,842) — exceeds 5% threshold.</li><li>Same-day last-month vs two-months-ago value: down 29.3% (R325,531 vs R460,252) — exceeds 5% threshold.</li><li>MTD vs prior-month MTD qty: down 4.3% (663,224 vs 692,801) — within 10% threshold, no flag.</li><li>MTD vs prior-month MTD value: up 0.2% (R11,247,511 vs R11,227,898) — within 10% threshold, no flag.</li><li>Neither qty nor value 3-month trend is abnormal: qty legs +0.3%/-4.3% (not same direction, cumulative -4.0%); value legs +1.0%/+0.2% (same direction but cumulative only +1.1%) — both well under thresholds.</li><li>Tenant breakdown (07-29 vs 06-29): uConnect qty 24,563 → 19,169 (-22.0%), value R316,955 → R307,159 (-3.1%). ME&YOU qty 296 → 263 (-11.1%), value R8,576 → R8,472 (-1.2%). The drop is not concentrated in one tenant — both move in the same direction, roughly proportional to their share of volume.</li><li>Notable pattern: quantity fell sharply (-21.8% to -50.0% across comparisons) while value fell far less (-0.2% to +3.0% MTD, -3.0% to -31.4% same-day) — average value per unit rose materially (e.g. uConnect: R12.91/unit on 06-29 vs R16.03/unit on 07-29). This looks like a mix shift toward fewer, higher-value transactions rather than a straightforward volume outage — worth a Telco dashboard cross-check to confirm which revenue stream(s) are driving the shift before treating this purely as a decline.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Yesterday</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday Qty</span><span class="stat-spacer"></span><span class='stat-value'>19,108</span></div><div class='stat-row'><span class='stat-label'>Yesterday Value</span><span class="stat-spacer"></span><span class='stat-value'>245,102.75</span></div></div></div><div class='stat-group'><h4>Same-Day History</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Same Day Last Month Qty</span><span class="stat-spacer"></span><span class='stat-value'>26,553</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>357,170.12</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Qty</span><span class="stat-spacer"></span><span class='stat-value'>24,280</span></div><div class='stat-row'><span class='stat-label'>Same Day Two Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>322,116.75</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day Last Month Qty</span><span class="stat-spacer"></span><span class='stat-value'>72.0% (down 28.0%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day Last Month Value</span><span class="stat-spacer"></span><span class='stat-value'>68.6% (down 31.4%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day 2 Months Ago Qty</span><span class="stat-spacer"></span><span class='stat-value'>78.7% (down 21.3%)</span></div><div class='stat-row'><span class='stat-label'>% Yesterday vs Same Day 2 Months Ago Value</span><span class="stat-spacer"></span><span class='stat-value'>76.1% (down 23.9%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Qty</span><span class="stat-spacer"></span><span class='stat-value'>109.4% (up 9.4%)</span></div><div class='stat-row'><span class='stat-label'>% Same Day LM vs 2LM Value</span><span class="stat-spacer"></span><span class='stat-value'>110.9% (up 10.9%)</span></div></div></div><div class='stat-group'><h4>Month to Date</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Qty</span><span class="stat-spacer"></span><span class='stat-value'>49,810</span></div><div class='stat-row'><span class='stat-label'>MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>757,074.45</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Qty</span><span class="stat-spacer"></span><span class='stat-value'>67,231</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Value</span><span class="stat-spacer"></span><span class='stat-value'>1,666,251.62</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Qty</span><span class="stat-spacer"></span><span class='stat-value'>74.1% (down 25.9%)</span></div><div class='stat-row'><span class='stat-label'>% MTD vs Prev Value</span><span class="stat-spacer"></span><span class='stat-value'>45.4% (down 54.6%)</span></div></div></div><div class='stat-group'><h4>3-Month Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Three Month Trend Qty</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,6.9 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,6.9 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>63,643 → 67,231 → 49,810 (legs: +5.6%, -25.9%)</span></div><div class='stat-row'><span class='stat-label'>Three Month Trend Value</span><svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none"><polygon points="4,20 4,4.5 30,4.0 56,18.0 56,20" fill="url(#sparkfill)"></polygon><polyline points="4,4.5 30,4.0 56,18.0" fill="none" stroke="var(--highvolt)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class='stat-value'>R1,632,991.31 → R1,666,251.62 → R757,074.45 (legs: +2.0%, -54.6%)</span></div></div></div><ul class="flags"><li>Yesterday qty/value dropped >20% vs BOTH historical points: qty 19,108 vs 26,553 last month (down 28.0%) and vs 24,280 two months ago (down 21.3%); value R245,102.75 vs R357,170.12 last month (down 31.4%) and vs R322,116.75 two months ago (down 23.9%).</li><li>MTD vs prior-MTD variance breaches ±10% for both metrics: qty down 25.9% (49,810 vs 67,231), value down 54.6% (R757,074.45 vs R1,666,251.62).</li><li>Same-day-last-month vs same-day-two-months-ago variance breaches ±5% for both metrics: qty up 9.4%, value up 10.9%.</li><li>3-month trend abnormal: value leg (prior-MTD → current-MTD) moved -54.6%, well past the 25% single-leg threshold; qty leg moved -25.9%, just past the threshold.</li><li>Tenant breakdown for yesterday vs same-day-last-month shows the drop is broad-based, not concentrated in one tenant: uConnect R241,985.31 → R350,447.88 (-30.9%); ME&YOU R3,117.44 → R6,722.24 (-53.6%).</li><li>Revenue sanity check passed — per-row AVG ranged R12.24–R34.53 and MAX ranged R434.78–R1,532.84 across all 6 periods checked (Jun 1–Aug 2), no order-of-magnitude outliers. No exclusions applied. WhatsApp purchase columns excluded from all sums per known masking-policy artifact.</li><li>2026-08-02 also has notably fewer underlying rows (15,998) than 2026-07-02 (28,711) or 2026-06-02 (24,589) in the source table, consistent with the Sunday vs weekday mismatch noted in comparison_note rather than a processing failure.</li></ul></div>
     </div>
   
-    <div class="card red">
+    <div class="card accent-c">
+        <div class="card-number">03</div>
         <div class="card-header">
-            <span class="badge red">FAIL</span>
             <span class="card-title">Active 1</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Snapshot</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Total SIMS in View</div><div class='stat-value'>433,821</div></div><div class='stat'><div class='stat-label'>Active 0 30 Days</div><div class='stat-value'>265,160</div></div><div class='stat'><div class='stat-label'>Semi Active 31 60 Days</div><div class='stat-value'>38,256</div></div><div class='stat'><div class='stat-label'>Inactive Over 60 Days</div><div class='stat-value'>64,337</div></div><div class='stat'><div class='stat-label'>Never Used</div><div class='stat-value'>66,068</div></div><div class='stat'><div class='stat-label'>Used in Last 1 Day</div><div class='stat-value'>134,225</div></div><div class='stat'><div class='stat-label'>Never Used vs Same Day Last Month</div><div class='stat-value'>N/A — no snapshot entry for 2026-06-29 (log currently covers 2026-07-21, 2026-07-22, 2026-07-27, 2026-07-28, 2026-07-29)</div></div></div></div><div class='stat-group'><h4>New-Subscriber Cohort</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>New Subs Yesterday</div><div class='stat-value'>1,447</div></div><div class='stat'><div class='stat-label'>New Subs Active 1 Yesterday</div><div class='stat-value'>312</div></div><div class='stat'><div class='stat-label'>New Subs Active 1 Rate Yesterday</div><div class='stat-value'>21.6%</div></div><div class='stat'><div class='stat-label'>New Subs Day Before</div><div class='stat-value'>3,240</div></div><div class='stat'><div class='stat-label'>New Subs Active 1 Day Before</div><div class='stat-value'>1,458</div></div><div class='stat'><div class='stat-label'>New Subs Active 1 Rate Day Before</div><div class='stat-value'>45.0%</div></div><div class='stat'><div class='stat-label'>% New Subs vs Day Before</div><div class='stat-value'>44.7% (down 55.3%)</div></div><div class='stat'><div class='stat-label'>% New Subs Active 1 vs Day Before</div><div class='stat-value'>21.4% (down 78.6%)</div></div></div></div><div class='stat-group'><h4>Day 2-4 Registration Activity</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Cohort 2 4 Days Active Yesterday</div><div class='stat-value'>1,316</div></div><div class='stat'><div class='stat-label'>Cohort 2 4 Days Active Avg Prior 7d</div><div class='stat-value'>3,616.14</div></div><div class='stat'><div class='stat-label'>% Cohort 2 4 Days Active vs 7d Avg</div><div class='stat-value'>36.4% (down 63.6%)</div></div></div></div><div class='stat-group'><h4>Day-30 Active-7 Retention</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Cohort Day 30 Total</div><div class='stat-value'>2,097</div></div><div class='stat'><div class='stat-label'>Cohort Day 30 Active 7 Count</div><div class='stat-value'>493</div></div><div class='stat'><div class='stat-label'>Cohort Day 30 Active 7 Rate</div><div class='stat-value'>23.5%</div></div><div class='stat'><div class='stat-label'>Cohort Day 30 Active 7 Same Period Last Month</div><div class='stat-value'>N/A — no snapshot entry for 2026-05-29</div></div></div></div><div class='stat-group'><h4>MTD Trend</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>MTD New Subs</div><div class='stat-value'>59,845</div></div><div class='stat'><div class='stat-label'>MTD New Subs Active 1</div><div class='stat-value'>30,390</div></div><div class='stat'><div class='stat-label'>MTD Active 1 Rate</div><div class='stat-value'>50.8%</div></div><div class='stat'><div class='stat-label'>Prev MTD New Subs</div><div class='stat-value'>56,991</div></div><div class='stat'><div class='stat-label'>Prev MTD New Subs Active 1</div><div class='stat-value'>22,263</div></div><div class='stat'><div class='stat-label'>Prev MTD Active 1 Rate</div><div class='stat-value'>39.1%</div></div><div class='stat'><div class='stat-label'>% MTD Active 1 vs Prev MTD</div><div class='stat-value'>136.5% (up 36.5%)</div></div></div></div><ul class="flags"><li>New-subscriber Active-1 count dropped 78.6% vs day before (312 vs 1,458, for cohorts created 2026-07-29 vs 2026-07-28) — exceeds the 60% drastic-drop threshold. New-subscriber volume itself dropped less sharply (1,447 vs 3,240, down 55.3%, within threshold), so the newest cohort's Active-1 rate also fell, from 45.0% (07-28) to 21.6% (07-29).</li><li>Registration-activity cohort (subscribers created 2-4 days prior): yesterday's cohort-active count (1,316) is 63.6% below the trailing-7-day average (3,616.1) — exceeds the 60% threshold.</li><li>MTD Active-1 is up 36.5% vs prior-MTD (30,390 vs 22,263; rate 50.8% vs 39.1%) — well above baseline, no flag (rule only trips on a >60% drop).</li><li>Day-30 Active-7 retention (subscribers created 2026-06-29, ~30 days old): 493/2,097 = 23.5%. Same-period-last-month comparison remains N/A — snapshot log has no entry for 2026-05-29 yet.</li><li>Never-used vs same-day-last-month comparison remains N/A — snapshot log has no entry for 2026-06-29 yet; today's run adds the 2026-07-29 entry to the log.</li><li>Both the new-subscriber Active-1 rate and the 2-4 day cohort activity dropped sharply, both anchored on 2026-07-29 — worth checking whether this reflects a genuine engagement dip in the newest cohorts or a data-timing effect, since USAGE_0_30_DAYS is a rolling as-of-today flag that can shift daily even for historical records already in the view (the 07-28 new-subscriber Active-1 count itself changed from 342, as reported in yesterday's run, to 1,458 today for the same cohort).</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Snapshot</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Total SIMS in View</span><span class="stat-spacer"></span><span class='stat-value'>393,060</span></div><div class='stat-row'><span class='stat-label'>Active 0 30 Days</span><span class="stat-spacer"></span><span class='stat-value'>266,782</span></div><div class='stat-row'><span class='stat-label'>Semi Active 31 60 Days</span><span class="stat-spacer"></span><span class='stat-value'>38,836</span></div><div class='stat-row'><span class='stat-label'>Inactive Over 60 Days</span><span class="stat-spacer"></span><span class='stat-value'>20,465</span></div><div class='stat-row'><span class='stat-label'>Never Used</span><span class="stat-spacer"></span><span class='stat-value'>66,977</span></div><div class='stat-row'><span class='stat-label'>Used in Last 1 Day</span><span class="stat-spacer"></span><span class='stat-value'>127,276</span></div><div class='stat-row'><span class='stat-label'>Never Used vs Same Day Last Month</span><span class="stat-spacer"></span><span class='stat-value'>N/A — snapshot history starts 2026-07-21</span></div></div></div><div class='stat-group'><h4>New-Subscriber Cohort</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>New Subs Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>720</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>77</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Rate Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>10.7%</span></div><div class='stat-row'><span class='stat-label'>New Subs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>2,225</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Day Before</span><span class="stat-spacer"></span><span class='stat-value'>483</span></div><div class='stat-row'><span class='stat-label'>New Subs Active 1 Rate Day Before</span><span class="stat-spacer"></span><span class='stat-value'>21.7%</span></div><div class='stat-row'><span class='stat-label'>% New Subs vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>32.4% (down 67.6%)</span></div><div class='stat-row'><span class='stat-label'>% New Subs Active 1 vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>15.9% (down 84.1%)</span></div></div></div><div class='stat-group'><h4>Day 2-4 Registration Activity</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Cohort 2 4 Days Active Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>2,462</span></div><div class='stat-row'><span class='stat-label'>Cohort 2 4 Days Active Avg Prior 7d</span><span class="stat-spacer"></span><span class='stat-value'>4,109.00</span></div><div class='stat-row'><span class='stat-label'>% Cohort 2 4 Days Active vs 7d Avg</span><span class="stat-spacer"></span><span class='stat-value'>59.9% (down 40.1%)</span></div></div></div><div class='stat-group'><h4>Day-30 Active-7 Retention</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Cohort Day 30 Total</span><span class="stat-spacer"></span><span class='stat-value'>3,080</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Count</span><span class="stat-spacer"></span><span class='stat-value'>750</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Rate</span><span class="stat-spacer"></span><span class='stat-value'>24.4%</span></div><div class='stat-row'><span class='stat-label'>Cohort Day 30 Active 7 Same Period Last Month</span><span class="stat-spacer"></span><span class='stat-value'>N/A — snapshot history starts 2026-07-21</span></div></div></div><div class='stat-group'><h4>MTD Trend</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD New Subs</span><span class="stat-spacer"></span><span class='stat-value'>2,945</span></div><div class='stat-row'><span class='stat-label'>MTD New Subs Active 1</span><span class="stat-spacer"></span><span class='stat-value'>560</span></div><div class='stat-row'><span class='stat-label'>MTD Active 1 Rate</span><span class="stat-spacer"></span><span class='stat-value'>19.0%</span></div><div class='stat-row'><span class='stat-label'>Prev MTD New Subs</span><span class="stat-spacer"></span><span class='stat-value'>5,774</span></div><div class='stat-row'><span class='stat-label'>Prev MTD New Subs Active 1</span><span class="stat-spacer"></span><span class='stat-value'>2,583</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Active 1 Rate</span><span class="stat-spacer"></span><span class='stat-value'>44.7%</span></div><div class='stat-row'><span class='stat-label'>% MTD Active 1 vs Prev MTD</span><span class="stat-spacer"></span><span class='stat-value'>21.7% (down 78.3%)</span></div></div></div><ul class="flags"><li>New-subscriber volume dropped 67.6% vs day before (720 vs 2,225 on 2026-08-01) — breaches the 60% drastic-drop threshold. Likely partly explained by 08-02 being a Sunday vs 08-01 a Saturday, both lower-volume days, but the drop still trips the rule.</li><li>New-subscriber Active-1 count dropped 84.1% vs day before (77 vs 483), breaching the 60% threshold.</li><li>MTD Active-1 count among new subscribers dropped 78.3% vs prior-MTD (560 vs 2,583; rate 19.0% vs 44.7%), breaching the 60% threshold.</li><li>Day 2-4 registration-activity cohort (2,462) was 40.1% below the trailing 7-day average (4,109) — within the 60% tolerance, not flagged.</li><li>Day-30 Active-7 retention and never-used-vs-last-month comparisons are N/A: the snapshot log only goes back to 2026-07-21, so neither 2026-07-02 nor 2026-06-02 has a logged snapshot yet.</li></ul></div>
     </div>
   
-    <div class="card red">
+    <div class="card accent-a">
+        <div class="card-number">04</div>
         <div class="card-header">
-            <span class="badge red">FAIL</span>
             <span class="card-title">DIM Subscriber Alignment</span>
-        </div>
-        <div class="card-body"><div class='stat-group'><h4>Table Alignment</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>VW ACTIVE SUBSCRIPTIONS Snapshot</div><div class='stat-value'>433,821</div></div><div class='stat'><div class='stat-label'>DIM SUBSCRIBERS Active</div><div class='stat-value'>429,725</div></div><div class='stat'><div class='stat-label'>UCONNECT MAY MERGE Active UConnect Only</div><div class='stat-value'>429,731</div></div><div class='stat'><div class='stat-label'>Spread</div><div class='stat-value'>4,096</div></div></div></div><div class='stat-group'><h4>Duplicate Check (Active, uConnect)</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>Duplicate Account Numbers</div><div class='stat-value'>6</div></div><div class='stat'><div class='stat-label'>Duplicate Account Number Rows</div><div class='stat-value'>12</div></div><div class='stat'><div class='stat-label'>Duplicate Iccids</div><div class='stat-value'>9</div></div><div class='stat'><div class='stat-label'>Duplicate ICCID Rows</div><div class='stat-value'>44</div></div></div></div><ul class="flags"><li>Spread of 4,096 across subscriber tables — VW_ACTIVE_SUBSCRIPTIONS (433,821) vs DIM_SUBSCRIBERS (429,725) / UCONNECT_MAY_MERGE uConnect-only (429,731) — exceeds the 15-record threshold. Spread is identical to the 2026-07-28 run's 4,096, suggesting a stable, structural offset rather than a widening data-quality issue.</li><li>DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE stayed close to each other (429,725 vs 429,731, a 6-record gap), consistent with prior runs — the spread is driven entirely by VW_ACTIVE_SUBSCRIPTIONS running ahead of the other two.</li><li>Duplicate ACCOUNT_NUMBER/ICCID check: 6 duplicated account numbers (12 rows) and 9 duplicated ICCIDs (44 rows) — identical counts to the 2026-07-28 run, both well under the 100 threshold, no flag.</li></ul></div>
-    </div>
-  
-    <div class="card red">
-        <div class="card-header">
             <span class="badge red">FAIL</span>
-            <span class="card-title">Terminations</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Terminations vs Threshold</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>MTD Terminations</div><div class='stat-value'>27,495</div></div><div class='stat'><div class='stat-label'>Prev MTD Terminations</div><div class='stat-value'>69,157</div></div><div class='stat'><div class='stat-label'>Two Months Ago MTD Terminations</div><div class='stat-value'>44,676</div></div><div class='stat'><div class='stat-label'>Baseline Avg Last 2 Months</div><div class='stat-value'>56,916.50</div></div><div class='stat'><div class='stat-label'>Threshold Baseline Plus 500</div><div class='stat-value'>57,416.50</div></div></div></div><div class='stat-group'><h4>Legacy Proxy</h4><div class='stat-grid'><div class='stat'><div class='stat-label'>SIMS Over 60 Days No Usage Proxy</div><div class='stat-value'>64,337</div></div></div></div><ul class="flags"><li>27,495 terminations MTD is below the (avg of last 2 months + 500) threshold of 57,416.5 — avg of 69,157 (June, through 06-29) and 44,676 (May, through 05-29) = 56,916.5. RED per rule.</li><li>Prior-MTD (June, through 06-29) jumped to 69,157 from the 55,429 reported at the 06-28 cutoff in the 2026-07-28 run — a 13,728-record, one-day increase. This matches the previously documented batch-applied/retroactive termination-date pattern rather than being a new anomaly: full-calendar-month June is 72,486 (vs 72,483 in the prior run, essentially unchanged), meaning ~95% of June's terminations are now captured by day 29, with the remainder landing on day 30.</li><li>Full calendar month totals for context (uConnect): 2026-03: 8,080; 2026-04: 52,134; 2026-05: 44,676; 2026-06: 72,486; 2026-07 (partial, through 07-29): 27,495. May's full-month total (44,676) exactly equals the 05-01→05-29 MTD figure used in the baseline, confirming May's terminations were also fully captured by day 29 — same batch pattern seen for June.</li><li>Known data-shape issue, still unresolved: because June's and May's MTD-through-day-29 windows already capture ~95-100% of their full-month totals (due to batch-applied termination dates), comparing July's partial-month figure (also through day 29, with its own month-end batch presumably still to post) against these near-complete baselines will structurally understate July. This RED flag should be read with that caveat rather than as confirmed evidence of a genuine slowdown in termination processing — recommend the data team resolve the underlying batch-timing behavior so this check's day-of-month-cutoff comparison becomes reliable.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Table Alignment</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>VW ACTIVE SUBSCRIPTIONS Snapshot</span><span class="stat-spacer"></span><span class='stat-value'>393,060</span></div><div class='stat-row'><span class='stat-label'>DIM SUBSCRIBERS Active</span><span class="stat-spacer"></span><span class='stat-value'>387,940</span></div><div class='stat-row'><span class='stat-label'>UCONNECT MAY MERGE Active UConnect Only</span><span class="stat-spacer"></span><span class='stat-value'>387,946</span></div><div class='stat-row'><span class='stat-label'>Spread</span><span class="stat-spacer"></span><span class='stat-value'>5,120</span></div></div></div><div class='stat-group'><h4>Duplicate Check (Active, uConnect)</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Duplicate Account Numbers</span><span class="stat-spacer"></span><span class='stat-value'>6</span></div><div class='stat-row'><span class='stat-label'>Duplicate Account Number Rows</span><span class="stat-spacer"></span><span class='stat-value'>12</span></div><div class='stat-row'><span class='stat-label'>Duplicate Iccids</span><span class="stat-spacer"></span><span class='stat-value'>9</span></div><div class='stat-row'><span class='stat-label'>Duplicate ICCID Rows</span><span class="stat-spacer"></span><span class='stat-value'>44</span></div></div></div><ul class="flags"><li>Spread between VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (393,060) and the other two tables (DIM_SUBSCRIBERS 387,940; UCONNECT_MAY_MERGE uConnect-only 387,946) is 5,120 rows — well past the 15-row tolerance. DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE agree closely with each other (spread of 6), so the discrepancy sits with the active-subscriptions usage view.</li><li>Duplicate checks are clean: 6 duplicated ACCOUNT_NUMBERs (12 rows) and 9 duplicated ICCIDs (44 rows) among active uConnect-only records — both well under the 100 threshold.</li></ul></div>
     </div>
-</div>
-
-<h2>Pending MCP Access</h2>
-<div class="grid">
   
-    <div class="card pending">
+    <div class="card accent-b">
+        <div class="card-number">05</div>
         <div class="card-header">
-            <span class="badge pending">PENDING</span>
+            <span class="card-title">Terminations</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-group'><h4>Terminations vs Threshold</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>20</span></div><div class='stat-row'><span class='stat-label'>Prev MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>1,893</span></div><div class='stat-row'><span class='stat-label'>Two Months Ago MTD Terminations</span><span class="stat-spacer"></span><span class='stat-value'>1,268</span></div><div class='stat-row'><span class='stat-label'>Baseline Avg Last 2 Months</span><span class="stat-spacer"></span><span class='stat-value'>1,580.50</span></div><div class='stat-row'><span class='stat-label'>Threshold Baseline Plus 500</span><span class="stat-spacer"></span><span class='stat-value'>2,080.50</span></div></div></div><div class='stat-group'><h4>Legacy Proxy</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>SIMS Over 60 Days No Usage Proxy</span><span class="stat-spacer"></span><span class='stat-value'>20,465</span></div></div></div><ul class="flags"><li>MTD terminations (20, covering 2026-08-01 to 2026-08-02) are below the threshold of baseline + 500 (1,580.5 + 500 = 2,080.5) — flags RED per the rule.</li><li>Known data-shape caveat: termination dates are batch-applied late in the month, not day-by-day. Full-calendar-month sanity check: July 2026 had 84,803 uConnect terminations total vs only 1,893 in its first 2 days; June 2026 had 72,486 total vs only 1,268 in its first 2 days. A near-zero count this early in August is consistent with that same batch pattern, not necessarily a processing outage — treat this RED with that context rather than as a standalone alarm.</li></ul></div>
+    </div>
+    </div>
+  </div>
+
+  <div id="content-pending" class="tab-panel">
+    <h2 class="section-title">Pending MCP Access</h2>
+    <div class="grid">
+      
+    <div class="card accent-a">
+        <div class="card-number">01</div>
+        <div class="card-header">
             <span class="card-title">Wholesale Usage</span>
+            <span class="badge pending">PENDING</span>
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE</p></div>
     </div>
   
-    <div class="card pending">
+    <div class="card accent-b">
+        <div class="card-number">02</div>
         <div class="card-header">
-            <span class="badge pending">PENDING</span>
             <span class="card-title">SmartConnect vs Datawarehouse</span>
+            <span class="badge pending">PENDING</span>
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT</p></div>
     </div>
   
-    <div class="card pending">
+    <div class="card accent-c">
+        <div class="card-number">03</div>
         <div class="card-header">
-            <span class="badge pending">PENDING</span>
             <span class="card-title">CDRs (Wholesale)</span>
+            <span class="badge pending">PENDING</span>
         </div>
         <div class="card-body"><p class="note">Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON</p></div>
     </div>
-</div>
+    </div>
+  </div>
 
-<h2>Manual Checks — Telco / Dashboards</h2>
-<div class="grid">
-  
-    <div class="card manual">
+  <div id="content-manual" class="tab-panel">
+    <h2 class="section-title">Manual Checks — Telco / Dashboards</h2>
+    <div class="grid">
+      
+    <div class="card accent-a">
+        <div class="card-number">01</div>
         <div class="card-header">
-            <span class="badge manual">MANUAL</span>
             <span class="card-title">Cell C Recharges — Telco Dashboard Alignment</span>
+            <span class="badge manual">MANUAL</span>
         </div>
         <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs</p></div>
     </div>
   
-    <div class="card manual">
+    <div class="card accent-b">
+        <div class="card-number">02</div>
         <div class="card-header">
-            <span class="badge manual">MANUAL</span>
             <span class="card-title">Wholesale Usage — Telco Dashboard</span>
+            <span class="badge manual">MANUAL</span>
         </div>
         <div class="card-body"><p class="note">Cross-check usage totals on Telco dashboard</p></div>
     </div>
   
-    <div class="card manual">
+    <div class="card accent-c">
+        <div class="card-number">03</div>
         <div class="card-header">
-            <span class="badge manual">MANUAL</span>
             <span class="card-title">CDR PowerBI Dashboard</span>
+            <span class="badge manual">MANUAL</span>
         </div>
         <div class="card-body"><p class="note">Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2</p></div>
     </div>
   
-    <div class="card manual">
+    <div class="card accent-a">
+        <div class="card-number">04</div>
         <div class="card-header">
-            <span class="badge manual">MANUAL</span>
             <span class="card-title">QOS by Tenant & Store (Active 1, Day 2-4)</span>
+            <span class="badge manual">MANUAL</span>
         </div>
         <div class="card-body"><p class="note">Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.</p></div>
     </div>
-</div>
+    </div>
+  </div>
 
-<footer>
-  <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
-  <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
-</footer>
+  <footer>
+    <span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
+    <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
+  </footer>
+</div>
 
 </body>
 </html>
