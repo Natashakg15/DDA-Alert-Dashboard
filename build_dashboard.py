@@ -121,20 +121,59 @@ CHECK_GROUPS = {
     ],
 }
 
+# Keys whose value is a genuine 3-point "a -> b -> c" trend string -> render as a real sparkline
+TREND_KEY_RE = re.compile(r"three_month_trend")
+TREND_VALUE_RE = re.compile(r"([R\-\d,\.]+)\s*→\s*([R\-\d,\.]+)\s*→\s*([R\-\d,\.]+)")
 
-def stat_grid(values: dict) -> str:
-    tiles = "".join(
-        f"<div class='stat'><div class='stat-label'>{label(k)}</div>"
-        f"<div class='stat-value'>{fmt(v)}</div></div>"
-        for k, v in values.items()
+
+def parse_trend(value: str):
+    m = TREND_VALUE_RE.search(str(value))
+    if not m:
+        return None
+    try:
+        return [float(g.replace("R", "").replace(",", "")) for g in m.groups()]
+    except ValueError:
+        return None
+
+
+def sparkline_svg(points):
+    lo, hi = min(points), max(points)
+    span = (hi - lo) or 1
+    xs = [4, 30, 56]
+    ys = [18 - ((p - lo) / span) * 14 for p in points]
+    coords = " ".join(f"{x},{y:.1f}" for x, y in zip(xs, ys))
+    area = f"4,20 {coords} 56,20"
+    return (
+        f'<svg class="spark" viewBox="0 0 60 22" preserveAspectRatio="none">'
+        f'<polygon points="{area}" fill="url(#sparkfill)"></polygon>'
+        f'<polyline points="{coords}" fill="none" stroke="var(--highvolt)" stroke-width="1.6" '
+        f'stroke-linecap="round" stroke-linejoin="round"></polyline>'
+        f"</svg>"
     )
-    return f"<div class='stat-grid'>{tiles}</div>"
+
+
+def stat_rows(values: dict) -> str:
+    rows = []
+    for k, v in values.items():
+        trend = parse_trend(v) if TREND_KEY_RE.search(k) else None
+        if trend:
+            spark = sparkline_svg(trend)
+        else:
+            spark = '<span class="stat-spacer"></span>'
+        rows.append(
+            f"<div class='stat-row'>"
+            f"<span class='stat-label'>{label(k)}</span>"
+            f"{spark}"
+            f"<span class='stat-value'>{fmt(v)}</span>"
+            f"</div>"
+        )
+    return f"<div class='stat-rows'>{''.join(rows)}</div>"
 
 
 def kv_table(check_name: str, values: dict) -> str:
     groups = CHECK_GROUPS.get(check_name)
     if not groups:
-        return stat_grid(values)
+        return stat_rows(values)
 
     seen = set()
     sections = []
@@ -143,11 +182,11 @@ def kv_table(check_name: str, values: dict) -> str:
         seen.update(present)
         if present:
             sections.append(
-                f"<div class='stat-group'><h4>{group_label}</h4>{stat_grid(present)}</div>"
+                f"<div class='stat-group'><h4>{group_label}</h4>{stat_rows(present)}</div>"
             )
     leftover = {k: v for k, v in values.items() if k not in seen}
     if leftover:
-        sections.append(f"<div class='stat-group'><h4>Other</h4>{stat_grid(leftover)}</div>")
+        sections.append(f"<div class='stat-group'><h4>Other</h4>{stat_rows(leftover)}</div>")
     return "".join(sections)
 
 
@@ -158,12 +197,17 @@ def flag_list(flags: list) -> str:
     return f'<ul class="flags">{items}</ul>'
 
 
-def card(check: dict) -> str:
+# Cycle of decorative left-border accents for card numerals (categorical, not status-based)
+ACCENT_CYCLE = ["accent-a", "accent-b", "accent-c"]
+
+
+def card(check: dict, index: int) -> str:
     status = check.get("status", "green")
     title  = check.get("check", "")
     values = check.get("values", {})
     flags  = check.get("flags",  [])
     note   = check.get("note",   "")
+    accent = ACCENT_CYCLE[index % len(ACCENT_CYCLE)]
 
     badge_label = {
         "green":   "PASS",
@@ -182,18 +226,46 @@ def card(check: dict) -> str:
     body += flag_list(flags)
 
     return f"""
-    <div class="card {status}">
+    <div class="card {accent}">
+        <div class="card-number">{index + 1:02d}</div>
         <div class="card-header">
-            <span class="badge {status}">{badge_label}</span>
             <span class="card-title">{title}</span>
+            <span class="badge {status}">{badge_label}</span>
         </div>
         <div class="card-body">{body}</div>
     </div>"""
 
 
-auto_cards    = "\n  ".join(card(c) for c in automated)
-pending_cards = "\n  ".join(card(c) for c in pending)
-manual_cards  = "\n  ".join(card(c) for c in manual)
+auto_cards    = "\n  ".join(card(c, i) for i, c in enumerate(automated))
+pending_cards = "\n  ".join(card(c, i) for i, c in enumerate(pending))
+manual_cards  = "\n  ".join(card(c, i) for i, c in enumerate(manual))
+
+kpi_tiles = f"""
+  <div class="kpi-tile">
+    <div class="kpi-label">Checks Passed</div>
+    <div class="kpi-value good">{passed}</div>
+    <div class="kpi-sub">of {len(automated)} automated checks</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Checks Failed</div>
+    <div class="kpi-value bad">{failed}</div>
+    <div class="kpi-sub">red flags today</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Warnings</div>
+    <div class="kpi-value warn">{warnings}</div>
+    <div class="kpi-sub">amber flags today</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Pending MCP Access</div>
+    <div class="kpi-value neutral">{len(pending)}</div>
+    <div class="kpi-sub">tables awaiting connection</div>
+  </div>
+  <div class="kpi-tile">
+    <div class="kpi-label">Manual Cross-Checks</div>
+    <div class="kpi-value neutral">{len(manual)}</div>
+    <div class="kpi-sub">verify on Telco / PowerBI</div>
+  </div>"""
 
 html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -205,28 +277,24 @@ html = f"""<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Spot CI 2025 — THERMOLINE ── */
+  /* Spot CI 2025 -- THERMOLINE, laid out to match the Telco KPI Dashboard format */
   :root {{
     --inkcore:    #0e0e0e;
+    --navy:       #10162b;
     --zero-white: #ffffff;
+    --page:       #f4f5f7;
     --hypermint:  #13f460;
     --sonic-blue: #2d40e9;
     --ultraviolet:#52bec0;
     --highvolt:   #f44610;
-
-    --pass:       var(--hypermint);
-    --pass-text:  #0a3d1f;
-    --fail:       var(--highvolt);
-    --fail-text:  #fff;
     --warn:       #f5c400;
-    --warn-text:  #3d2f00;
-    --pending:    var(--ultraviolet);
-    --pending-text: #0c2e2e;
-    --manual:     var(--sonic-blue);
-    --manual-text:#fff;
-    --error:      var(--highvolt);
 
-    --card-radius: 8px;
+    --ink:        #101114;
+    --ink-soft:   rgba(16,17,20,0.55);
+    --ink-faint:  rgba(16,17,20,0.32);
+    --border:     rgba(16,17,20,0.09);
+
+    --card-radius: 10px;
     --font-header: 'At Hauss Std Retina', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-body:   'Helvetica Now', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }}
@@ -235,274 +303,368 @@ html = f"""<!DOCTYPE html>
 
   body {{
     font-family: var(--font-body);
-    background: var(--inkcore);
-    color: var(--zero-white);
-    padding: 32px 28px;
+    background: var(--page);
+    color: var(--ink);
+    padding: 0 0 40px;
     min-height: 100vh;
   }}
 
-  header {{
+  .topbar {{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding-bottom: 28px;
-    margin-bottom: 28px;
-  }}
-  .header-top {{
-    display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 16px;
+    padding: 16px 28px;
+    background: var(--zero-white);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }}
-  header h1 {{
-    font-family: var(--font-header);
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+  .brand {{ display: flex; align-items: center; gap: 14px; }}
+  .spot-logo {{
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--inkcore);
     color: var(--zero-white);
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    padding: 7px 12px;
+    border-radius: 6px;
   }}
-  header h1 span {{ color: var(--hypermint); }}
-  header .meta {{
+  .spot-logo sup {{ font-size: 0.55em; }}
+  .brand h1 {{
+    font-family: var(--font-header);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+  }}
+  .topbar .status-line {{
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-top: 2px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
   }}
-  .overall {{
+  .status-dot {{ width: 8px; height: 8px; border-radius: 50%; background: var(--hypermint); flex-shrink: 0; }}
+  .status-dot.red {{ background: var(--highvolt); }}
+  .status-dot.amber {{ background: var(--warn); }}
+
+  .tab-panel, footer {{ padding: 0 28px; }}
+
+  /* ---- CSS-only tabs ---- */
+  .tabs-wrapper input[type="radio"] {{ display: none; }}
+  .tabbar {{
+    display: flex;
+    gap: 26px;
+    border-bottom: 1px solid var(--border);
+    background: var(--zero-white);
+    padding: 0 28px;
+    margin: 0 -28px 28px;
+    flex-wrap: wrap;
+  }}
+  .tabbar label {{
+    padding: 16px 2px;
+    font-family: var(--font-header);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    user-select: none;
+  }}
+  .tab-panel {{ display: none; }}
+  #tab-overview:checked ~ .tabbar label[for="tab-overview"],
+  #tab-auto:checked ~ .tabbar label[for="tab-auto"],
+  #tab-pending:checked ~ .tabbar label[for="tab-pending"],
+  #tab-manual:checked ~ .tabbar label[for="tab-manual"] {{
+    color: var(--highvolt);
+    border-bottom-color: var(--highvolt);
+  }}
+  #tab-overview:checked ~ #content-overview,
+  #tab-auto:checked ~ #content-auto,
+  #tab-pending:checked ~ #content-pending,
+  #tab-manual:checked ~ #content-manual {{ display: block; }}
+
+  /* ---- KPI tile row ---- */
+  .kpi-row {{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }}
+  .kpi-tile {{
+    background: var(--navy);
+    border-radius: var(--card-radius);
+    padding: 18px 18px 16px;
+  }}
+  .kpi-label {{
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 10px;
+  }}
+  .kpi-value {{
+    font-family: var(--font-header);
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--zero-white);
+    line-height: 1;
+  }}
+  .kpi-value.good {{ color: var(--hypermint); }}
+  .kpi-value.bad  {{ color: var(--highvolt); }}
+  .kpi-value.warn {{ color: var(--warn); }}
+  .kpi-sub {{
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+  }}
+
+  .overall-banner {{
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
-    border-radius: 4px;
+    padding: 9px 18px;
+    border-radius: 6px;
     font-family: var(--font-header);
     font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    flex-shrink: 0;
+    margin-bottom: 22px;
   }}
-  .overall.green  {{ background: var(--hypermint); color: var(--pass-text); }}
-  .overall.red    {{ background: var(--highvolt);  color: var(--zero-white); }}
-  .overall.amber  {{ background: var(--warn);      color: var(--warn-text); }}
-  .overall-dot {{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.7; }}
+  .overall-banner.green {{ background: rgba(19,244,96,0.14); color: #0a7d38; }}
+  .overall-banner.red   {{ background: rgba(244,70,16,0.12); color: var(--highvolt); }}
+  .overall-banner.amber {{ background: rgba(245,196,0,0.16); color: #8a6a00; }}
 
-  .summary-bar {{
-    display: flex;
-    gap: 10px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }}
-  .summary-pill {{
-    padding: 6px 16px;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border: 1px solid;
-  }}
-  .summary-pill.green   {{ background: rgba(19,244,96,0.12);  color: var(--hypermint);  border-color: rgba(19,244,96,0.25); }}
-  .summary-pill.red     {{ background: rgba(244,70,16,0.12);  color: #ff7d5c;           border-color: rgba(244,70,16,0.3); }}
-  .summary-pill.amber   {{ background: rgba(245,196,0,0.12);  color: #f5c400;           border-color: rgba(245,196,0,0.25); }}
-  .summary-pill.gray    {{ background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.1); }}
-  .summary-pill.pending {{ background: rgba(82,190,192,0.12); color: var(--ultraviolet); border-color: rgba(82,190,192,0.25); }}
-
-  h2 {{
+  h2.section-title {{
     font-family: var(--font-header);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.3);
-    margin: 32px 0 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
   }}
 
   .grid {{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
     gap: 16px;
     align-items: start;
   }}
 
   .card {{
+    position: relative;
     border-radius: var(--card-radius);
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    background: var(--zero-white);
     overflow: hidden;
-    transition: border-color 0.15s, background 0.15s;
+    padding-left: 5px;
+    box-shadow: 0 1px 2px rgba(16,17,20,0.04);
   }}
-  .card:hover {{ background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }}
+  .card.accent-a {{ box-shadow: inset 4px 0 0 var(--highvolt); }}
+  .card.accent-b {{ box-shadow: inset 4px 0 0 var(--sonic-blue); }}
+  .card.accent-c {{ box-shadow: inset 4px 0 0 var(--ultraviolet); }}
 
-  .card.green  {{ border-color: rgba(19,244,96,0.3);  background: rgba(19,244,96,0.05); }}
-  .card.red    {{ border-color: rgba(244,70,16,0.4);  background: rgba(244,70,16,0.06); }}
-  .card.amber  {{ border-color: rgba(245,196,0,0.3);  background: rgba(245,196,0,0.05); }}
-  .card.pending {{ border-color: rgba(82,190,192,0.3); background: rgba(82,190,192,0.05); }}
-  .card.manual {{ border-color: rgba(45,64,233,0.4);  background: rgba(45,64,233,0.06); }}
-  .card.error  {{ border-color: rgba(244,70,16,0.5);  background: rgba(244,70,16,0.08); }}
+  .card-number {{
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-family: var(--font-header);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: rgba(16,17,20,0.06);
+    line-height: 1;
+  }}
 
   .card-header {{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 16px 18px 12px;
   }}
   .card-title {{
     font-family: var(--font-header);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--zero-white);
-    letter-spacing: 0.01em;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
   }}
   .card-body {{
-    padding: 14px 16px;
+    padding: 0 18px 16px;
     font-size: 0.82rem;
-    color: rgba(255,255,255,0.75);
+    color: var(--ink-soft);
   }}
 
   .badge {{
     padding: 3px 10px;
     border-radius: 3px;
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     flex-shrink: 0;
     font-family: var(--font-header);
   }}
-  .badge.green   {{ background: var(--hypermint);  color: var(--pass-text); }}
-  .badge.red     {{ background: var(--highvolt);   color: var(--zero-white); }}
-  .badge.amber   {{ background: var(--warn);       color: var(--warn-text); }}
-  .badge.manual  {{ background: var(--sonic-blue); color: var(--zero-white); }}
-  .badge.pending {{ background: var(--ultraviolet);color: var(--inkcore); }}
-  .badge.error   {{ background: var(--highvolt);   color: var(--zero-white); }}
+  .badge.green   {{ background: rgba(19,244,96,0.16);  color: #0a7d38; }}
+  .badge.red     {{ background: var(--highvolt);       color: var(--zero-white); }}
+  .badge.amber   {{ background: rgba(245,196,0,0.22);  color: #8a6a00; }}
+  .badge.manual  {{ background: var(--sonic-blue);      color: var(--zero-white); }}
+  .badge.pending {{ background: var(--ultraviolet);    color: var(--inkcore); }}
+  .badge.error   {{ background: var(--highvolt);       color: var(--zero-white); }}
 
-  .stat-group {{ margin-top: 14px; }}
+  .stat-group {{ margin-top: 12px; }}
   .stat-group:first-child {{ margin-top: 0; }}
   .stat-group h4 {{
     font-family: var(--font-header);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ultraviolet);
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    letter-spacing: 0.07em;
+    color: var(--sonic-blue);
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
   }}
 
-  .stat-grid {{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px 16px;
+  .stat-rows {{ display: flex; flex-direction: column; }}
+  .stat-row {{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(16,17,20,0.05);
   }}
-  .stat {{ min-width: 0; }}
+  .stat-row:last-child {{ border-bottom: none; }}
   .stat-label {{
-    color: rgba(255,255,255,0.4);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 3px;
-    line-height: 1.3;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
   }}
+  .stat-spacer {{ width: 60px; flex-shrink: 0; }}
+  .spark {{ width: 60px; height: 22px; flex-shrink: 0; }}
   .stat-value {{
-    color: var(--zero-white);
+    color: var(--ink);
     font-weight: 600;
-    font-size: 0.88rem;
-    line-height: 1.35;
-    word-break: break-word;
+    font-size: 0.82rem;
+    text-align: right;
+    white-space: nowrap;
   }}
 
   ul.flags {{ list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }}
   ul.flags li {{
-    background: rgba(244,70,16,0.1);
+    background: rgba(244,70,16,0.07);
     border-left: 3px solid var(--highvolt);
     padding: 7px 12px;
     border-radius: 3px;
-    color: #ffb8a0;
-    font-size: 0.8rem;
+    color: #9a3a1c;
+    font-size: 0.78rem;
     line-height: 1.4;
   }}
 
-  .note {{ color: var(--ultraviolet); font-style: italic; margin-bottom: 6px; font-size: 0.8rem; }}
+  .note {{ color: var(--sonic-blue); font-style: italic; margin-bottom: 6px; font-size: 0.78rem; }}
 
   footer {{
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 40px;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.04em;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
     text-transform: uppercase;
-  }}
-  .footer-dot {{
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--hypermint);
-    margin-right: 8px;
-    vertical-align: middle;
   }}
 
   @media (max-width: 640px) {{
     .grid {{ grid-template-columns: 1fr; }}
-    body {{ padding: 20px 16px; }}
-    header h1 {{ font-size: 1.5rem; }}
+    .page {{ padding: 0 16px; }}
+    .topbar {{ padding: 14px 16px; }}
+    .tabbar {{ padding: 0 16px; margin: 0 -16px 22px; }}
   }}
+
+  svg.spark defs {{ display: none; }}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div>
-      <h1>DDA <span>Daily BI</span> Checks</h1>
-      <div class="meta">{display_date} &nbsp;&middot;&nbsp; Data as of {run_date} &nbsp;&middot;&nbsp; Snowflake</div>
-    </div>
-    <div class="overall {overall_cls}">
-      <span class="overall-dot"></span>
-      {overall_label}
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f44610" stop-opacity="0.28"></stop>
+      <stop offset="100%" stop-color="#f44610" stop-opacity="0"></stop>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="spot-logo">Spot<sup>TM</sup></span>
+    <h1>DDA Daily BI Checks</h1>
+  </div>
+  <div class="status-line">
+    <span class="status-dot {overall_cls}"></span>
+    {display_date} &nbsp;&middot;&nbsp; Data as of {run_date} &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
+  </div>
+</div>
+
+<div class="tabs-wrapper">
+  <input type="radio" name="tabs" id="tab-overview" checked>
+  <input type="radio" name="tabs" id="tab-auto">
+  <input type="radio" name="tabs" id="tab-pending">
+  <input type="radio" name="tabs" id="tab-manual">
+
+  <nav class="tabbar">
+    <label for="tab-overview">Overview</label>
+    <label for="tab-auto">Automated Checks</label>
+    <label for="tab-pending">Pending MCP Access</label>
+    <label for="tab-manual">Manual Checks</label>
+  </nav>
+
+  <div id="content-overview" class="tab-panel">
+    <div class="overall-banner {overall_cls}">{overall_label}</div>
+    <div class="kpi-row">{kpi_tiles}</div>
+    <h2 class="section-title">Automated Checks — Snowflake</h2>
+    <div class="grid">
+      {auto_cards}
     </div>
   </div>
-</header>
 
-<div class="summary-bar">
-  <span class="summary-pill green">{passed} Passed</span>
-  <span class="summary-pill red">{failed} Failed</span>
-  <span class="summary-pill amber">{warnings} Warnings</span>
-  <span class="summary-pill pending">{len(pending)} Pending</span>
-  <span class="summary-pill gray">{len(manual)} Manual</span>
+  <div id="content-auto" class="tab-panel">
+    <h2 class="section-title">Automated Checks — Snowflake</h2>
+    <div class="grid">
+      {auto_cards}
+    </div>
+  </div>
+
+  <div id="content-pending" class="tab-panel">
+    <h2 class="section-title">Pending MCP Access</h2>
+    <div class="grid">
+      {pending_cards}
+    </div>
+  </div>
+
+  <div id="content-manual" class="tab-panel">
+    <h2 class="section-title">Manual Checks — Telco / Dashboards</h2>
+    <div class="grid">
+      {manual_cards}
+    </div>
+  </div>
+
+  <footer>
+    <span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
+    <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
+  </footer>
 </div>
-
-<h2>Automated Checks — Snowflake</h2>
-<div class="grid">
-  {auto_cards}
-</div>
-
-<h2>Pending MCP Access</h2>
-<div class="grid">
-  {pending_cards}
-</div>
-
-<h2>Manual Checks — Telco / Dashboards</h2>
-<div class="grid">
-  {manual_cards}
-</div>
-
-<footer>
-  <span><span class="footer-dot"></span>Uconnect DDA &mdash; Snowflake UCONNECT_DW</span>
-  <span>Refreshed daily 07:00 SAST &mdash; GitHub Actions</span>
-</footer>
 
 </body>
 </html>"""
