@@ -1,64 +1,65 @@
 {
-  "run_date": "2026-08-16",
-  "run_time": "2026-08-17 00:00 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-08-16) is the run_date. Today (2026-08-17) is excluded as it is an incomplete day. Same-day-last-month reference is 2026-07-16; same-day-two-months-ago is 2026-06-16. Cell C Recharges and Sales compare yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length). Note: no automated run was committed to main between 2026-08-07 and this run — an uncommitted, partial run_date-2026-08-11 draft was found in the working tree and has been superseded by this full run. The gap means roughly 8 days (2026-08-08 through 2026-08-15) have no published data.",
+  "run_date": "2026-08-18",
+  "run_time": "2026-08-19 05:00 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-08-18) vs day before (2026-08-17). Today (2026-08-19) is excluded as it is an incomplete day. Same-day-last-month reference is 2026-07-18; same-day-two-months-ago is 2026-06-18. Cell C Recharges and Sales compare yesterday against same-day-last-month and same-day-two-months-ago, plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length). Note: no run was committed for 2026-08-17 (Monday) — this run covers 2026-08-18 (Tuesday) only, so that one weekday has no published data.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "red",
       "values": {
-        "yesterday_count": 15461,
-        "yesterday_value": 217064.46,
-        "same_day_last_month_count": 17364,
-        "same_day_last_month_value": 261602.50,
-        "same_day_two_months_ago_count": 15839,
-        "same_day_two_months_ago_value": 244830.00,
-        "pct_same_day_lm_vs_2lm_count": "109.6% (up 9.6%)",
-        "pct_same_day_lm_vs_2lm_value": "106.9% (up 6.9%)",
-        "mtd_count": 288121,
-        "mtd_value": 4282358.72,
-        "prev_mtd_count": 294803,
-        "prev_mtd_value": 4486025.05,
-        "pct_mtd_vs_prev_count": "97.7% (down 2.3%)",
-        "pct_mtd_vs_prev_value": "95.5% (down 4.5%)",
-        "three_month_trend_count": "283,460 → 294,803 → 288,121 (legs: +4.0%, -2.3%)",
-        "three_month_trend_value": "R4,263,917.00 → R4,486,025.05 → R4,282,358.72 (legs: +5.2%, -4.5%)"
+        "yesterday_count": 15858,
+        "yesterday_value": 234862.10,
+        "same_day_last_month_count": 17815,
+        "same_day_last_month_value": 256843.13,
+        "same_day_two_months_ago_count": 15960,
+        "same_day_two_months_ago_value": 240877.00,
+        "pct_same_day_lm_vs_2lm_count": "111.6% (up 11.6%)",
+        "pct_same_day_lm_vs_2lm_value": "106.6% (up 6.6%)",
+        "mtd_count": 321194,
+        "mtd_value": 4769603.80,
+        "prev_mtd_count": 331138,
+        "prev_mtd_value": 5020082.95,
+        "pct_mtd_vs_prev_count": "97.0% (down 3.0%)",
+        "pct_mtd_vs_prev_value": "95.0% (down 5.0%)",
+        "three_month_trend_count": "316,074 → 331,138 → 321,194 (legs: +4.8%, -3.0%)",
+        "three_month_trend_value": "R4,754,992.00 → R5,020,082.95 → R4,769,603.80 (legs: +5.6%, -5.0%)"
       },
       "flags": [
-        "Same-day-last-month vs two-months-ago count is up 9.6% (17,364 vs 15,839), exceeding the 5% threshold.",
-        "Same-day-last-month vs two-months-ago value is up 6.9% (R261,602.50 vs R244,830.00), exceeding the 5% threshold.",
-        "Revenue sanity check passed for all periods — AVG per recharge ranged R14.87-R15.22, in the normal ~R15 ballpark, no anomalous transactions detected."
+        "Same-day-last-month vs two-months-ago count is up 11.6% (17,815 vs 15,960), exceeding the 5% threshold.",
+        "Same-day-last-month vs two-months-ago value is up 6.6% (R256,843.13 vs R240,877.00), exceeding the 5% threshold.",
+        "Revenue sanity check passed for all periods — AVG per recharge ranged R14.42-R15.16, in the normal ~R15 ballpark, no anomalous transactions detected (MAX topped out at R15,121, well under the R1m anomaly threshold)."
       ]
     },
     {
       "check": "Sales (Last 30 Days)",
       "status": "red",
       "values": {
-        "yesterday_qty": 18440,
-        "yesterday_value": 217399.16,
-        "same_day_last_month_qty": 20821,
-        "same_day_last_month_value": 293892.10,
-        "same_day_two_months_ago_qty": 17954,
-        "same_day_two_months_ago_value": 241757.39,
-        "pct_yesterday_vs_same_day_last_month_qty": "88.6% (down 11.4%)",
-        "pct_yesterday_vs_same_day_last_month_value": "74.0% (down 26.0%)",
-        "pct_yesterday_vs_same_day_2_months_ago_qty": "102.7% (up 2.7%)",
-        "pct_yesterday_vs_same_day_2_months_ago_value": "89.9% (down 10.1%)",
-        "pct_same_day_lm_vs_2lm_qty": "116.0% (up 16.0%)",
-        "pct_same_day_lm_vs_2lm_value": "121.6% (up 21.6%)",
-        "mtd_qty": 385911,
-        "mtd_value": 6052199.34,
-        "prev_mtd_qty": 385824,
-        "prev_mtd_value": 6709232.24,
-        "pct_mtd_vs_prev_qty": "100.0% (up 0.0%)",
-        "pct_mtd_vs_prev_value": "90.2% (down 9.8%)",
-        "three_month_trend_qty": "370,880 → 385,824 → 385,911 (legs: +4.0%, +0.0%)",
-        "three_month_trend_value": "R6,443,695.10 → R6,709,232.24 → R6,052,199.34 (legs: +4.1%, -9.8%)"
+        "yesterday_qty": 16136,
+        "yesterday_value": 202140.36,
+        "same_day_last_month_qty": 19978,
+        "same_day_last_month_value": 257014.20,
+        "same_day_two_months_ago_qty": 18336,
+        "same_day_two_months_ago_value": 247045.38,
+        "pct_yesterday_vs_same_day_last_month_qty": "80.8% (down 19.2%)",
+        "pct_yesterday_vs_same_day_last_month_value": "78.7% (down 21.3%)",
+        "pct_yesterday_vs_same_day_2_months_ago_qty": "88.0% (down 12.0%)",
+        "pct_yesterday_vs_same_day_2_months_ago_value": "81.8% (down 18.2%)",
+        "pct_same_day_lm_vs_2lm_qty": "109.0% (up 9.0%)",
+        "pct_same_day_lm_vs_2lm_value": "104.0% (up 4.0%)",
+        "mtd_qty": 419396,
+        "mtd_value": 6304059.20,
+        "prev_mtd_qty": 427397,
+        "prev_mtd_value": 7245197.31,
+        "pct_mtd_vs_prev_qty": "98.1% (down 1.9%)",
+        "pct_mtd_vs_prev_value": "87.0% (down 13.0%)",
+        "three_month_trend_qty": "408,242 → 427,397 → 419,396 (legs: +4.7%, -1.9%)",
+        "three_month_trend_value": "R6,950,123.93 → R7,245,197.31 → R6,304,059.20 (legs: +4.2%, -13.0%)"
       },
       "flags": [
-        "Yesterday's value is down 26.0% vs same-day-last-month (R217,399.16 vs R293,892.10) — exceeds the 20% drop threshold.",
-        "Same-day-last-month vs two-months-ago qty is up 16.0% (20,821 vs 17,954) and value is up 21.6% (R293,892.10 vs R241,757.39) — both exceed the 5% threshold.",
-        "Tenant breakdown (yesterday vs same-day-last-month): uConnect R212,608.65 vs R286,487.67 (-25.8%); ME&YOU R4,790.51 vs R7,404.43 (-35.3%) — decline is broad-based across both tenants this run, not concentrated in one as in the earlier (2026-07-21) incident."
+        "Yesterday's value is down 21.3% vs same-day-last-month (R202,140.36 vs R257,014.20) — exceeds the 20% drop threshold.",
+        "Same-day-last-month vs two-months-ago qty is up 9.0% (19,978 vs 18,336) — exceeds the 5% threshold.",
+        "MTD value vs prior-month MTD is down 13.0% (R6,304,059.20 vs R7,245,197.31) — exceeds the 10% threshold.",
+        "Tenant breakdown (yesterday vs same-day-last-month, value): ME&YOU R7,181.26 → R5,886.83 (-18.0%); uConnect R249,832.94 → R196,253.53 (-21.4%) — decline is broad-based across both tenants this run, not concentrated in one."
       ]
     },
     {
@@ -66,16 +67,16 @@
       "status": "error",
       "values": {},
       "flags": [
-        "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS failed on every query this run — including a bare SELECT COUNT(*) — with Snowflake error 'Error in secure object'. Retried once with the same result. This is a new failure mode: the view was queryable in the last full run (2026-08-06/07). Likely a masking-policy or secure-view definition break rather than a permissions issue — needs data-team/Snowflake-admin follow-up before this check (and its snapshots.json history) can resume.",
-        "snapshots.json was NOT updated for 2026-08-16 — there is no source data to append this run."
+        "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS failed on every query this run — including a bare SELECT COUNT(*) — with Snowflake error 'Error in secure object'. Retried once with the same result. This is the same failure seen in the 2026-08-16 run, now persisting across multiple consecutive run dates without resolution — likely a masking-policy or secure-view definition break rather than a permissions issue, and needs data-team/Snowflake-admin follow-up before this check (and its snapshots.json history) can resume.",
+        "snapshots.json was NOT updated for 2026-08-18 — there is no source data to append this run."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "amber",
       "values": {
-        "DIM_SUBSCRIBERS_active": 405207,
-        "UCONNECT_MAY_MERGE_active_uConnect_only": 405207,
+        "DIM_SUBSCRIBERS_active": 404115,
+        "UCONNECT_MAY_MERGE_active_uConnect_only": 404115,
         "spread": 0,
         "duplicate_account_numbers": 0,
         "duplicate_account_number_rows": 0,
@@ -83,24 +84,24 @@
         "duplicate_iccid_rows": 28
       },
       "flags": [
-        "VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS could not be queried this run (same Snowflake 'secure object' error as the Active 1 check) — the full 3-table spread could not be evaluated. The two available tables, DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE (uConnect-only), match exactly at 405,207 with zero spread between them.",
-        "Duplicate ICCID group of 3 includes one blank/null ICCID entry (24 rows) plus 2 genuine duplicate ICCIDs (2 rows each, 4 rows total) — both distinct-duplicate counts (0 account numbers, 3 ICCIDs) are well under the 100 threshold."
+        "VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS could not be queried this run (same Snowflake 'secure object' error as the Active 1 check) — the full 3-table spread could not be evaluated. The two available tables, DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE (uConnect-only), match exactly at 404,115 with zero spread between them.",
+        "Duplicate ICCID group of 3 (28 rows) is identical to the 2026-08-16 run's count — consistent with the same handful of blank/duplicate ICCID records persisting rather than a new issue. Well under the 100 threshold."
       ]
     },
     {
       "check": "Terminations",
       "status": "red",
       "values": {
-        "mtd_terminations": 11491,
-        "prev_mtd_terminations": 14332,
-        "two_months_ago_mtd_terminations": 18247,
-        "baseline_avg_last_2_months": 16289.5,
-        "threshold_baseline_plus_500": 16789.5,
+        "mtd_terminations": 11496,
+        "prev_mtd_terminations": 14885,
+        "two_months_ago_mtd_terminations": 18254,
+        "baseline_avg_last_2_months": 16569.5,
+        "threshold_baseline_plus_500": 17069.5,
         "sims_over_60_days_no_usage_proxy": "N/A — source view (Active 1) unavailable this run"
       },
       "flags": [
-        "MTD terminations (11,491) are below the threshold of 16,789.5 (baseline avg of last 2 months' MTD-cutoff terminations [14,332 / 18,247] + 500) — mechanically flags RED per the current rule.",
-        "Known data-shape caveat: full-calendar-month totals (Apr 30,017 / May 44,676 / Jun 72,487 / Jul 84,802 / Aug-to-date 11,491) confirm terminations remain heavily back-loaded within each month — July's day-16 cutoff (14,332) was only ~17% of July's eventual full-month total (84,802). Given that established pattern, this month's low day-16 cutoff most likely reflects the back-half batch load not having landed yet rather than an actual drop in termination processing — treat this RED with that caveat pending data-team confirmation."
+        "MTD terminations (11,496) are below the threshold of 17,069.5 (baseline avg of last 2 months' MTD-cutoff terminations [14,885 / 18,254] + 500) — mechanically flags RED per the current rule.",
+        "Known data-shape caveat: terminations look batch-processed within a month rather than flowing evenly day-by-day (see the 2026-08-16 run's caveat on July's day-16 cutoff being only ~17% of that month's eventual total). Given that established pattern, this month's low day-18 cutoff most likely reflects the back-half batch load not having landed yet rather than an actual drop in termination processing — treat this RED with that caveat pending data-team confirmation."
       ]
     }
   ],
@@ -116,6 +117,7 @@
     {"check": "QOS by Tenant & Store (Active 1, Day 2-4)", "status": "manual", "note": "Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.", "flags": []}
   ],
   "errors": [
-    "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS is fully inaccessible this run (Snowflake 'Error in secure object' on every query, including a bare COUNT(*)) — blocks the Active 1 check entirely and half of DIM Subscriber Alignment. This is new since the last full run (2026-08-06/07); needs data-team/Snowflake-admin investigation."
+    "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS is fully inaccessible this run (Snowflake 'Error in secure object' on every query, including a bare COUNT(*)) — blocks the Active 1 check entirely and one leg of DIM Subscriber Alignment. This is the same failure seen in the 2026-08-16 run; it has now persisted across multiple runs and needs data-team/Snowflake-admin investigation.",
+    "No run was committed for 2026-08-17 (Monday) — this run covers 2026-08-18 (Tuesday) data only, leaving that weekday unpublished."
   ]
 }
