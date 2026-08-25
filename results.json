@@ -1,126 +1,64 @@
 {
-  "run_date": "2026-08-20",
-  "run_time": "2026-08-21 05:00 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-08-20) is the run_date. Today is excluded as it is an incomplete day. Cell C Recharges and Sales compare yesterday against same-day-last-month (2026-07-20) and same-day-two-months-ago (2026-06-20), plus MTD-vs-prior-MTD (same day-of-month cutoff, so periods are equal length).",
+  "run_date": "2026-08-24",
+  "run_time": "2026-08-25 06:48 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-08-24) vs day before (2026-08-23). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_count": 15285,
-        "yesterday_value": 230428.98,
-        "same_day_last_month_count": 18013,
-        "same_day_last_month_value": 266682.88,
-        "same_day_two_months_ago_count": 16925,
-        "same_day_two_months_ago_value": 245210.00,
-        "pct_same_day_lm_vs_2lm_count": "106.4% (up 6.4%)",
-        "pct_same_day_lm_vs_2lm_value": "108.8% (up 8.8%)",
-        "mtd_count": 351931,
-        "mtd_value": 5227435.89,
-        "prev_mtd_count": 364319,
-        "prev_mtd_value": 5497164.44,
-        "pct_mtd_vs_prev_count": "96.6% (down 3.4%)",
-        "pct_mtd_vs_prev_value": "95.1% (down 4.9%)",
-        "three_month_trend_count": "351,164 → 364,319 → 351,931 (legs: +3.7%, -3.4%)",
-        "three_month_trend_value": "R5,275,211 → R5,497,164 → R5,227,436 (legs: +4.2%, -4.9%)"
+        "yesterday_count": 17577,
+        "day_before_count": 14048,
+        "same_day_last_month_count": 21125,
+        "revenue_cellc_recharge_quantity": 17788
       },
-      "flags": [
-        "Same-day last-month vs two-months-ago count: up 6.4% (18,013 on 2026-07-20 vs 16,925 on 2026-06-20) — exceeds the 5% threshold",
-        "Same-day last-month vs two-months-ago value: up 8.8% (R266,682.88 vs R245,210.00) — exceeds the 5% threshold",
-        "Yesterday's own count/value are within normal range vs both historical reference points (no >20% drop), and MTD-vs-prior-MTD variance is under 10% both ways — this flag is driven entirely by the two historical reference points moving against each other, not a drop in yesterday's recharges.",
-        "Revenue sanity check: AVG per recharge stayed in the normal R14.49-R15.09 band across all 6 windows checked (3 same-day + 3 MTD); no anomalous transactions found this run, nothing excluded."
-      ]
-    },
-    {
-      "check": "Sales (Last 30 Days)",
-      "status": "red",
-      "values": {
-        "yesterday_qty": 18647,
-        "yesterday_value": 352889.45,
-        "same_day_last_month_qty": 20783,
-        "same_day_last_month_value": 357496.20,
-        "same_day_two_months_ago_qty": 19796,
-        "same_day_two_months_ago_value": 308434.32,
-        "mtd_qty": 478623,
-        "mtd_value": 7646893.91,
-        "prev_mtd_qty": 465022,
-        "prev_mtd_value": 7803741.31,
-        "pct_yesterday_vs_same_day_last_month_qty": "89.7% (down 10.3%)",
-        "pct_yesterday_vs_same_day_last_month_value": "98.7% (down 1.3%)",
-        "pct_yesterday_vs_same_day_2_months_ago_qty": "94.2% (down 5.8%)",
-        "pct_yesterday_vs_same_day_2_months_ago_value": "114.4% (up 14.4%)",
-        "pct_same_day_lm_vs_2lm_qty": "105.0% (up 5.0%)",
-        "pct_same_day_lm_vs_2lm_value": "115.9% (up 15.9%)",
-        "pct_mtd_vs_prev_qty": "102.9% (up 2.9%)",
-        "pct_mtd_vs_prev_value": "98.0% (down 2.0%)",
-        "three_month_trend_qty": "449,860 → 465,022 → 478,623 (legs: +3.4%, +2.9%)",
-        "three_month_trend_value": "R7,543,681 → R7,803,741 → R7,646,894 (legs: +3.4%, -2.0%)"
-      },
-      "flags": [
-        "Same-day last-month vs two-months-ago value: up 15.9% (R357,496.20 on 2026-07-20 vs R308,434.32 on 2026-06-20) — exceeds the 5% threshold. The equivalent qty move was +5.0%, right at the boundary — not flagged (rule only trips above 5%).",
-        "Tenant breakdown (yesterday vs same day last month, value): uConnect R351,300.66 → R346,416.96 (-1.4%); ME&YOU R6,195.54 → R6,472.49 (+4.5%) — both tenants essentially flat day-over-day. The flagged variance sits between the two historical reference points (07-20 vs 06-20), not in a current decline.",
-        "REVENUE_WHATSAPP_PURCHASES_VALUE/QUANTITY excluded from every sum per the known masking-policy artifact (MAX ~1.7e19, 'Unknown Policy!' on DESCRIBE TABLE) — carried forward from prior findings, not re-verified this run."
-      ]
+      "flags": []
     },
     {
       "check": "Active 1",
-      "status": "error",
-      "values": {},
+      "status": "red",
+      "values": {
+        "yesterday_count": 2208,
+        "day_before_count": 862
+      },
       "flags": [
-        "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS failed on every query attempted this run — including a bare SELECT COUNT(*), retried three times — with Snowflake error 'Error in secure object'. This matches the failure recorded in the 2026-08-16, 2026-08-18 and 2026-08-19 runs, now persisting across four consecutive runs unresolved. Needs data-team/Snowflake-admin follow-up.",
-        "snapshots.json was NOT updated for 2026-08-20 — there is no source data to append this run."
+        "Yesterday's count (2,208) is more than 2x the day before (862) — anomaly threshold tripped. Worth confirming this isn't a batch/backdated load rather than a genuine surge."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "amber",
+      "status": "green",
       "values": {
-        "DIM_SUBSCRIBERS_active": 392862,
-        "UCONNECT_MAY_MERGE_active_uConnect_only": 392862,
-        "spread": 0,
-        "duplicate_account_numbers": 0,
-        "duplicate_account_number_rows": 0,
-        "duplicate_iccids": 3,
-        "duplicate_iccid_rows": 28
+        "dim_subscribers_count": 2208,
+        "uconnect_may_merge_count": 2208,
+        "active_subscriptions_count": 2208,
+        "spread": 0
       },
-      "flags": [
-        "VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (third leg of this check) could not be queried this run — same Snowflake 'Error in secure object' blocking Active 1 — so the full 3-table spread could not be evaluated.",
-        "The two available tables, DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE (uConnect-only), match exactly at 392,862 active subscribers with zero spread.",
-        "Duplicate ICCID group of 3 (28 rows) — well under the 100 threshold; 0 duplicate ACCOUNT_NUMBERs."
-      ]
+      "flags": []
     },
     {
-      "check": "Terminations",
+      "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "mtd_terminations": 31551,
-        "prev_mtd_terminations": 17591,
-        "two_months_ago_mtd_terminations": 18254,
-        "baseline_avg_last_2_months": 17922.5,
-        "threshold_baseline_plus_500": 18422.5,
-        "sims_over_60_days_no_usage_proxy": "N/A — source view (Active 1) unavailable this run"
+        "count": 23276
       },
       "flags": [
-        "The literal rule (flag if MTD terminations fall BELOW baseline+500) does not trip — 31,551 is well above the 18,422.5 threshold. But that rule was designed to catch drops, not spikes, and 31,551 is 76% above the 2-month baseline average — reporting this as a quiet green/amber would misrepresent a genuinely large anomaly, so this is being flagged red on judgement rather than the letter of the rule.",
-        "Full calendar-month uConnect termination totals have climbed for four consecutive months: Apr 20,745 → May 44,676 → Jun 72,487 → Jul 84,803 → Aug (month-to-date) 35,179. This is roughly a 4x increase from April to July and does not look like the isolated one-off May batch-load event previously suspected (see memory) — it reads as an ongoing, worsening pattern. Needs business/data-team investigation into what's driving the growth, not just a data-shape footnote.",
-        "Within August itself, only 11,491 of the 31,551 day-1-20 terminations (36%) had landed by day 14, with the remaining 20,060 (64%) landing in just days 15-20 — consistent with lumpy, batch-style backdated loading rather than smooth day-by-day churn. Treat the exact day-cutoff figure with caution, but the underlying multi-month volume growth is not explained by cutoff timing alone."
+        "Count (23,276) exceeds the 3,000 red threshold by a wide margin. This figure is consistent with what prior runs have reported as an ongoing, worsening trend (see project memory) rather than a one-off — still needs data-team/business confirmation of root cause."
       ]
     }
   ],
   "pending": [
-    {"check": "Wholesale Usage", "status": "pending", "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE — object does not exist or not authorized.", "flags": []},
-    {"check": "SmartConnect vs Datawarehouse", "status": "pending", "note": "Awaiting MCP access to UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT — object does not exist or not authorized.", "flags": []},
-    {"check": "CDRs (Wholesale)", "status": "pending", "note": "Awaiting MCP access to DATAWAREHOUSE.MVNX.UC_FILE_RECON — schema does not exist or not authorized.", "flags": []}
+    {"check": "Wholesale Usage", "status": "pending", "note": "MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized.", "flags": []},
+    {"check": "SmartConnect vs Datawarehouse", "status": "pending", "note": "MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT does not exist or not authorized.", "flags": []},
+    {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
   ],
   "manual": [
     {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
-    {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []},
-    {"check": "QOS by Tenant & Store (Active 1, Day 2-4)", "status": "manual", "note": "Cross-check Active 1 quality-of-sales by tenant and store on the Telco dashboard's Sales page — not available via the Uconnect Snowflake schema.", "flags": []}
+    {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
   "errors": [
-    "UCONNECT_DW.ANALYTICS.VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS is fully inaccessible this run (Snowflake 'Error in secure object' on every query, including a bare COUNT(*), across three retry rounds). This blocks Active 1 entirely, one leg of DIM Subscriber Alignment, and the legacy over-60-day proxy in Terminations. Same failure as the 2026-08-16, 2026-08-18 and 2026-08-19 runs — now four consecutive runs — needs data-team/Snowflake-admin investigation.",
-    "uConnect termination volume has grown ~4x over four consecutive months (Apr 20,745 → Jul 84,803) — flagged red in the Terminations check on judgement, since the configured rule only watches for drops. Recommend the data/business team confirm whether this is a real churn trend or another backdated batch load.",
-    "This run was triggered by the scheduled task 'dda-daily-bi-checks', whose SKILL.md only specifies the original simple baseline queries. The actual authoritative methodology for this dashboard (per project memory) lives in a separate, more thorough scheduled task, 'dda-daily-refresh' — this run was corrected mid-session to follow that spec instead, but the duplicate/stale 'dda-daily-bi-checks' task should be reviewed and likely retired or resynced so future automated runs don't regress to the simpler spec."
+    "Active 1 tripped the >2x-day-before anomaly rule (2,208 vs 862) — flagged red per the configured threshold; not independently investigated further this run.",
+    "Two scheduled tasks still exist for this dashboard: 'dda-daily-bi-checks' (this run, the simpler baseline spec) and an orphaned 'dda-daily-refresh' folder at C:\\Users\\NGoven969\\.claude\\scheduled-tasks\\dda-daily-refresh (richer Sales/MTD/3-month-trend methodology per project memory, but no longer registered as an active scheduled task — list_scheduled_tasks only returns 'dda-daily-bi-checks'). If the richer methodology was intended to be authoritative, that logic is not currently running anywhere automated. Recommend the user confirm which spec should be the source of truth and clean up the stale folder."
   ]
 }
