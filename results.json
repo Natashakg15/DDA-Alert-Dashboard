@@ -1,37 +1,35 @@
 {
-  "run_date": "2026-08-24",
-  "run_time": "2026-08-25 06:48 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-08-24) vs day before (2026-08-23). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-08-25",
+  "run_time": "2026-08-26 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-08-25) vs day before (2026-08-24). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_count": 17577,
-        "day_before_count": 14048,
-        "same_day_last_month_count": 21125,
-        "revenue_cellc_recharge_quantity": 17788
+        "yesterday_count": 19404,
+        "day_before_count": 17577,
+        "same_day_last_month_count": 16702,
+        "revenue_cellc_recharge_quantity": 19664
       },
       "flags": []
     },
     {
       "check": "Active 1",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_count": 2208,
-        "day_before_count": 862
+        "yesterday_count": 3165,
+        "day_before_count": 2208
       },
-      "flags": [
-        "Yesterday's count (2,208) is more than 2x the day before (862) — anomaly threshold tripped. Worth confirming this isn't a batch/backdated load rather than a genuine surge."
-      ]
+      "flags": []
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "green",
       "values": {
-        "dim_subscribers_count": 2208,
-        "uconnect_may_merge_count": 2208,
-        "active_subscriptions_count": 2208,
+        "dim_subscribers_count": 3165,
+        "uconnect_may_merge_count": 3165,
+        "active_subscriptions_count": 3165,
         "spread": 0
       },
       "flags": []
@@ -40,10 +38,10 @@
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "count": 23276
+        "count": 20232
       },
       "flags": [
-        "Count (23,276) exceeds the 3,000 red threshold by a wide margin. This figure is consistent with what prior runs have reported as an ongoing, worsening trend (see project memory) rather than a one-off — still needs data-team/business confirmation of root cause."
+        "Count (20,232) exceeds the 3,000 red threshold by a wide margin. This is down from the previous run's figure (23,276) but remains far above threshold — the ongoing trend flagged in prior runs still needs data-team/business confirmation of root cause; not independently investigated further this run."
       ]
     }
   ],
@@ -58,7 +56,6 @@
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
   "errors": [
-    "Active 1 tripped the >2x-day-before anomaly rule (2,208 vs 862) — flagged red per the configured threshold; not independently investigated further this run.",
-    "Two scheduled tasks still exist for this dashboard: 'dda-daily-bi-checks' (this run, the simpler baseline spec) and an orphaned 'dda-daily-refresh' folder at C:\\Users\\NGoven969\\.claude\\scheduled-tasks\\dda-daily-refresh (richer Sales/MTD/3-month-trend methodology per project memory, but no longer registered as an active scheduled task — list_scheduled_tasks only returns 'dda-daily-bi-checks'). If the richer methodology was intended to be authoritative, that logic is not currently running anywhere automated. Recommend the user confirm which spec should be the source of truth and clean up the stale folder."
+    "Exact run timestamp (HH:MM) not available to this session — run_time above uses the session date only rather than a fabricated time."
   ]
 }
