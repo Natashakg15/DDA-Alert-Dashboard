@@ -1,16 +1,16 @@
 {
-  "run_date": "2026-08-25",
-  "run_time": "2026-08-26 — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-08-25) vs day before (2026-08-24). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-08-26",
+  "run_time": "2026-08-27 — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-08-26) vs day before (2026-08-25). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_count": 19404,
-        "day_before_count": 17577,
-        "same_day_last_month_count": 16702,
-        "revenue_cellc_recharge_quantity": 19664
+        "yesterday_count": 20937,
+        "day_before_count": 19404,
+        "same_day_last_month_count": 19495,
+        "revenue_cellc_recharge_quantity": 21190
       },
       "flags": []
     },
@@ -18,8 +18,8 @@
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_count": 3165,
-        "day_before_count": 2208
+        "yesterday_count": 3314,
+        "day_before_count": 3165
       },
       "flags": []
     },
@@ -27,10 +27,10 @@
       "check": "DIM Subscriber Alignment",
       "status": "green",
       "values": {
-        "dim_subscribers_count": 3165,
-        "uconnect_may_merge_count": 3165,
-        "active_subscriptions_count": 3165,
-        "spread": 0
+        "dim_subscribers_count": 3316,
+        "uconnect_may_merge_count": 3314,
+        "active_subscriptions_count": 3314,
+        "spread": 2
       },
       "flags": []
     },
@@ -38,10 +38,10 @@
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "count": 20232
+        "count": 20078
       },
       "flags": [
-        "Count (20,232) exceeds the 3,000 red threshold by a wide margin. This is down from the previous run's figure (23,276) but remains far above threshold — the ongoing trend flagged in prior runs still needs data-team/business confirmation of root cause; not independently investigated further this run."
+        "Count (20,078) exceeds the 3,000 red threshold by a wide margin. Roughly flat vs the previous run (20,232) and down from two runs ago (23,276) — still far above threshold. The underlying trend flagged in prior runs continues and still needs data-team/business root-cause confirmation; not independently investigated further this run."
       ]
     }
   ],
