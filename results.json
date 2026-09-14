@@ -1,36 +1,41 @@
 {
-  "run_date": "2026-08-26",
-  "run_time": "2026-08-27 — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-08-26) vs day before (2026-08-25). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-09-14",
+  "run_time": "2026-09-14 05:57 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-13) vs day before (2026-09-12). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_count": 20937,
-        "day_before_count": 19404,
-        "same_day_last_month_count": 19495,
-        "revenue_cellc_recharge_quantity": 21190
+        "yesterday_2026-09-13": 15107,
+        "day_before_2026-09-12": 18269,
+        "same_day_last_month_2026-08-14": 19797,
+        "revenue_cellc_recharge_qty_yesterday": 15272
       },
-      "flags": []
+      "flags": [
+        "Yesterday (15,107) is 23.7% below same day last month (19,797) — exceeds the 20% decline threshold.",
+        "Yesterday vs day before is a 17.3% decline — within the 60% threshold, not flagged on its own."
+      ]
     },
     {
       "check": "Active 1",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_count": 3314,
-        "day_before_count": 3165
+        "yesterday_2026-09-13": 596,
+        "day_before_2026-09-12": 3839
       },
-      "flags": []
+      "flags": [
+        "Yesterday (596) is 84.5% below day before (3,839) — exceeds the 60% decline threshold.",
+        "Note: 2026-09-13 was a Sunday and 2026-09-12 a Saturday; some of this drop may be a weekend pattern, but it still breaches the rule as written and should be visually confirmed."
+      ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "green",
       "values": {
-        "dim_subscribers_count": 3316,
-        "uconnect_may_merge_count": 3314,
-        "active_subscriptions_count": 3314,
-        "spread": 2
+        "dim_subscribers_create_date_2026-09-13": 596,
+        "uconnect_may_merge_activation_2026-09-13": 596,
+        "active_subscriptions_usage_2026-09-13": 596
       },
       "flags": []
     },
@@ -38,10 +43,10 @@
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "count": 20078
+        "usage_greater_than_60_days_count": 5753
       },
       "flags": [
-        "Count (20,078) exceeds the 3,000 red threshold by a wide margin. Roughly flat vs the previous run (20,232) and down from two runs ago (23,276) — still far above threshold. The underlying trend flagged in prior runs continues and still needs data-team/business root-cause confirmation; not independently investigated further this run."
+        "Count (5,753) exceeds the RED threshold of 3,000."
       ]
     }
   ],
@@ -55,7 +60,5 @@
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
-  "errors": [
-    "Exact run timestamp (HH:MM) not available to this session — run_time above uses the session date only rather than a fabricated time."
-  ]
+  "errors": []
 }
