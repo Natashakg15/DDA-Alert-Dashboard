@@ -1,50 +1,47 @@
 {
-  "run_date": "2026-09-17",
-  "run_time": "2026-09-17 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-16) vs day before (2026-09-15). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-09-18",
+  "run_time": "2026-09-18 05:21 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-17) vs day before (2026-09-16). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-09-16": 2159,
-        "day_before_2026-09-15": 18410,
-        "same_day_last_month_2026-08-17": 17215,
-        "revenue_cellc_recharge_qty_yesterday": 2381
+        "yesterday_2026-09-17": 16383,
+        "day_before_2026-09-16": 16943,
+        "same_day_last_month_2026-08-19": 15858,
+        "revenue_cellc_recharge_qty_yesterday": 16580
       },
       "flags": [
-        "Yesterday (2,159) is 88.3% below day before (18,410) — exceeds the 60% decline threshold.",
-        "Yesterday (2,159) is 87.5% below same day last month (17,215) — exceeds the 20% decline threshold.",
-        "This is the second consecutive day of a severe recharge shortfall and it has worsened (prior run: 4,902 vs 17,005 day before; this run: 2,159 vs 18,410 day before) — recommend urgent investigation into a recharge feed/file failure rather than a genuine demand drop."
+        "Recovered from the severe shortfall flagged on 2026-09-16 and 2026-09-17 (2,159 vs 18,410 day before) — yesterday's count (16,383) is back in normal range, -3.3% vs day before and +3.3% vs same day last month, both within thresholds."
       ]
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-09-16": 3578,
-        "day_before_2026-09-15": 4538
+        "yesterday_2026-09-17": 2154,
+        "day_before_2026-09-16": 3578
       },
       "flags": []
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "red",
+      "status": "green",
       "values": {
-        "dim_subscribers_create_date_2026-09-16": 2553,
-        "uconnect_may_merge_activation_2026-09-16": 2554,
-        "active_subscriptions_usage_2026-09-16": 3578
+        "dim_subscribers_create_date_2026-09-17": 2154,
+        "uconnect_may_merge_activation_2026-09-17": 2159,
+        "active_subscriptions_usage_2026-09-17": 2154
       },
       "flags": [
-        "Spread between the three counts is 1,025 (2,553 / 2,554 / 3,578) — exceeds the 15 threshold.",
-        "DIM_SUBSCRIBERS and UCONNECT_MAY_MERGE agree closely (2,553 / 2,554), but VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (3,578) runs well above both — same recurring pattern flagged in prior runs; worth checking whether ACCOUNTCREATEDATE in that view is populated/interpreted consistently with CREATE_DATE/ACTIVATION_DATE in the other tables."
+        "Spread is now 5 (2,154 / 2,159 / 2,154), well within the 15 threshold — resolves the 1,025 spread flagged on 2026-09-17."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "green",
       "values": {
-        "usage_greater_than_60_days_count": 2572
+        "usage_greater_than_60_days_count": 2570
       },
       "flags": []
     }
@@ -55,7 +52,7 @@
     {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
   ],
   "manual": [
-    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Given the 88% drop flagged above (and worsening from the prior run), this cross-check is especially urgent today.", "flags": []},
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Recharge volumes have recovered to normal range today.", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
