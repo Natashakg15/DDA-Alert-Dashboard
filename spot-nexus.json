@@ -1,0 +1,8 @@
+{
+  "id": "dda-alert-dashboard",
+  "title": "DDA Alert Dashboard",
+  "description": "Daily deliberate-action BI checks for Uconnect — Snowflake pipeline health, recharges, activations, terminations and CDR reconciliation, refreshed each weekday morning.",
+  "icon": "alert",
+  "status": "live",
+  "tag": "Uconnect BI"
+}
