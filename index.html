@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-09-18</title>
+<title>DDA Daily BI Checks — 2026-09-21</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -343,8 +343,8 @@
     <h1>DDA Daily BI Checks</h1>
   </div>
   <div class="status-line">
-    <span class="status-dot green"></span>
-    18 September 2026 &nbsp;&middot;&nbsp; Data as of 2026-09-18 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
+    <span class="status-dot red"></span>
+    21 September 2026 &nbsp;&middot;&nbsp; Data as of 2026-09-21 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
   </div>
 </div>
 
@@ -362,16 +362,16 @@
   </nav>
 
   <div id="content-overview" class="tab-panel">
-    <div class="overall-banner green">ALL CHECKS PASSED</div>
+    <div class="overall-banner red">FAILURES DETECTED</div>
     <div class="kpi-row">
   <div class="kpi-tile">
     <div class="kpi-label">Checks Passed</div>
-    <div class="kpi-value good">4</div>
-    <div class="kpi-sub">of 4 automated checks</div>
+    <div class="kpi-value good">1</div>
+    <div class="kpi-sub">of 6 automated checks</div>
   </div>
   <div class="kpi-tile">
     <div class="kpi-label">Checks Failed</div>
-    <div class="kpi-value bad">0</div>
+    <div class="kpi-value bad">5</div>
     <div class="kpi-sub">red flags today</div>
   </div>
   <div class="kpi-tile">
@@ -381,7 +381,7 @@
   </div>
   <div class="kpi-tile">
     <div class="kpi-label">Pending MCP Access</div>
-    <div class="kpi-value neutral">3</div>
+    <div class="kpi-value neutral">2</div>
     <div class="kpi-sub">tables awaiting connection</div>
   </div>
   <div class="kpi-tile">
@@ -396,36 +396,54 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>16,383</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-16</span><span class="stat-spacer"></span><span class='stat-value'>16,943</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-19</span><span class="stat-spacer"></span><span class='stat-value'>15,858</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>16,580</span></div></div></div><ul class="flags"><li>Recovered from the severe shortfall flagged on 2026-09-16 and 2026-09-17 (2,159 vs 18,410 day before) — yesterday's count (16,383) is back in normal range, -3.3% vs day before and +3.3% vs same day last month, both within thresholds.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>247</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-19</span><span class="stat-spacer"></span><span class='stat-value'>18,059</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-21</span><span class="stat-spacer"></span><span class='stat-value'>18,299</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>414</span></div></div></div><ul class="flags"><li>Yesterday (247) is 98.6% below day before (18,059) — massively exceeds the 60% decline threshold.</li><li>Yesterday (247) is 98.7% below same day last month (18,299) — massively exceeds the 20% decline threshold.</li><li>Day before (Saturday) was completely normal (18,059) — this is not a smooth weekend dip, it looks like a near-total feed failure specific to Sunday 2026-09-20.</li></ul></div>
     </div>
   
     <div class="card accent-b">
         <div class="card-number">02</div>
         <div class="card-header">
             <span class="card-title">Active 1</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-16</span><span class="stat-spacer"></span><span class='stat-value'>3,578</span></div></div></div></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-19</span><span class="stat-spacer"></span><span class='stat-value'>1,959</span></div></div></div><ul class="flags"><li>Yesterday's count is 0 — immediate red trigger. Day before (Saturday) was 1,959, a normal figure, so this is not a gradual decline.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,159</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div></div></div><ul class="flags"><li>Spread is now 5 (2,154 / 2,159 / 2,154), well within the 15 threshold — resolves the 1,025 spread flagged on 2026-09-17.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables show 0 for yesterday — spread is technically 0 ("aligned"), but a full day of zero activity across three independent tables is itself the anomaly, not a clean pass.</li><li>Cross-check against SmartConnect (see below): 1,553 real activations were recorded in the source system for the same day. This strongly suggests the DIM/Merge/Active-Subscriptions load failed for 2026-09-20 rather than genuine zero business activity.</li></ul></div>
     </div>
   
     <div class="card accent-a">
         <div class="card-number">04</div>
         <div class="card-header">
             <span class="card-title">Terminations (>60 day usage)</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>5,228</span></div></div><ul class="flags"><li>5,228 exceeds the 5,000 threshold. More than doubled from 2,570 on 2026-09-18 in three days — worth investigating why the dormant-but-active count jumped this sharply.</li></ul></div>
+    </div>
+  
+    <div class="card accent-b">
+        <div class="card-number">05</div>
+        <div class="card-header">
+            <span class="card-title">SmartConnect vs Datawarehouse</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>1,553</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Top Tenant</span><span class="stat-spacer"></span><span class='stat-value'>THE UNLIMITED (1,530 of 1,553)</span></div></div><ul class="flags"><li>MCP access to VW_SC_RICA_REPORT is now granted — this check ran automatically for the first time today (previously pending).</li><li>SmartConnect recorded 1,553 activations yesterday; UCONNECT_MAY_MERGE recorded 0 — a gap of 1,553, far beyond the 10-record threshold.</li><li>This is the same signal as the DIM Subscriber Alignment flag above: real activations happened (per the source system) but did not load into the merge/warehouse tables for 2026-09-20.</li><li>None of the previously-flagged risk tenants (SPAR, BUILD IT, MIDAS, PET POOL AND HOME) appear in yesterday's SmartConnect activity — the gap is a load failure, not a specific-tenant overcount.</li></ul></div>
+    </div>
+  
+    <div class="card accent-c">
+        <div class="card-number">06</div>
+        <div class="card-header">
+            <span class="card-title">Snowflake Query Health (Spot MCP)</span>
             <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>2,570</span></div></div></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Unexpected Production Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>2</span></div><div class='stat-row'><span class='stat-label'>Self Test Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>1</span></div></div><ul class="flags"><li>3 total failures in the last 24h on the Spot MCP account (NATASHAG969): 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) and 1 self-caused exploratory query error (a column-name mistake made while investigating newly-granted SmartConnect access) — none are production issues.</li></ul></div>
     </div>
     </div>
   </div>
@@ -438,36 +456,54 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>16,383</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-16</span><span class="stat-spacer"></span><span class='stat-value'>16,943</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-19</span><span class="stat-spacer"></span><span class='stat-value'>15,858</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>16,580</span></div></div></div><ul class="flags"><li>Recovered from the severe shortfall flagged on 2026-09-16 and 2026-09-17 (2,159 vs 18,410 day before) — yesterday's count (16,383) is back in normal range, -3.3% vs day before and +3.3% vs same day last month, both within thresholds.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>247</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-19</span><span class="stat-spacer"></span><span class='stat-value'>18,059</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-21</span><span class="stat-spacer"></span><span class='stat-value'>18,299</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>414</span></div></div></div><ul class="flags"><li>Yesterday (247) is 98.6% below day before (18,059) — massively exceeds the 60% decline threshold.</li><li>Yesterday (247) is 98.7% below same day last month (18,299) — massively exceeds the 20% decline threshold.</li><li>Day before (Saturday) was completely normal (18,059) — this is not a smooth weekend dip, it looks like a near-total feed failure specific to Sunday 2026-09-20.</li></ul></div>
     </div>
   
     <div class="card accent-b">
         <div class="card-number">02</div>
         <div class="card-header">
             <span class="card-title">Active 1</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-16</span><span class="stat-spacer"></span><span class='stat-value'>3,578</span></div></div></div></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-19</span><span class="stat-spacer"></span><span class='stat-value'>1,959</span></div></div></div><ul class="flags"><li>Yesterday's count is 0 — immediate red trigger. Day before (Saturday) was 1,959, a normal figure, so this is not a gradual decline.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,159</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-17</span><span class="stat-spacer"></span><span class='stat-value'>2,154</span></div></div></div><ul class="flags"><li>Spread is now 5 (2,154 / 2,159 / 2,154), well within the 15 threshold — resolves the 1,025 spread flagged on 2026-09-17.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables show 0 for yesterday — spread is technically 0 ("aligned"), but a full day of zero activity across three independent tables is itself the anomaly, not a clean pass.</li><li>Cross-check against SmartConnect (see below): 1,553 real activations were recorded in the source system for the same day. This strongly suggests the DIM/Merge/Active-Subscriptions load failed for 2026-09-20 rather than genuine zero business activity.</li></ul></div>
     </div>
   
     <div class="card accent-a">
         <div class="card-number">04</div>
         <div class="card-header">
             <span class="card-title">Terminations (>60 day usage)</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>5,228</span></div></div><ul class="flags"><li>5,228 exceeds the 5,000 threshold. More than doubled from 2,570 on 2026-09-18 in three days — worth investigating why the dormant-but-active count jumped this sharply.</li></ul></div>
+    </div>
+  
+    <div class="card accent-b">
+        <div class="card-number">05</div>
+        <div class="card-header">
+            <span class="card-title">SmartConnect vs Datawarehouse</span>
+            <span class="badge red">FAIL</span>
+        </div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>1,553</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-20</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Top Tenant</span><span class="stat-spacer"></span><span class='stat-value'>THE UNLIMITED (1,530 of 1,553)</span></div></div><ul class="flags"><li>MCP access to VW_SC_RICA_REPORT is now granted — this check ran automatically for the first time today (previously pending).</li><li>SmartConnect recorded 1,553 activations yesterday; UCONNECT_MAY_MERGE recorded 0 — a gap of 1,553, far beyond the 10-record threshold.</li><li>This is the same signal as the DIM Subscriber Alignment flag above: real activations happened (per the source system) but did not load into the merge/warehouse tables for 2026-09-20.</li><li>None of the previously-flagged risk tenants (SPAR, BUILD IT, MIDAS, PET POOL AND HOME) appear in yesterday's SmartConnect activity — the gap is a load failure, not a specific-tenant overcount.</li></ul></div>
+    </div>
+  
+    <div class="card accent-c">
+        <div class="card-number">06</div>
+        <div class="card-header">
+            <span class="card-title">Snowflake Query Health (Spot MCP)</span>
             <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>2,570</span></div></div></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Unexpected Production Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>2</span></div><div class='stat-row'><span class='stat-label'>Self Test Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>1</span></div></div><ul class="flags"><li>3 total failures in the last 24h on the Spot MCP account (NATASHAG969): 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) and 1 self-caused exploratory query error (a column-name mistake made while investigating newly-granted SmartConnect access) — none are production issues.</li></ul></div>
     </div>
     </div>
   </div>
@@ -488,15 +524,6 @@
     <div class="card accent-b">
         <div class="card-number">02</div>
         <div class="card-header">
-            <span class="card-title">SmartConnect vs Datawarehouse</span>
-            <span class="badge pending">PENDING</span>
-        </div>
-        <div class="card-body"><p class="note">MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT does not exist or not authorized.</p></div>
-    </div>
-  
-    <div class="card accent-c">
-        <div class="card-number">03</div>
-        <div class="card-header">
             <span class="card-title">CDR Recon</span>
             <span class="badge pending">PENDING</span>
         </div>
@@ -515,7 +542,7 @@
             <span class="card-title">Cell C Recharges — Telco Dashboard Alignment</span>
             <span class="badge manual">MANUAL</span>
         </div>
-        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Recharge volumes have recovered to normal range today.</p></div>
+        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Urgent today given the 98.6% drop flagged above.</p></div>
     </div>
   
     <div class="card accent-b">
