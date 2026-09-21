@@ -1,55 +1,53 @@
 {
   "run_date": "2026-09-21",
-  "run_time": "2026-09-21 05:06 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-20, Sunday) vs day before (2026-09-19, Saturday). Today is excluded as it is an incomplete day.",
+  "run_time": "2026-09-21 12:24 UTC — Refreshed via Snowflake MCP (re-run after morning incident)",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-20, Sunday) vs day before (2026-09-19, Saturday). Today is excluded as it is an incomplete day. This is a same-day re-run — the 07:00 SAST run found a severe pipeline gap for 2026-09-20 that has been recovering in real time through the day; see flags below for the before/after.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-09-20": 247,
+        "yesterday_2026-09-20": 14849,
         "day_before_2026-09-19": 18059,
         "same_day_last_month_2026-08-21": 18299,
-        "revenue_cellc_recharge_qty_yesterday": 414
+        "revenue_cellc_recharge_qty_yesterday": 15016
       },
       "flags": [
-        "Yesterday (247) is 98.6% below day before (18,059) — massively exceeds the 60% decline threshold.",
-        "Yesterday (247) is 98.7% below same day last month (18,299) — massively exceeds the 20% decline threshold.",
-        "Day before (Saturday) was completely normal (18,059) — this is not a smooth weekend dip, it looks like a near-total feed failure specific to Sunday 2026-09-20."
+        "Recovering: this morning's run showed only 247 (−98.6%). Now at 14,849 (−17.8% vs day before, −18.9% vs same day last month) — back within threshold, but still visibly short of a normal ~18k day. Keep an eye on tomorrow's run to confirm it fully catches up."
       ]
     },
     {
       "check": "Active 1",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-09-20": 0,
-        "day_before_2026-09-19": 1959
+        "yesterday_2026-09-20": 1680,
+        "day_before_2026-09-19": 1983
       },
       "flags": [
-        "Yesterday's count is 0 — immediate red trigger. Day before (Saturday) was 1,959, a normal figure, so this is not a gradual decline."
+        "Recovered: this morning's run showed 0. Now 1,680 vs 1,983 day before (−15.3%), within threshold."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-09-20": 0,
-        "uconnect_may_merge_activation_2026-09-20": 0,
-        "active_subscriptions_usage_2026-09-20": 0
+        "dim_subscribers_create_date_2026-09-20": 655,
+        "uconnect_may_merge_activation_2026-09-20": 656,
+        "active_subscriptions_usage_2026-09-20": 1680
       },
       "flags": [
-        "All three tables show 0 for yesterday — spread is technically 0 (\"aligned\"), but a full day of zero activity across three independent tables is itself the anomaly, not a clean pass.",
-        "Cross-check against SmartConnect (see below): 1,553 real activations were recorded in the source system for the same day. This strongly suggests the DIM/Merge/Active-Subscriptions load failed for 2026-09-20 rather than genuine zero business activity."
+        "Improved from this morning's 0/0/0, but not aligned: DIM_SUBSCRIBERS (655) and UCONNECT_MAY_MERGE (656) agree closely, but VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (1,680) runs well above both — spread of 1,025, exceeds the 15 threshold.",
+        "This is the same recurring pattern flagged in prior runs (active-usage view running high vs the merge-based tables) — worth checking whether it's fully resolved once the backfill finishes, or whether it persists as the known ACCOUNTCREATEDATE-vs-CREATE_DATE/ACTIVATION_DATE definitional gap."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 5228
+        "usage_greater_than_60_days_count": 5095
       },
       "flags": [
-        "5,228 exceeds the 5,000 threshold. More than doubled from 2,570 on 2026-09-18 in three days — worth investigating why the dormant-but-active count jumped this sharply."
+        "5,095 — still over the 5,000 threshold, though down slightly from 5,228 this morning. Watch whether this keeps easing as the pipeline recovers or is a separate, unrelated trend."
       ]
     },
     {
@@ -57,14 +55,11 @@
       "status": "red",
       "values": {
         "smartconnect_activations_2026-09-20": 1553,
-        "uconnect_may_merge_activations_2026-09-20": 0,
-        "top_tenant": "THE UNLIMITED (1,530 of 1,553)"
+        "uconnect_may_merge_activations_2026-09-20": 656,
+        "gap": 897
       },
       "flags": [
-        "MCP access to VW_SC_RICA_REPORT is now granted — this check ran automatically for the first time today (previously pending).",
-        "SmartConnect recorded 1,553 activations yesterday; UCONNECT_MAY_MERGE recorded 0 — a gap of 1,553, far beyond the 10-record threshold.",
-        "This is the same signal as the DIM Subscriber Alignment flag above: real activations happened (per the source system) but did not load into the merge/warehouse tables for 2026-09-20.",
-        "None of the previously-flagged risk tenants (SPAR, BUILD IT, MIDAS, PET POOL AND HOME) appear in yesterday's SmartConnect activity — the gap is a load failure, not a specific-tenant overcount."
+        "Narrowing but not closed: this morning the merge table had 0 vs SmartConnect's 1,553 (gap of 1,553). Now merge is at 656 (gap of 897) — the backfill is catching up but hasn't finished. Re-check once Cell C Recharges and Active 1 fully normalize."
       ]
     },
     {
@@ -72,11 +67,10 @@
       "status": "green",
       "values": {
         "unexpected_production_failures_last_24h": 0,
-        "known_pending_access_failures_excluded": 2,
-        "self_test_failures_excluded": 1
+        "known_pending_access_failures_excluded": 2
       },
       "flags": [
-        "3 total failures in the last 24h on the Spot MCP account (NATASHAG969): 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) and 1 self-caused exploratory query error (a column-name mistake made while investigating newly-granted SmartConnect access) — none are production issues."
+        "Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h — no unexpected production failures."
       ]
     }
   ],
@@ -85,7 +79,7 @@
     {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
   ],
   "manual": [
-    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Urgent today given the 98.6% drop flagged above.", "flags": []},
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Cross-check against the recovery noted above.", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
