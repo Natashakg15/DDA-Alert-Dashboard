@@ -1,65 +1,66 @@
 {
-  "run_date": "2026-09-21",
-  "run_time": "2026-09-21 12:24 UTC — Refreshed via Snowflake MCP (re-run after morning incident)",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-20, Sunday) vs day before (2026-09-19, Saturday). Today is excluded as it is an incomplete day. This is a same-day re-run — the 07:00 SAST run found a severe pipeline gap for 2026-09-20 that has been recovering in real time through the day; see flags below for the before/after.",
+  "run_date": "2026-09-23",
+  "run_time": "2026-09-23 05:53 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-22) vs day before (2026-09-21). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-09-20": 14849,
-        "day_before_2026-09-19": 18059,
-        "same_day_last_month_2026-08-21": 18299,
-        "revenue_cellc_recharge_qty_yesterday": 15016
+        "yesterday_2026-09-22": 12048,
+        "day_before_2026-09-21": 17467,
+        "same_day_last_month_2026-08-24": 14048,
+        "revenue_cellc_recharge_qty_yesterday": 12235
       },
       "flags": [
-        "Recovering: this morning's run showed only 247 (−98.6%). Now at 14,849 (−17.8% vs day before, −18.9% vs same day last month) — back within threshold, but still visibly short of a normal ~18k day. Keep an eye on tomorrow's run to confirm it fully catches up."
+        "−31.0% vs day before, −14.2% vs same day last month — both within threshold. Continues to look normal after the 20 Sep incident."
       ]
     },
     {
       "check": "Active 1",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_2026-09-20": 1680,
-        "day_before_2026-09-19": 1983
+        "yesterday_2026-09-22": 14,
+        "day_before_2026-09-21": 2676
       },
       "flags": [
-        "Recovered: this morning's run showed 0. Now 1,680 vs 1,983 day before (−15.3%), within threshold."
+        "Yesterday's count (14) is 99.5% below day before (2,676) — far exceeds the 60% drop threshold, near-total collapse.",
+        "Same signature as the 20 Sep incident: a near-zero activation count that doesn't match independent source-system activity (see SmartConnect vs Datawarehouse below). This looks like a recurring merge/warehouse load issue, not a one-off."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "red",
+      "status": "amber",
       "values": {
-        "dim_subscribers_create_date_2026-09-20": 655,
-        "uconnect_may_merge_activation_2026-09-20": 656,
-        "active_subscriptions_usage_2026-09-20": 1680
+        "dim_subscribers_create_date_2026-09-22": 14,
+        "uconnect_may_merge_activation_2026-09-22": 19,
+        "active_subscriptions_usage_2026-09-22": 14
       },
       "flags": [
-        "Improved from this morning's 0/0/0, but not aligned: DIM_SUBSCRIBERS (655) and UCONNECT_MAY_MERGE (656) agree closely, but VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (1,680) runs well above both — spread of 1,025, exceeds the 15 threshold.",
-        "This is the same recurring pattern flagged in prior runs (active-usage view running high vs the merge-based tables) — worth checking whether it's fully resolved once the backfill finishes, or whether it persists as the known ACCOUNTCREATEDATE-vs-CREATE_DATE/ACTIVATION_DATE definitional gap."
+        "Spread is 5, technically under the 15 threshold — but all three values are suspicious in absolute terms (14/19/14, when normal days run in the hundreds to low thousands). Reported amber rather than a clean green: the three tables agree with each other, but they may all be agreeing on an incomplete load."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
-      "status": "red",
+      "status": "green",
       "values": {
-        "usage_greater_than_60_days_count": 5095
+        "usage_greater_than_60_days_count": 3931
       },
       "flags": [
-        "5,095 — still over the 5,000 threshold, though down slightly from 5,228 this morning. Watch whether this keeps easing as the pipeline recovers or is a separate, unrelated trend."
+        "3,931 — under the 5,000 threshold. Continuing to ease: 5,228 (21 Sep AM) → 5,095 (21 Sep midday) → 3,931 (today)."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-09-20": 1553,
-        "uconnect_may_merge_activations_2026-09-20": 656,
-        "gap": 897
+        "smartconnect_activations_2026-09-22": 4339,
+        "uconnect_may_merge_activations_2026-09-22": 19,
+        "gap": 4320
       },
       "flags": [
-        "Narrowing but not closed: this morning the merge table had 0 vs SmartConnect's 1,553 (gap of 1,553). Now merge is at 656 (gap of 897) — the backfill is catching up but hasn't finished. Re-check once Cell C Recharges and Active 1 fully normalize."
+        "SmartConnect recorded 4,339 activations yesterday; UCONNECT_MAY_MERGE recorded only 19 — a gap of 4,320, far beyond the 10-record threshold.",
+        "This is the same pattern as 20 Sep's incident (SmartConnect 1,553 vs Merge 0, later backfilled) — recurring within 2 days. Worth escalating as a pattern, not just a single-day fix: whatever caused the 20th's gap does not appear to have been permanently resolved."
       ]
     },
     {
@@ -79,7 +80,7 @@
     {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
   ],
   "manual": [
-    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Cross-check against the recovery noted above.", "flags": []},
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs.", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
