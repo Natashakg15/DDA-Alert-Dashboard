@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-09-23</title>
+<title>DDA Daily BI Checks — 2026-09-25</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -344,7 +344,7 @@
   </div>
   <div class="status-line">
     <span class="status-dot red"></span>
-    23 September 2026 &nbsp;&middot;&nbsp; Data as of 2026-09-23 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
+    25 September 2026 &nbsp;&middot;&nbsp; Data as of 2026-09-25 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
   </div>
 </div>
 
@@ -366,17 +366,17 @@
     <div class="kpi-row">
   <div class="kpi-tile">
     <div class="kpi-label">Checks Passed</div>
-    <div class="kpi-value good">3</div>
+    <div class="kpi-value good">1</div>
     <div class="kpi-sub">of 6 automated checks</div>
   </div>
   <div class="kpi-tile">
     <div class="kpi-label">Checks Failed</div>
-    <div class="kpi-value bad">2</div>
+    <div class="kpi-value bad">5</div>
     <div class="kpi-sub">red flags today</div>
   </div>
   <div class="kpi-tile">
     <div class="kpi-label">Warnings</div>
-    <div class="kpi-value warn">1</div>
+    <div class="kpi-value warn">0</div>
     <div class="kpi-sub">amber flags today</div>
   </div>
   <div class="kpi-tile">
@@ -396,9 +396,9 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>12,048</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-21</span><span class="stat-spacer"></span><span class='stat-value'>17,467</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-24</span><span class="stat-spacer"></span><span class='stat-value'>14,048</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>12,235</span></div></div></div><ul class="flags"><li>−31.0% vs day before, −14.2% vs same day last month — both within threshold. Continues to look normal after the 20 Sep incident.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-23</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-26</span><span class="stat-spacer"></span><span class='stat-value'>19,404</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>218</span></div></div></div><ul class="flags"><li>Yesterday's count is 0 — immediate red trigger. Day before (2026-09-23) is ALSO 0 — two consecutive full zero-days, not a one-day blip.</li><li>This is worse than the 20 Sep incident, which never hit a literal zero across two consecutive days. The merge/warehouse gap looks like it has been ongoing and worsening since at least 22 Sep, not resolved.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -407,25 +407,25 @@
             <span class="card-title">Active 1</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-21</span><span class="stat-spacer"></span><span class='stat-value'>2,676</span></div></div></div><ul class="flags"><li>Yesterday's count (14) is 99.5% below day before (2,676) — far exceeds the 60% drop threshold, near-total collapse.</li><li>Same signature as the 20 Sep incident: a near-zero activation count that doesn't match independent source-system activity (see SmartConnect vs Datawarehouse below). This looks like a recurring merge/warehouse load issue, not a one-off.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-23</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>Both yesterday and day before are 0 — two consecutive zero-days.</li><li>Same recurring signature as 20 Sep and 22 Sep, now spanning multiple days without resolution.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge amber">WARN</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>19</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div></div></div><ul class="flags"><li>Spread is 5, technically under the 15 threshold — but all three values are suspicious in absolute terms (14/19/14, when normal days run in the hundreds to low thousands). Reported amber rather than a clean green: the three tables agree with each other, but they may all be agreeing on an incomplete load.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables at 0 for yesterday — consistent with the ongoing merge/warehouse load issue, not a fresh alignment problem.</li></ul></div>
     </div>
   
     <div class="card accent-a">
         <div class="card-number">04</div>
         <div class="card-header">
             <span class="card-title">Terminations (>60 day usage)</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>3,931</span></div></div><ul class="flags"><li>3,931 — under the 5,000 threshold. Continuing to ease: 5,228 (21 Sep AM) → 5,095 (21 Sep midday) → 3,931 (today).</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>6,006</span></div></div><ul class="flags"><li>6,006 — well over the 5,000 threshold and climbing: 3,931 (23 Sep) → 6,006 (today). Trend has reversed from the earlier easing and is now getting worse, in step with the ongoing activation pipeline issue.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -434,7 +434,7 @@
             <span class="card-title">SmartConnect vs Datawarehouse</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>4,339</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>19</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>4,320</span></div></div><ul class="flags"><li>SmartConnect recorded 4,339 activations yesterday; UCONNECT_MAY_MERGE recorded only 19 — a gap of 4,320, far beyond the 10-record threshold.</li><li>This is the same pattern as 20 Sep's incident (SmartConnect 1,553 vs Merge 0, later backfilled) — recurring within 2 days. Worth escalating as a pattern, not just a single-day fix: whatever caused the 20th's gap does not appear to have been permanently resolved.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>1,834</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>1,834</span></div></div><ul class="flags"><li>SmartConnect recorded 1,834 real activations yesterday; merge table recorded 0 — gap of 1,834.</li><li>This is the third time this exact pattern has appeared in under a week (20 Sep, 22 Sep, now 24 Sep). This should now be treated as an ongoing/unresolved incident, not three separate one-off events — escalate accordingly.</li></ul></div>
     </div>
   
     <div class="card accent-c">
@@ -456,9 +456,9 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>12,048</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-21</span><span class="stat-spacer"></span><span class='stat-value'>17,467</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-24</span><span class="stat-spacer"></span><span class='stat-value'>14,048</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>12,235</span></div></div></div><ul class="flags"><li>−31.0% vs day before, −14.2% vs same day last month — both within threshold. Continues to look normal after the 20 Sep incident.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-23</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-08-26</span><span class="stat-spacer"></span><span class='stat-value'>19,404</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>218</span></div></div></div><ul class="flags"><li>Yesterday's count is 0 — immediate red trigger. Day before (2026-09-23) is ALSO 0 — two consecutive full zero-days, not a one-day blip.</li><li>This is worse than the 20 Sep incident, which never hit a literal zero across two consecutive days. The merge/warehouse gap looks like it has been ongoing and worsening since at least 22 Sep, not resolved.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -467,25 +467,25 @@
             <span class="card-title">Active 1</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-21</span><span class="stat-spacer"></span><span class='stat-value'>2,676</span></div></div></div><ul class="flags"><li>Yesterday's count (14) is 99.5% below day before (2,676) — far exceeds the 60% drop threshold, near-total collapse.</li><li>Same signature as the 20 Sep incident: a near-zero activation count that doesn't match independent source-system activity (see SmartConnect vs Datawarehouse below). This looks like a recurring merge/warehouse load issue, not a one-off.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-09-23</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>Both yesterday and day before are 0 — two consecutive zero-days.</li><li>Same recurring signature as 20 Sep and 22 Sep, now spanning multiple days without resolution.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge amber">WARN</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>19</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div></div></div><ul class="flags"><li>Spread is 5, technically under the 15 threshold — but all three values are suspicious in absolute terms (14/19/14, when normal days run in the hundreds to low thousands). Reported amber rather than a clean green: the three tables agree with each other, but they may all be agreeing on an incomplete load.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables at 0 for yesterday — consistent with the ongoing merge/warehouse load issue, not a fresh alignment problem.</li></ul></div>
     </div>
   
     <div class="card accent-a">
         <div class="card-number">04</div>
         <div class="card-header">
             <span class="card-title">Terminations (>60 day usage)</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>3,931</span></div></div><ul class="flags"><li>3,931 — under the 5,000 threshold. Continuing to ease: 5,228 (21 Sep AM) → 5,095 (21 Sep midday) → 3,931 (today).</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>6,006</span></div></div><ul class="flags"><li>6,006 — well over the 5,000 threshold and climbing: 3,931 (23 Sep) → 6,006 (today). Trend has reversed from the earlier easing and is now getting worse, in step with the ongoing activation pipeline issue.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -494,7 +494,7 @@
             <span class="card-title">SmartConnect vs Datawarehouse</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>4,339</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-22</span><span class="stat-spacer"></span><span class='stat-value'>19</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>4,320</span></div></div><ul class="flags"><li>SmartConnect recorded 4,339 activations yesterday; UCONNECT_MAY_MERGE recorded only 19 — a gap of 4,320, far beyond the 10-record threshold.</li><li>This is the same pattern as 20 Sep's incident (SmartConnect 1,553 vs Merge 0, later backfilled) — recurring within 2 days. Worth escalating as a pattern, not just a single-day fix: whatever caused the 20th's gap does not appear to have been permanently resolved.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>1,834</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-09-24</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>1,834</span></div></div><ul class="flags"><li>SmartConnect recorded 1,834 real activations yesterday; merge table recorded 0 — gap of 1,834.</li><li>This is the third time this exact pattern has appeared in under a week (20 Sep, 22 Sep, now 24 Sep). This should now be treated as an ongoing/unresolved incident, not three separate one-off events — escalate accordingly.</li></ul></div>
     </div>
   
     <div class="card accent-c">
@@ -542,7 +542,7 @@
             <span class="card-title">Cell C Recharges — Telco Dashboard Alignment</span>
             <span class="badge manual">MANUAL</span>
         </div>
-        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs.</p></div>
+        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Two consecutive zero-days is urgent enough to cross-check today.</p></div>
     </div>
   
     <div class="card accent-b">

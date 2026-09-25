@@ -1,66 +1,67 @@
 {
-  "run_date": "2026-09-23",
-  "run_time": "2026-09-23 05:53 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-22) vs day before (2026-09-21). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-09-25",
+  "run_time": "2026-09-25 05:37 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-24) vs day before (2026-09-23). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_2026-09-22": 12048,
-        "day_before_2026-09-21": 17467,
-        "same_day_last_month_2026-08-24": 14048,
-        "revenue_cellc_recharge_qty_yesterday": 12235
+        "yesterday_2026-09-24": 0,
+        "day_before_2026-09-23": 0,
+        "same_day_last_month_2026-08-26": 19404,
+        "revenue_cellc_recharge_qty_yesterday": 218
       },
       "flags": [
-        "−31.0% vs day before, −14.2% vs same day last month — both within threshold. Continues to look normal after the 20 Sep incident."
+        "Yesterday's count is 0 — immediate red trigger. Day before (2026-09-23) is ALSO 0 — two consecutive full zero-days, not a one-day blip.",
+        "This is worse than the 20 Sep incident, which never hit a literal zero across two consecutive days. The merge/warehouse gap looks like it has been ongoing and worsening since at least 22 Sep, not resolved."
       ]
     },
     {
       "check": "Active 1",
       "status": "red",
       "values": {
-        "yesterday_2026-09-22": 14,
-        "day_before_2026-09-21": 2676
+        "yesterday_2026-09-24": 0,
+        "day_before_2026-09-23": 0
       },
       "flags": [
-        "Yesterday's count (14) is 99.5% below day before (2,676) — far exceeds the 60% drop threshold, near-total collapse.",
-        "Same signature as the 20 Sep incident: a near-zero activation count that doesn't match independent source-system activity (see SmartConnect vs Datawarehouse below). This looks like a recurring merge/warehouse load issue, not a one-off."
+        "Both yesterday and day before are 0 — two consecutive zero-days.",
+        "Same recurring signature as 20 Sep and 22 Sep, now spanning multiple days without resolution."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "amber",
+      "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-09-22": 14,
-        "uconnect_may_merge_activation_2026-09-22": 19,
-        "active_subscriptions_usage_2026-09-22": 14
+        "dim_subscribers_create_date_2026-09-24": 0,
+        "uconnect_may_merge_activation_2026-09-24": 0,
+        "active_subscriptions_usage_2026-09-24": 0
       },
       "flags": [
-        "Spread is 5, technically under the 15 threshold — but all three values are suspicious in absolute terms (14/19/14, when normal days run in the hundreds to low thousands). Reported amber rather than a clean green: the three tables agree with each other, but they may all be agreeing on an incomplete load."
+        "All three tables at 0 for yesterday — consistent with the ongoing merge/warehouse load issue, not a fresh alignment problem."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
-      "status": "green",
+      "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 3931
+        "usage_greater_than_60_days_count": 6006
       },
       "flags": [
-        "3,931 — under the 5,000 threshold. Continuing to ease: 5,228 (21 Sep AM) → 5,095 (21 Sep midday) → 3,931 (today)."
+        "6,006 — well over the 5,000 threshold and climbing: 3,931 (23 Sep) → 6,006 (today). Trend has reversed from the earlier easing and is now getting worse, in step with the ongoing activation pipeline issue."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-09-22": 4339,
-        "uconnect_may_merge_activations_2026-09-22": 19,
-        "gap": 4320
+        "smartconnect_activations_2026-09-24": 1834,
+        "uconnect_may_merge_activations_2026-09-24": 0,
+        "gap": 1834
       },
       "flags": [
-        "SmartConnect recorded 4,339 activations yesterday; UCONNECT_MAY_MERGE recorded only 19 — a gap of 4,320, far beyond the 10-record threshold.",
-        "This is the same pattern as 20 Sep's incident (SmartConnect 1,553 vs Merge 0, later backfilled) — recurring within 2 days. Worth escalating as a pattern, not just a single-day fix: whatever caused the 20th's gap does not appear to have been permanently resolved."
+        "SmartConnect recorded 1,834 real activations yesterday; merge table recorded 0 — gap of 1,834.",
+        "This is the third time this exact pattern has appeared in under a week (20 Sep, 22 Sep, now 24 Sep). This should now be treated as an ongoing/unresolved incident, not three separate one-off events — escalate accordingly."
       ]
     },
     {
@@ -80,7 +81,7 @@
     {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
   ],
   "manual": [
-    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs.", "flags": []},
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs. Two consecutive zero-days is urgent enough to cross-check today.", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
