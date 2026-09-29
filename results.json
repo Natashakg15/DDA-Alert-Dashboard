@@ -1,66 +1,67 @@
 {
-  "run_date": "2026-09-28",
-  "run_time": "2026-09-28 06:54 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-27) vs day before (2026-09-26). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-09-29",
+  "run_time": "2026-09-29 05:57 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-28) vs day before (2026-09-27). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-09-27": 17197,
-        "day_before_2026-09-26": 21482,
-        "same_day_last_month_2026-08-29": 21980,
-        "revenue_cellc_recharge_qty_yesterday": 17398
+        "yesterday_2026-09-28": 19852,
+        "day_before_2026-09-27": 17197,
+        "same_day_last_month_2026-08-30": 20269,
+        "revenue_cellc_recharge_qty_yesterday": 20124
       },
       "flags": [
-        "−21.8% vs same day last month (21,980) — just past the 20% decline threshold. −20.0% vs day before, within its own threshold.",
-        "Volumes have otherwise returned to a normal order of magnitude (17k–21k range) — this looks like ordinary variance, not a repeat of the earlier outage, but it does trip the same-day-last-month rule."
+        "+15.4% vs day before, −2.1% vs same day last month — both comfortably within threshold. Fully back to normal range."
       ]
     },
     {
       "check": "Active 1",
       "status": "red",
       "values": {
-        "yesterday_2026-09-27": 720,
-        "day_before_2026-09-26": 2209
+        "yesterday_2026-09-28": 4810,
+        "day_before_2026-09-27": 720
       },
       "flags": [
-        "Yesterday (720) is 67.4% below day before (2,209) — exceeds the 60% decline threshold."
+        "Yesterday (4,810) is 6.7x day before (720) — exceeds the 2x anomaly threshold, in the opposite direction from the earlier outage (a spike, not a drop).",
+        "Worth checking whether this is a genuine demand spike or a backlog/catch-up batch from the recent pipeline issues finally clearing through this specific view."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "green",
+      "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-09-27": 720,
-        "uconnect_may_merge_activation_2026-09-27": 720,
-        "active_subscriptions_usage_2026-09-27": 720
+        "dim_subscribers_create_date_2026-09-28": 2762,
+        "uconnect_may_merge_activation_2026-09-28": 2764,
+        "active_subscriptions_usage_2026-09-28": 4810
       },
       "flags": [
-        "All three tables agree exactly (720/720/720, spread 0) — genuinely aligned, not the earlier all-zero pattern. Absolute value is still low relative to typical days, consistent with the Active 1 drop above, but the alignment itself is clean."
+        "DIM_SUBSCRIBERS (2,762) and UCONNECT_MAY_MERGE (2,764) agree closely (2 apart) — the discrepancy is isolated to VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (4,810), which is driving both this misalignment and the Active 1 flag above.",
+        "Spread of 2,048 exceeds the 15 threshold. Suggests the anomaly is specific to that one view, not a broader load issue — dim/merge themselves look healthy and consistent with each other."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
-      "status": "red",
+      "status": "green",
       "values": {
-        "usage_greater_than_60_days_count": 5019
+        "usage_greater_than_60_days_count": 2699
       },
       "flags": [
-        "5,019 — still over the 5,000 threshold, roughly flat vs 6,006 on 25 Sep (easing slightly, not resolved)."
+        "2,699 — a sharp drop from 5,019 (28 Sep) and well under both the 5,000 checklist bar and the 3,000 script threshold. Backlog appears to have cleared."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-09-27": 669,
-        "uconnect_may_merge_activations_2026-09-27": 720,
-        "gap": -51
+        "smartconnect_activations_2026-09-28": 4700,
+        "uconnect_may_merge_activations_2026-09-28": 2764,
+        "gap": 1936
       },
       "flags": [
-        "Gap has narrowed dramatically: 1,834 (24 Sep) → -51 (today) — smallest gap seen since this incident began, and for the first time the direction has flipped (merge now slightly exceeds SmartConnect rather than lagging it).",
-        "Still exceeds the 10-record threshold in absolute terms (|-51| > 10), so still flags red, but this reads as the pipeline recovering rather than an active outage."
+        "Gap has reopened: −51 (yesterday's run) → 1,936 (today). SmartConnect recorded 4,700 real activations; merge captured 2,764.",
+        "SmartConnect's own volume (4,700) is unusually high too — roughly 2-3x a typical day (source, not warehouse). Combined with the Active 1 spike above, this looks like a genuinely high-activation day that the merge/warehouse load didn't fully keep up with, rather than a repeat of the total-failure pattern from 20-25 Sep."
       ]
     },
     {
