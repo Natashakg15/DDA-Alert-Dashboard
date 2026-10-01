@@ -1,66 +1,69 @@
 {
-  "run_date": "2026-09-30",
-  "run_time": "2026-09-30 05:51 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-29) vs day before (2026-09-28). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-01",
+  "run_time": "2026-10-01 06:01 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-09-30) vs day before (2026-09-29). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-09-29": 18247,
-        "day_before_2026-09-28": 19852,
-        "same_day_last_month_2026-08-31": 16759,
-        "revenue_cellc_recharge_qty_yesterday": 18489
+        "yesterday_2026-09-30": 20230,
+        "day_before_2026-09-29": 18247,
+        "same_day_last_month_2026-08-31": 21111,
+        "revenue_cellc_recharge_qty_yesterday": 20522
       },
       "flags": [
-        "-8.1% vs day before, +8.9% vs same day last month — both within threshold. Normal."
+        "+10.9% vs day before, −4.2% vs same day last month — both within threshold. Normal."
       ]
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-09-29": 4990,
-        "day_before_2026-09-28": 4810
+        "yesterday_2026-09-30": 4064,
+        "day_before_2026-09-29": 4990
       },
       "flags": [
-        "+3.7% vs day before — day-over-day change is now small and stable. The elevated ~4,800-5,000 level from 28 Sep has persisted rather than being a one-off spike; see DIM Alignment and SmartConnect below for what that means."
+        "−18.6% vs day before — within threshold, not an anomaly spike this time."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-09-29": 2942,
-        "uconnect_may_merge_activation_2026-09-29": 2945,
-        "active_subscriptions_usage_2026-09-29": 4990
+        "dim_subscribers_create_date_2026-09-30": 3039,
+        "uconnect_may_merge_activation_2026-09-30": 3043,
+        "active_subscriptions_usage_2026-09-30": 4064,
+        "pairwise_dim_vs_merge": 4,
+        "pairwise_dim_vs_active": 1025,
+        "pairwise_merge_vs_active": 1021
       },
       "flags": [
-        "DIM_SUBSCRIBERS (2,942) and UCONNECT_MAY_MERGE (2,945) again agree closely (3 apart) - the gap is entirely VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS (4,990) running high, same as 28 Sep.",
-        "This is now a 2-day pattern, not a one-off: DIM+Merge have held steady around ~2,900-2,960 both days, while SmartConnect and the Active-Subscriptions view have both held around ~4,700-4,990. Looks like a stable, systematic split between two consistent groupings rather than noise - worth asking Data whether something changed in how VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS or VW_SC_RICA_REPORT count as of ~27-28 Sep."
+        "Now using pairwise comparison (changed 2026-09-30 per user request) instead of a single spread figure — reporting each pair individually.",
+        "DIM vs Merge: 4 apart — clean, well under the ~300 threshold.",
+        "DIM vs Active and Merge vs Active: both ~1,020-1,025 apart — exceed the ~300 threshold. Still the same two-group pattern as 28-30 Sep (DIM+Merge together, Active+SmartConnect together), but the gap has narrowed from ~2,000 to ~1,020 — easing, not resolved."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "green",
       "values": {
-        "usage_greater_than_60_days_count": 3418
+        "usage_greater_than_60_days_count": 3281
       },
       "flags": [
-        "3,418 - up from 2,699 (29 Sep) but still well under the 5,000 threshold. Normal range of movement."
+        "3,281 — under the 5,000 threshold, roughly stable vs 3,418 (30 Sep)."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-09-29": 4863,
-        "uconnect_may_merge_activations_2026-09-29": 2945,
-        "gap": 1918
+        "smartconnect_activations_2026-09-30": 4003,
+        "uconnect_may_merge_activations_2026-09-30": 3043,
+        "gap": 960
       },
       "flags": [
-        "Gap of 1,918 - essentially the same size as yesterday's 1,936. Second consecutive day with a ~1,900-2,000 gap, after nearly closing to -51 on 28 Sep.",
-        "SmartConnect volume (4,863) continues to track closely with the Active 1 figure above rather than with DIM/Merge - reinforces the same-pattern read: two consistent groupings, not random variance."
+        "Gap continues to narrow: 1,936 (29 Sep) → 1,918 (30 Sep) → 960 (today). Still exceeds the 10-record threshold but the trend is consistently closing, consistent with the DIM Alignment pairwise read above — looks like it's resolving, not worsening."
       ]
     },
     {
@@ -71,7 +74,7 @@
         "known_pending_access_failures_excluded": 2
       },
       "flags": [
-        "Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h - no unexpected production failures."
+        "Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h — no unexpected production failures."
       ]
     }
   ],
