@@ -1,69 +1,68 @@
 {
-  "run_date": "2026-10-01",
-  "run_time": "2026-10-01 06:01 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-09-30) vs day before (2026-09-29). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-02",
+  "run_time": "2026-10-02 05:32 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-01) vs day before (2026-09-30). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-09-30": 20230,
-        "day_before_2026-09-29": 18247,
-        "same_day_last_month_2026-08-31": 21111,
-        "revenue_cellc_recharge_qty_yesterday": 20522
+        "yesterday_2026-10-01": 19598,
+        "day_before_2026-09-30": 20230,
+        "same_day_last_month_2026-09-02": 18833,
+        "revenue_cellc_recharge_qty_yesterday": 19786
       },
       "flags": [
-        "+10.9% vs day before, −4.2% vs same day last month — both within threshold. Normal."
+        "-3.1% vs day before, +4.1% vs same day last month — both within threshold. Normal."
       ]
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-09-30": 4064,
-        "day_before_2026-09-29": 4990
+        "yesterday_2026-10-01": 5027,
+        "day_before_2026-09-30": 4064
       },
       "flags": [
-        "−18.6% vs day before — within threshold, not an anomaly spike this time."
+        "+23.7% vs day before — within threshold."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-09-30": 3039,
-        "uconnect_may_merge_activation_2026-09-30": 3043,
-        "active_subscriptions_usage_2026-09-30": 4064,
-        "pairwise_dim_vs_merge": 4,
-        "pairwise_dim_vs_active": 1025,
-        "pairwise_merge_vs_active": 1021
+        "dim_subscribers_create_date_2026-10-01": 2981,
+        "uconnect_may_merge_activation_2026-10-01": 2992,
+        "active_subscriptions_usage_2026-10-01": 5027,
+        "pairwise_dim_vs_merge": 11,
+        "pairwise_dim_vs_active": 2046,
+        "pairwise_merge_vs_active": 2035
       },
       "flags": [
-        "Now using pairwise comparison (changed 2026-09-30 per user request) instead of a single spread figure — reporting each pair individually.",
-        "DIM vs Merge: 4 apart — clean, well under the ~300 threshold.",
-        "DIM vs Active and Merge vs Active: both ~1,020-1,025 apart — exceed the ~300 threshold. Still the same two-group pattern as 28-30 Sep (DIM+Merge together, Active+SmartConnect together), but the gap has narrowed from ~2,000 to ~1,020 — easing, not resolved."
+        "DIM vs Merge: 11 apart — clean, well under the ~300 threshold.",
+        "DIM vs Active and Merge vs Active: ~2,035-2,046 apart — back up from ~1,020-1,025 yesterday. Correcting yesterday's read: this is not steadily closing, it's fluctuating (2,048 on 28-29 Sep -> ~1,020 on 30 Sep/1 Oct -> ~2,046 today). Same two-group pattern (DIM+Merge vs Active+SmartConnect) holding for 5 straight days now, but the gap size itself bounces around rather than trending cleanly in either direction."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "green",
       "values": {
-        "usage_greater_than_60_days_count": 3281
+        "usage_greater_than_60_days_count": 4210
       },
       "flags": [
-        "3,281 — under the 5,000 threshold, roughly stable vs 3,418 (30 Sep)."
+        "4,210 — up from 3,281 (1 Oct) but still under the 5,000 threshold."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-09-30": 4003,
-        "uconnect_may_merge_activations_2026-09-30": 3043,
-        "gap": 960
+        "smartconnect_activations_2026-10-01": 5127,
+        "uconnect_may_merge_activations_2026-10-01": 2992,
+        "gap": 2135
       },
       "flags": [
-        "Gap continues to narrow: 1,936 (29 Sep) → 1,918 (30 Sep) → 960 (today). Still exceeds the 10-record threshold but the trend is consistently closing, consistent with the DIM Alignment pairwise read above — looks like it's resolving, not worsening."
+        "Gap widened back to 2,135 from 960 yesterday — not a clean recovery trend. Day-to-day sequence: 1,936 -> 1,918 -> 960 -> 2,135. Tracks the same oscillation as the DIM Alignment pairwise gap above (same underlying pair: SmartConnect/Active vs DIM/Merge)."
       ]
     },
     {
