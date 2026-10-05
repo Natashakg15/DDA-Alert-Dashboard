@@ -1,68 +1,67 @@
 {
-  "run_date": "2026-10-02",
-  "run_time": "2026-10-02 05:32 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-01) vs day before (2026-09-30). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-05",
+  "run_time": "2026-10-05 05:55 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-04, Sunday) vs day before (2026-10-03, Saturday). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_2026-10-01": 19598,
-        "day_before_2026-09-30": 20230,
-        "same_day_last_month_2026-09-02": 18833,
-        "revenue_cellc_recharge_qty_yesterday": 19786
+        "yesterday_2026-10-04": 15511,
+        "day_before_2026-10-03": 16117,
+        "same_day_last_month_2026-09-04": 20648,
+        "revenue_cellc_recharge_qty_yesterday": 15668
       },
       "flags": [
-        "-3.1% vs day before, +4.1% vs same day last month — both within threshold. Normal."
+        "-24.9% vs same day last month — exceeds the 20% threshold. -3.8% vs day before (Saturday), within threshold. Looks like ordinary weekend softness rather than a feed issue — day before is close to yesterday, not a sudden collapse."
       ]
     },
     {
       "check": "Active 1",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_2026-10-01": 5027,
-        "day_before_2026-09-30": 4064
+        "yesterday_2026-10-04": 574,
+        "day_before_2026-10-03": 3197
       },
       "flags": [
-        "+23.7% vs day before — within threshold."
+        "Yesterday (574) is 82.1% below day before (Saturday, 3,197) — exceeds the 60% threshold. Large Sunday dip — see DIM Alignment below for a possible explanation."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "red",
+      "status": "green",
       "values": {
-        "dim_subscribers_create_date_2026-10-01": 2981,
-        "uconnect_may_merge_activation_2026-10-01": 2992,
-        "active_subscriptions_usage_2026-10-01": 5027,
-        "pairwise_dim_vs_merge": 11,
-        "pairwise_dim_vs_active": 2046,
-        "pairwise_merge_vs_active": 2035
+        "dim_subscribers_create_date_2026-10-04": 574,
+        "uconnect_may_merge_activation_2026-10-04": 574,
+        "active_subscriptions_usage_2026-10-04": 574,
+        "pairwise_dim_vs_merge": 0,
+        "pairwise_dim_vs_active": 0,
+        "pairwise_merge_vs_active": 0
       },
       "flags": [
-        "DIM vs Merge: 11 apart — clean, well under the ~300 threshold.",
-        "DIM vs Active and Merge vs Active: ~2,035-2,046 apart — back up from ~1,020-1,025 yesterday. Correcting yesterday's read: this is not steadily closing, it's fluctuating (2,048 on 28-29 Sep -> ~1,020 on 30 Sep/1 Oct -> ~2,046 today). Same two-group pattern (DIM+Merge vs Active+SmartConnect) holding for 5 straight days now, but the gap size itself bounces around rather than trending cleanly in either direction."
+        "All three tables match exactly (574/574/574) for the first time since the ongoing weekday split began. Useful data point for the open investigation: the gap that's shown up every weekday since 27-28 Sep (DIM+Merge vs Active+SmartConnect) is absent on this Sunday — consistent with a weekday-only channel (e.g. Telesales) being the source of the discrepancy rather than a data-quality bug. Worth raising with Data as a lead, not just a status update."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
-      "status": "green",
+      "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 4210
+        "usage_greater_than_60_days_count": 5057
       },
       "flags": [
-        "4,210 — up from 3,281 (1 Oct) but still under the 5,000 threshold."
+        "5,057 — back over the 5,000 threshold, up from 4,210 (1 Oct)."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-01": 5127,
-        "uconnect_may_merge_activations_2026-10-01": 2992,
-        "gap": 2135
+        "smartconnect_activations_2026-10-04": 513,
+        "uconnect_may_merge_activations_2026-10-04": 574,
+        "gap": -61
       },
       "flags": [
-        "Gap widened back to 2,135 from 960 yesterday — not a clean recovery trend. Day-to-day sequence: 1,936 -> 1,918 -> 960 -> 2,135. Tracks the same oscillation as the DIM Alignment pairwise gap above (same underlying pair: SmartConnect/Active vs DIM/Merge)."
+        "Gap shrank to 61 (from 2,135 on 1 Oct) and flipped direction — merge now slightly exceeds SmartConnect. Still exceeds the 10-record threshold in absolute terms, but far smaller than every weekday gap since 28 Sep. Same weekend-effect read as DIM Alignment above."
       ]
     },
     {
