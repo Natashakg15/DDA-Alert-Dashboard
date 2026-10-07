@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDA Daily BI Checks — 2026-10-05</title>
+<title>DDA Daily BI Checks — 2026-10-07</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;500;700&display=swap" rel="stylesheet">
@@ -344,7 +344,7 @@
   </div>
   <div class="status-line">
     <span class="status-dot red"></span>
-    5 October 2026 &nbsp;&middot;&nbsp; Data as of 2026-10-05 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
+    7 October 2026 &nbsp;&middot;&nbsp; Data as of 2026-10-07 &nbsp;&middot;&nbsp; Snowflake UCONNECT_DW
   </div>
 </div>
 
@@ -396,27 +396,27 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge red">FAIL</span>
+            <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>15,511</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-03</span><span class="stat-spacer"></span><span class='stat-value'>16,117</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-09-04</span><span class="stat-spacer"></span><span class='stat-value'>20,648</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>15,668</span></div></div></div><ul class="flags"><li>-24.9% vs same day last month — exceeds the 20% threshold. -3.8% vs day before (Saturday), within threshold. Looks like ordinary weekend softness rather than a feed issue — day before is close to yesterday, not a sudden collapse.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>21,241</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-05</span><span class="stat-spacer"></span><span class='stat-value'>20,298</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-09-06</span><span class="stat-spacer"></span><span class='stat-value'>16,340</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>21,443</span></div></div></div><ul class="flags"><li>+4.6% vs day before and +30.0% vs same day last month (a Sunday, so not a like-for-like weekday baseline). Revenue-table quantity (21,443) is within 1% of the view count.</li></ul></div>
     </div>
   
     <div class="card accent-b">
         <div class="card-number">02</div>
         <div class="card-header">
             <span class="card-title">Active 1</span>
-            <span class="badge red">FAIL</span>
+            <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-03</span><span class="stat-spacer"></span><span class='stat-value'>3,197</span></div></div></div><ul class="flags"><li>Yesterday (574) is 82.1% below day before (Saturday, 3,197) — exceeds the 60% threshold. Large Sunday dip — see DIM Alignment below for a possible explanation.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,235</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-05</span><span class="stat-spacer"></span><span class='stat-value'>3,680</span></div><div class='stat-row'><span class='stat-label'>Ratio vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>1.69</span></div></div></div><ul class="flags"><li>Within thresholds (1.69x day before; anomaly trigger is 2x). However, roughly 3,070 of yesterday's 6,235 appear to be the same bulk-activation spike seen in SmartConnect (3 stores) and are NOT in DIM or Merge — see DIM Alignment and SmartConnect checks. Treat this green with caution.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Merge</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Active</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Pairwise Merge vs Active</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables match exactly (574/574/574) for the first time since the ongoing weekday split began. Useful data point for the open investigation: the gap that's shown up every weekday since 27-28 Sep (DIM+Merge vs Active+SmartConnect) is absent on this Sunday — consistent with a weekday-only channel (e.g. Telesales) being the source of the discrepancy rather than a data-quality bug. Worth raising with Data as a lead, not just a status update.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,162</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,165</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,235</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Merge</span><span class="stat-spacer"></span><span class='stat-value'>3</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Active</span><span class="stat-spacer"></span><span class='stat-value'>3,073</span></div><div class='stat-row'><span class='stat-label'>Pairwise Merge vs Active</span><span class="stat-spacer"></span><span class='stat-value'>3,070</span></div></div></div><ul class="flags"><li>Active vs DIM differs by 3,073 and Active vs Merge by 3,070 — both far above the 300 threshold. DIM and Merge agree closely (gap of 3).</li><li>The ~3,070 excess in Active matches almost exactly the ~3,073 excess in SmartConnect concentrated in three stores (Fashion Fusion Elloff Street, Fashion Fusion Port Shepstone, A5 Cash and Carry Mthatha, ~1,025 each). Most likely a bulk activation load at those stores that reached SmartConnect and Active but not DIM/Merge. Needs Data/Ops confirmation: genuine sales, or a test/bulk load?</li></ul></div>
     </div>
   
     <div class="card accent-a">
@@ -425,7 +425,7 @@
             <span class="card-title">Terminations (>60 day usage)</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>5,057</span></div></div><ul class="flags"><li>5,057 — back over the 5,000 threshold, up from 4,210 (1 Oct).</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>7,460</span></div></div><ul class="flags"><li>7,460 — well above the 3,000 RED threshold, and up 47.5% from 5,057 on the last run (5 Oct). Large step-change in 2 days; worth checking whether a batch of accounts crossed the 60-day mark or the view logic changed.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -434,16 +434,16 @@
             <span class="card-title">SmartConnect vs Datawarehouse</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>513</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>-61</span></div></div><ul class="flags"><li>Gap shrank to 61 (from 2,135 on 1 Oct) and flipped direction — merge now slightly exceeds SmartConnect. Still exceeds the 10-record threshold in absolute terms, but far smaller than every weekday gap since 28 Sep. Same weekend-effect read as DIM Alignment above.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,178</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,165</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>3,013</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge Fashion Fusion Elloff Street</span><span class="stat-spacer"></span><span class='stat-value'>1,025</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge Fashion Fusion Port Shepstone</span><span class="stat-spacer"></span><span class='stat-value'>1,025</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge a 5 Cash And Carry Mthatha</span><span class="stat-spacer"></span><span class='stat-value'>1,023</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge The Unlimited</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div></div><ul class="flags"><li>SmartConnect exceeds Merge by 3,013 (threshold 10).</li><li>Three stores account for 3,073 of the excess: Fashion Fusion Elloff Street (1,035 SC vs 10 Merge), Fashion Fusion Port Shepstone (1,044 vs 19), A5 Cash and Carry Mthatha (1,038 vs 15). ~1,000+ activations in one day at a single store is far above their normal volume — likely a bulk/test load.</li><li>Smaller SC > Merge gaps: The Unlimited (+14), SPAR Kranskop (+2), SPAR Richards Bay (+2), SPAR Esikhawini (+1). Build It, Midas and Pet Pool & Home stores all match exactly.</li><li>Merge > SC (offsetting): Spot Connect App (0 vs 43), Mobile Store (47 vs 63), Spot Connect (0 vs 10), Uconnect (9 vs 17).</li><li>Note: the task spec's tenant columns (TENANT_NAME / RETAILER_NAME) don't exist; the tenant breakdown used the TENANT column on both tables instead.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">06</div>
         <div class="card-header">
             <span class="card-title">Snowflake Query Health (Spot MCP)</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Unexpected Production Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>2</span></div></div><ul class="flags"><li>Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h — no unexpected production failures.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Non Excluded Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>4</span></div><div class='stat-row'><span class='stat-label'>Of Which Caused By This Run</span><span class="stat-spacer"></span><span class='stat-value'>4</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>1</span></div></div><ul class="flags"><li>All 4 non-excluded failures come from this run itself, not from production workloads. Flagged RED per the rule, but no external issue is indicated.</li><li>2026-10-07 12:38 UTC — invalid identifier 'RETAILER_NAME' — SELECT UPPER(RETAILER_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE ... (spec query uses a column that doesn't exist; correct column is TENANT).</li><li>2026-10-07 12:38 UTC — invalid identifier 'TENANT_NAME' — SELECT UPPER(TENANT_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT ... (same cause; correct column is TENANT).</li><li>2026-10-07 12:30 UTC — 300s statement timeout — combined multi-subquery count across VW_CELLC_RECHARGES / Active / DIM / Merge (re-run as individual queries, which succeeded).</li><li>2026-10-07 12:30 UTC — 300s statement timeout — SELECT COUNT(*) FROM VW_SC_RICA_REPORT wrapped in a subquery (re-run directly, which succeeded).</li><li>1 expected pending-access failure excluded (DATAWAREHOUSE.MVNX).</li></ul></div>
     </div>
     </div>
   </div>
@@ -456,27 +456,27 @@
         <div class="card-number">01</div>
         <div class="card-header">
             <span class="card-title">Cell C Recharges</span>
-            <span class="badge red">FAIL</span>
+            <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>15,511</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-03</span><span class="stat-spacer"></span><span class='stat-value'>16,117</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-09-04</span><span class="stat-spacer"></span><span class='stat-value'>20,648</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>15,668</span></div></div></div><ul class="flags"><li>-24.9% vs same day last month — exceeds the 20% threshold. -3.8% vs day before (Saturday), within threshold. Looks like ordinary weekend softness rather than a feed issue — day before is close to yesterday, not a sudden collapse.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>21,241</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-05</span><span class="stat-spacer"></span><span class='stat-value'>20,298</span></div><div class='stat-row'><span class='stat-label'>Same Day Last Month 2026-09-06</span><span class="stat-spacer"></span><span class='stat-value'>16,340</span></div><div class='stat-row'><span class='stat-label'>Revenue Cellc Recharge Qty Yesterday</span><span class="stat-spacer"></span><span class='stat-value'>21,443</span></div></div></div><ul class="flags"><li>+4.6% vs day before and +30.0% vs same day last month (a Sunday, so not a like-for-like weekday baseline). Revenue-table quantity (21,443) is within 1% of the view count.</li></ul></div>
     </div>
   
     <div class="card accent-b">
         <div class="card-number">02</div>
         <div class="card-header">
             <span class="card-title">Active 1</span>
-            <span class="badge red">FAIL</span>
+            <span class="badge green">PASS</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-03</span><span class="stat-spacer"></span><span class='stat-value'>3,197</span></div></div></div><ul class="flags"><li>Yesterday (574) is 82.1% below day before (Saturday, 3,197) — exceeds the 60% threshold. Large Sunday dip — see DIM Alignment below for a possible explanation.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Yesterday 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,235</span></div><div class='stat-row'><span class='stat-label'>Day Before 2026-10-05</span><span class="stat-spacer"></span><span class='stat-value'>3,680</span></div><div class='stat-row'><span class='stat-label'>Ratio vs Day Before</span><span class="stat-spacer"></span><span class='stat-value'>1.69</span></div></div></div><ul class="flags"><li>Within thresholds (1.69x day before; anomaly trigger is 2x). However, roughly 3,070 of yesterday's 6,235 appear to be the same bulk-activation spike seen in SmartConnect (3 stores) and are NOT in DIM or Merge — see DIM Alignment and SmartConnect checks. Treat this green with caution.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">03</div>
         <div class="card-header">
             <span class="card-title">DIM Subscriber Alignment</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Merge</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Active</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Pairwise Merge vs Active</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div></div></div><ul class="flags"><li>All three tables match exactly (574/574/574) for the first time since the ongoing weekday split began. Useful data point for the open investigation: the gap that's shown up every weekday since 27-28 Sep (DIM+Merge vs Active+SmartConnect) is absent on this Sunday — consistent with a weekday-only channel (e.g. Telesales) being the source of the discrepancy rather than a data-quality bug. Worth raising with Data as a lead, not just a status update.</li></ul></div>
+        <div class="card-body"><div class='stat-group'><h4>Other</h4><div class='stat-rows'><div class='stat-row'><span class='stat-label'>DIM Subscribers Create Date 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,162</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activation 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,165</span></div><div class='stat-row'><span class='stat-label'>Active Subscriptions Usage 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,235</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Merge</span><span class="stat-spacer"></span><span class='stat-value'>3</span></div><div class='stat-row'><span class='stat-label'>Pairwise DIM vs Active</span><span class="stat-spacer"></span><span class='stat-value'>3,073</span></div><div class='stat-row'><span class='stat-label'>Pairwise Merge vs Active</span><span class="stat-spacer"></span><span class='stat-value'>3,070</span></div></div></div><ul class="flags"><li>Active vs DIM differs by 3,073 and Active vs Merge by 3,070 — both far above the 300 threshold. DIM and Merge agree closely (gap of 3).</li><li>The ~3,070 excess in Active matches almost exactly the ~3,073 excess in SmartConnect concentrated in three stores (Fashion Fusion Elloff Street, Fashion Fusion Port Shepstone, A5 Cash and Carry Mthatha, ~1,025 each). Most likely a bulk activation load at those stores that reached SmartConnect and Active but not DIM/Merge. Needs Data/Ops confirmation: genuine sales, or a test/bulk load?</li></ul></div>
     </div>
   
     <div class="card accent-a">
@@ -485,7 +485,7 @@
             <span class="card-title">Terminations (>60 day usage)</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>5,057</span></div></div><ul class="flags"><li>5,057 — back over the 5,000 threshold, up from 4,210 (1 Oct).</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Usage Greater Than 60 Days Count</span><span class="stat-spacer"></span><span class='stat-value'>7,460</span></div></div><ul class="flags"><li>7,460 — well above the 3,000 RED threshold, and up 47.5% from 5,057 on the last run (5 Oct). Large step-change in 2 days; worth checking whether a batch of accounts crossed the 60-day mark or the view logic changed.</li></ul></div>
     </div>
   
     <div class="card accent-b">
@@ -494,16 +494,16 @@
             <span class="card-title">SmartConnect vs Datawarehouse</span>
             <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>513</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-10-04</span><span class="stat-spacer"></span><span class='stat-value'>574</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>-61</span></div></div><ul class="flags"><li>Gap shrank to 61 (from 2,135 on 1 Oct) and flipped direction — merge now slightly exceeds SmartConnect. Still exceeds the 10-record threshold in absolute terms, but far smaller than every weekday gap since 28 Sep. Same weekend-effect read as DIM Alignment above.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Smartconnect Activations 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>6,178</span></div><div class='stat-row'><span class='stat-label'>Uconnect May Merge Activations 2026-10-06</span><span class="stat-spacer"></span><span class='stat-value'>3,165</span></div><div class='stat-row'><span class='stat-label'>Gap</span><span class="stat-spacer"></span><span class='stat-value'>3,013</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge Fashion Fusion Elloff Street</span><span class="stat-spacer"></span><span class='stat-value'>1,025</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge Fashion Fusion Port Shepstone</span><span class="stat-spacer"></span><span class='stat-value'>1,025</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge a 5 Cash And Carry Mthatha</span><span class="stat-spacer"></span><span class='stat-value'>1,023</span></div><div class='stat-row'><span class='stat-label'>Sc Minus Merge The Unlimited</span><span class="stat-spacer"></span><span class='stat-value'>14</span></div></div><ul class="flags"><li>SmartConnect exceeds Merge by 3,013 (threshold 10).</li><li>Three stores account for 3,073 of the excess: Fashion Fusion Elloff Street (1,035 SC vs 10 Merge), Fashion Fusion Port Shepstone (1,044 vs 19), A5 Cash and Carry Mthatha (1,038 vs 15). ~1,000+ activations in one day at a single store is far above their normal volume — likely a bulk/test load.</li><li>Smaller SC > Merge gaps: The Unlimited (+14), SPAR Kranskop (+2), SPAR Richards Bay (+2), SPAR Esikhawini (+1). Build It, Midas and Pet Pool & Home stores all match exactly.</li><li>Merge > SC (offsetting): Spot Connect App (0 vs 43), Mobile Store (47 vs 63), Spot Connect (0 vs 10), Uconnect (9 vs 17).</li><li>Note: the task spec's tenant columns (TENANT_NAME / RETAILER_NAME) don't exist; the tenant breakdown used the TENANT column on both tables instead.</li></ul></div>
     </div>
   
     <div class="card accent-c">
         <div class="card-number">06</div>
         <div class="card-header">
             <span class="card-title">Snowflake Query Health (Spot MCP)</span>
-            <span class="badge green">PASS</span>
+            <span class="badge red">FAIL</span>
         </div>
-        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Unexpected Production Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>0</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>2</span></div></div><ul class="flags"><li>Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h — no unexpected production failures.</li></ul></div>
+        <div class="card-body"><div class='stat-rows'><div class='stat-row'><span class='stat-label'>Non Excluded Failures Last 24h</span><span class="stat-spacer"></span><span class='stat-value'>4</span></div><div class='stat-row'><span class='stat-label'>Of Which Caused By This Run</span><span class="stat-spacer"></span><span class='stat-value'>4</span></div><div class='stat-row'><span class='stat-label'>Known Pending Access Failures Excluded</span><span class="stat-spacer"></span><span class='stat-value'>1</span></div></div><ul class="flags"><li>All 4 non-excluded failures come from this run itself, not from production workloads. Flagged RED per the rule, but no external issue is indicated.</li><li>2026-10-07 12:38 UTC — invalid identifier 'RETAILER_NAME' — SELECT UPPER(RETAILER_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE ... (spec query uses a column that doesn't exist; correct column is TENANT).</li><li>2026-10-07 12:38 UTC — invalid identifier 'TENANT_NAME' — SELECT UPPER(TENANT_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT ... (same cause; correct column is TENANT).</li><li>2026-10-07 12:30 UTC — 300s statement timeout — combined multi-subquery count across VW_CELLC_RECHARGES / Active / DIM / Merge (re-run as individual queries, which succeeded).</li><li>2026-10-07 12:30 UTC — 300s statement timeout — SELECT COUNT(*) FROM VW_SC_RICA_REPORT wrapped in a subquery (re-run directly, which succeeded).</li><li>1 expected pending-access failure excluded (DATAWAREHOUSE.MVNX).</li></ul></div>
     </div>
     </div>
   </div>
@@ -518,7 +518,7 @@
             <span class="card-title">Wholesale Usage</span>
             <span class="badge pending">PENDING</span>
         </div>
-        <div class="card-body"><p class="note">MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized.</p></div>
+        <div class="card-body"><p class="note">MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized for MCP_SPOT_ROLE.</p></div>
     </div>
   
     <div class="card accent-b">
@@ -527,7 +527,7 @@
             <span class="card-title">CDR Recon</span>
             <span class="badge pending">PENDING</span>
         </div>
-        <div class="card-body"><p class="note">MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.</p></div>
+        <div class="card-body"><p class="note">MCP access not yet granted — schema DATAWAREHOUSE.MVNX does not exist or not authorized for MCP_SPOT_ROLE.</p></div>
     </div>
     </div>
   </div>
@@ -542,7 +542,7 @@
             <span class="card-title">Cell C Recharges — Telco Dashboard Alignment</span>
             <span class="badge manual">MANUAL</span>
         </div>
-        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs.</p></div>
+        <div class="card-body"><p class="note">Verify recharges on Telco BI dashboard — App, V Redemptions & Subs</p></div>
     </div>
   
     <div class="card accent-b">
