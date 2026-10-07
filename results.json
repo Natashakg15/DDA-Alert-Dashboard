@@ -1,89 +1,108 @@
 {
-  "run_date": "2026-10-05",
-  "run_time": "2026-10-05 05:55 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-04, Sunday) vs day before (2026-10-03, Saturday). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-07",
+  "run_time": "2026-10-07 12:39 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-06, Tuesday) vs day before (2026-10-05, Monday). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-10-04": 15511,
-        "day_before_2026-10-03": 16117,
-        "same_day_last_month_2026-09-04": 20648,
-        "revenue_cellc_recharge_qty_yesterday": 15668
+        "yesterday_2026-10-06": 21241,
+        "day_before_2026-10-05": 20298,
+        "same_day_last_month_2026-09-06": 16340,
+        "revenue_cellc_recharge_qty_yesterday": 21443
       },
       "flags": [
-        "-24.9% vs same day last month — exceeds the 20% threshold. -3.8% vs day before (Saturday), within threshold. Looks like ordinary weekend softness rather than a feed issue — day before is close to yesterday, not a sudden collapse."
+        "+4.6% vs day before and +30.0% vs same day last month (a Sunday, so not a like-for-like weekday baseline). Revenue-table quantity (21,443) is within 1% of the view count."
       ]
     },
     {
       "check": "Active 1",
-      "status": "red",
+      "status": "green",
       "values": {
-        "yesterday_2026-10-04": 574,
-        "day_before_2026-10-03": 3197
+        "yesterday_2026-10-06": 6235,
+        "day_before_2026-10-05": 3680,
+        "ratio_vs_day_before": 1.69
       },
       "flags": [
-        "Yesterday (574) is 82.1% below day before (Saturday, 3,197) — exceeds the 60% threshold. Large Sunday dip — see DIM Alignment below for a possible explanation."
+        "Within thresholds (1.69x day before; anomaly trigger is 2x). However, roughly 3,070 of yesterday's 6,235 appear to be the same bulk-activation spike seen in SmartConnect (3 stores) and are NOT in DIM or Merge — see DIM Alignment and SmartConnect checks. Treat this green with caution."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "green",
+      "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-10-04": 574,
-        "uconnect_may_merge_activation_2026-10-04": 574,
-        "active_subscriptions_usage_2026-10-04": 574,
-        "pairwise_dim_vs_merge": 0,
-        "pairwise_dim_vs_active": 0,
-        "pairwise_merge_vs_active": 0
+        "dim_subscribers_create_date_2026-10-06": 3162,
+        "uconnect_may_merge_activation_2026-10-06": 3165,
+        "active_subscriptions_usage_2026-10-06": 6235,
+        "pairwise_dim_vs_merge": 3,
+        "pairwise_dim_vs_active": 3073,
+        "pairwise_merge_vs_active": 3070
       },
       "flags": [
-        "All three tables match exactly (574/574/574) for the first time since the ongoing weekday split began. Useful data point for the open investigation: the gap that's shown up every weekday since 27-28 Sep (DIM+Merge vs Active+SmartConnect) is absent on this Sunday — consistent with a weekday-only channel (e.g. Telesales) being the source of the discrepancy rather than a data-quality bug. Worth raising with Data as a lead, not just a status update."
+        "Active vs DIM differs by 3,073 and Active vs Merge by 3,070 — both far above the 300 threshold. DIM and Merge agree closely (gap of 3).",
+        "The ~3,070 excess in Active matches almost exactly the ~3,073 excess in SmartConnect concentrated in three stores (Fashion Fusion Elloff Street, Fashion Fusion Port Shepstone, A5 Cash and Carry Mthatha, ~1,025 each). Most likely a bulk activation load at those stores that reached SmartConnect and Active but not DIM/Merge. Needs Data/Ops confirmation: genuine sales, or a test/bulk load?"
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 5057
+        "usage_greater_than_60_days_count": 7460
       },
       "flags": [
-        "5,057 — back over the 5,000 threshold, up from 4,210 (1 Oct)."
+        "7,460 — well above the 3,000 RED threshold, and up 47.5% from 5,057 on the last run (5 Oct). Large step-change in 2 days; worth checking whether a batch of accounts crossed the 60-day mark or the view logic changed."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-04": 513,
-        "uconnect_may_merge_activations_2026-10-04": 574,
-        "gap": -61
+        "smartconnect_activations_2026-10-06": 6178,
+        "uconnect_may_merge_activations_2026-10-06": 3165,
+        "gap": 3013,
+        "sc_minus_merge_fashion_fusion_elloff_street": 1025,
+        "sc_minus_merge_fashion_fusion_port_shepstone": 1025,
+        "sc_minus_merge_a5_cash_and_carry_mthatha": 1023,
+        "sc_minus_merge_the_unlimited": 14
       },
       "flags": [
-        "Gap shrank to 61 (from 2,135 on 1 Oct) and flipped direction — merge now slightly exceeds SmartConnect. Still exceeds the 10-record threshold in absolute terms, but far smaller than every weekday gap since 28 Sep. Same weekend-effect read as DIM Alignment above."
+        "SmartConnect exceeds Merge by 3,013 (threshold 10).",
+        "Three stores account for 3,073 of the excess: Fashion Fusion Elloff Street (1,035 SC vs 10 Merge), Fashion Fusion Port Shepstone (1,044 vs 19), A5 Cash and Carry Mthatha (1,038 vs 15). ~1,000+ activations in one day at a single store is far above their normal volume — likely a bulk/test load.",
+        "Smaller SC > Merge gaps: The Unlimited (+14), SPAR Kranskop (+2), SPAR Richards Bay (+2), SPAR Esikhawini (+1). Build It, Midas and Pet Pool & Home stores all match exactly.",
+        "Merge > SC (offsetting): Spot Connect App (0 vs 43), Mobile Store (47 vs 63), Spot Connect (0 vs 10), Uconnect (9 vs 17).",
+        "Note: the task spec's tenant columns (TENANT_NAME / RETAILER_NAME) don't exist; the tenant breakdown used the TENANT column on both tables instead."
       ]
     },
     {
       "check": "Snowflake Query Health (Spot MCP)",
-      "status": "green",
+      "status": "red",
       "values": {
-        "unexpected_production_failures_last_24h": 0,
-        "known_pending_access_failures_excluded": 2
+        "non_excluded_failures_last_24h": 4,
+        "of_which_caused_by_this_run": 4,
+        "known_pending_access_failures_excluded": 1
       },
       "flags": [
-        "Only the 2 known pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX) failed in the last 24h — no unexpected production failures."
+        "All 4 non-excluded failures come from this run itself, not from production workloads. Flagged RED per the rule, but no external issue is indicated.",
+        "2026-10-07 12:38 UTC — invalid identifier 'RETAILER_NAME' — SELECT UPPER(RETAILER_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE ... (spec query uses a column that doesn't exist; correct column is TENANT).",
+        "2026-10-07 12:38 UTC — invalid identifier 'TENANT_NAME' — SELECT UPPER(TENANT_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT ... (same cause; correct column is TENANT).",
+        "2026-10-07 12:30 UTC — 300s statement timeout — combined multi-subquery count across VW_CELLC_RECHARGES / Active / DIM / Merge (re-run as individual queries, which succeeded).",
+        "2026-10-07 12:30 UTC — 300s statement timeout — SELECT COUNT(*) FROM VW_SC_RICA_REPORT wrapped in a subquery (re-run directly, which succeeded).",
+        "1 expected pending-access failure excluded (DATAWAREHOUSE.MVNX)."
       ]
     }
   ],
   "pending": [
-    {"check": "Wholesale Usage", "status": "pending", "note": "MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized.", "flags": []},
-    {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — DATAWAREHOUSE.MVNX schema does not exist or not authorized.", "flags": []}
+    {"check": "Wholesale Usage", "status": "pending", "note": "MCP access not yet granted — UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized for MCP_SPOT_ROLE.", "flags": []},
+    {"check": "CDR Recon", "status": "pending", "note": "MCP access not yet granted — schema DATAWAREHOUSE.MVNX does not exist or not authorized for MCP_SPOT_ROLE.", "flags": []}
   ],
   "manual": [
-    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs.", "flags": []},
+    {"check": "Cell C Recharges — Telco Dashboard Alignment", "status": "manual", "note": "Verify recharges on Telco BI dashboard — App, V Redemptions & Subs", "flags": []},
     {"check": "Wholesale Usage — Telco Dashboard", "status": "manual", "note": "Cross-check usage totals on Telco dashboard", "flags": []},
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
-  "errors": []
+  "errors": [
+    "Spec SmartConnect tenant queries failed: TENANT_NAME (VW_SC_RICA_REPORT) and RETAILER_NAME (UCONNECT_MAY_MERGE) are invalid identifiers. Substituted the TENANT column on both tables. The task file should be updated.",
+    "Two combined queries hit the 300s warehouse timeout; all checks were re-run as individual queries and completed."
+  ]
 }
