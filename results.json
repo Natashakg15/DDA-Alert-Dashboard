@@ -1,94 +1,93 @@
 {
-  "run_date": "2026-10-07",
-  "run_time": "2026-10-07 12:39 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-06, Tuesday) vs day before (2026-10-05, Monday). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-08",
+  "run_time": "2026-10-08 05:38 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-07, Wednesday) vs day before (2026-10-06, Tuesday). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-10-06": 21241,
-        "day_before_2026-10-05": 20298,
-        "same_day_last_month_2026-09-06": 16340,
-        "revenue_cellc_recharge_qty_yesterday": 21443
+        "yesterday_2026-10-07": 19242,
+        "day_before_2026-10-06": 21241,
+        "same_day_last_month_2026-09-07": 18925,
+        "revenue_cellc_recharge_qty_yesterday": 19435
       },
       "flags": [
-        "+4.6% vs day before and +30.0% vs same day last month (a Sunday, so not a like-for-like weekday baseline). Revenue-table quantity (21,443) is within 1% of the view count."
+        "-9.4% vs day before (threshold -60%) and +1.7% vs same day last month (threshold -20%). Revenue-table quantity (19,435) is within 1% of the view count."
       ]
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-10-06": 6235,
-        "day_before_2026-10-05": 3680,
-        "ratio_vs_day_before": 1.69
+        "yesterday_2026-10-07": 5005,
+        "day_before_2026-10-06": 6235,
+        "ratio_vs_day_before": 0.80
       },
       "flags": [
-        "Within thresholds (1.69x day before; anomaly trigger is 2x). However, roughly 3,070 of yesterday's 6,235 appear to be the same bulk-activation spike seen in SmartConnect (3 stores) and are NOT in DIM or Merge — see DIM Alignment and SmartConnect checks. Treat this green with caution."
+        "Within thresholds (-19.7% vs day before). But about 2,044 of yesterday's 5,005 are again not in DIM or Merge. This is the second day in a row of a ~1,023-per-store bulk spike (see DIM Alignment and SmartConnect). Treat this green with caution."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
       "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-10-06": 3162,
-        "uconnect_may_merge_activation_2026-10-06": 3165,
-        "active_subscriptions_usage_2026-10-06": 6235,
-        "pairwise_dim_vs_merge": 3,
-        "pairwise_dim_vs_active": 3073,
-        "pairwise_merge_vs_active": 3070
+        "dim_subscribers_create_date_2026-10-07": 2959,
+        "uconnect_may_merge_activation_2026-10-07": 2961,
+        "active_subscriptions_usage_2026-10-07": 5005,
+        "pairwise_dim_vs_merge": 2,
+        "pairwise_dim_vs_active": 2046,
+        "pairwise_merge_vs_active": 2044
       },
       "flags": [
-        "Active vs DIM differs by 3,073 and Active vs Merge by 3,070 — both far above the 300 threshold. DIM and Merge agree closely (gap of 3).",
-        "The ~3,070 excess in Active matches almost exactly the ~3,073 excess in SmartConnect concentrated in three stores (Fashion Fusion Elloff Street, Fashion Fusion Port Shepstone, A5 Cash and Carry Mthatha, ~1,025 each). Most likely a bulk activation load at those stores that reached SmartConnect and Active but not DIM/Merge. Needs Data/Ops confirmation: genuine sales, or a test/bulk load?"
+        "Active is 2,046 above DIM and 2,044 above Merge, both far over the 300 threshold. DIM and Merge agree closely (gap of 2).",
+        "The ~2,044 excess in Active matches the SmartConnect excess at two tenants (A5 Cash and Carry Reservoir Hills +1,023, ONAIR +1,023). That is the same ~1,023-per-store pattern seen on 6 Oct at three other stores. A repeated, near-identical bulk volume per store points to a systematic load (test/bulk/batch process), not organic sales. Data/Ops need to confirm."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 7460
+        "usage_greater_than_60_days_count": 5438
       },
       "flags": [
-        "7,460 — well above the 3,000 RED threshold, and up 47.5% from 5,057 on the last run (5 Oct). Large step-change in 2 days; worth checking whether a batch of accounts crossed the 60-day mark or the view logic changed."
+        "5,438 is above the 3,000 RED threshold. It is down 27% from 7,460 on the last run (7 Oct), back near the 5,057 seen on 5 Oct. The 7 Oct reading looks like a one-day spike. The count is still well above threshold."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-06": 6178,
-        "uconnect_may_merge_activations_2026-10-06": 3165,
-        "gap": 3013,
-        "sc_minus_merge_fashion_fusion_elloff_street": 1025,
-        "sc_minus_merge_fashion_fusion_port_shepstone": 1025,
-        "sc_minus_merge_a5_cash_and_carry_mthatha": 1023,
-        "sc_minus_merge_the_unlimited": 14
+        "smartconnect_activations_2026-10-07": 4909,
+        "uconnect_may_merge_activations_2026-10-07": 2961,
+        "gap": 1948,
+        "sc_minus_merge_a5_cash_and_carry_reservoir_hills": 1023,
+        "sc_minus_merge_onair": 1023,
+        "sc_minus_merge_the_unlimited": 10
       },
       "flags": [
-        "SmartConnect exceeds Merge by 3,013 (threshold 10).",
-        "Three stores account for 3,073 of the excess: Fashion Fusion Elloff Street (1,035 SC vs 10 Merge), Fashion Fusion Port Shepstone (1,044 vs 19), A5 Cash and Carry Mthatha (1,038 vs 15). ~1,000+ activations in one day at a single store is far above their normal volume — likely a bulk/test load.",
-        "Smaller SC > Merge gaps: The Unlimited (+14), SPAR Kranskop (+2), SPAR Richards Bay (+2), SPAR Esikhawini (+1). Build It, Midas and Pet Pool & Home stores all match exactly.",
-        "Merge > SC (offsetting): Spot Connect App (0 vs 43), Mobile Store (47 vs 63), Spot Connect (0 vs 10), Uconnect (9 vs 17).",
-        "Note: the task spec's tenant columns (TENANT_NAME / RETAILER_NAME) don't exist; the tenant breakdown used the TENANT column on both tables instead."
+        "SmartConnect exceeds Merge by 1,948 (threshold 10).",
+        "Two tenants make up 2,046 of the excess: A5 Cash and Carry Reservoir Hills (1,030 SC vs 7 Merge) and ONAIR (1,606 vs 583). Both are exactly +1,023, matching the ~1,023–1,025 per store on 6 Oct (Fashion Fusion Elloff St, Fashion Fusion Port Shepstone, A5 Cash and Carry Mthatha). This is the second consecutive day.",
+        "Smaller SC > Merge gaps: The Unlimited (+10), Spot Airtime Rewards (+5), Build It Burmeisters Mthatha (+1), Amazing Vouchers (+1), OnAir Connect 50 (+1). SPAR, Midas and Pet Pool & Home all match exactly.",
+        "Merge > SC (offsetting): Spot Connect App (0 vs 83), Spot Connect (0 vs 11), Mobile Store (35 vs 46), Uconnect (10 vs 19), blank tenant (0 vs 2).",
+        "Note: the spec's TENANT_NAME / RETAILER_NAME columns don't exist, so the TENANT column was used on both tables (same as previous runs)."
       ]
     },
     {
       "check": "Snowflake Query Health (Spot MCP)",
       "status": "red",
       "values": {
-        "non_excluded_failures_last_24h": 4,
-        "of_which_caused_by_this_run": 4,
-        "known_pending_access_failures_excluded": 1
+        "non_excluded_failures_last_24h": 11,
+        "of_which_caused_by_this_run": 0,
+        "from_previous_dda_run_2026-10-07": 4,
+        "known_pending_access_failures_excluded": 4
       },
       "flags": [
-        "All 4 non-excluded failures come from this run itself, not from production workloads. Flagged RED per the rule, but no external issue is indicated.",
-        "2026-10-07 12:38 UTC — invalid identifier 'RETAILER_NAME' — SELECT UPPER(RETAILER_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.UCONNECT_MAY_MERGE ... (spec query uses a column that doesn't exist; correct column is TENANT).",
-        "2026-10-07 12:38 UTC — invalid identifier 'TENANT_NAME' — SELECT UPPER(TENANT_NAME), COUNT(*) FROM UCONNECT_DW.ANALYTICS.VW_SC_RICA_REPORT ... (same cause; correct column is TENANT).",
-        "2026-10-07 12:30 UTC — 300s statement timeout — combined multi-subquery count across VW_CELLC_RECHARGES / Active / DIM / Merge (re-run as individual queries, which succeeded).",
-        "2026-10-07 12:30 UTC — 300s statement timeout — SELECT COUNT(*) FROM VW_SC_RICA_REPORT wrapped in a subquery (re-run directly, which succeeded).",
-        "1 expected pending-access failure excluded (DATAWAREHOUSE.MVNX)."
+        "This run caused none of the failures; its only errors were the 2 expected pending-access probes. The 11 non-excluded failures are from other sessions in the last 24h:",
+        "2026-10-07 14:09 UTC (x2): VW_SIMS_TO_TERMINATE_NEW does not exist or is not authorized for MCP_SPOT_ROLE (SELECT COUNT(*) / DESCRIBE VIEW). Access needed if this view will be used.",
+        "2026-10-07 07:29–12:36 UTC (x5): 300s timeouts on VW_TELCO_JOURNEYS_PEL (3) and DATAWAREHOUSE.SS_INTEGRATION.VW_EL_SFTOENGAIGE_REPORTING (2). These views are too slow for the MCP warehouse timeout and may affect the Customer Journeys recon.",
+        "2026-10-07 12:30–12:38 UTC (x4): from the previous DDA run (2 combined-query timeouts and 2 invalid spec columns TENANT_NAME/RETAILER_NAME). Already reported on 7 Oct.",
+        "Method note: the spec query uses QUERY_HISTORY's default RESULT_LIMIT of 100, so it only saw this run's 2 failures. It was re-run with RESULT_LIMIT=>10000 to get the full 24h picture. The task file should be updated, or earlier failures will be silently missed."
       ]
     }
   ],
@@ -102,7 +101,7 @@
     {"check": "CDR PowerBI Dashboard", "status": "manual", "note": "Verify on PowerBI: https://app.powerbi.com/groups/me/reports/99160c3f-a907-43c4-a499-c701fdf5daf2", "flags": []}
   ],
   "errors": [
-    "Spec SmartConnect tenant queries failed: TENANT_NAME (VW_SC_RICA_REPORT) and RETAILER_NAME (UCONNECT_MAY_MERGE) are invalid identifiers. Substituted the TENANT column on both tables. The task file should be updated.",
-    "Two combined queries hit the 300s warehouse timeout; all checks were re-run as individual queries and completed."
+    "Spec SmartConnect tenant columns (TENANT_NAME / RETAILER_NAME) do not exist, so TENANT was used on both tables. Not re-run with the spec columns this time, to avoid creating known failures.",
+    "Spec Query Health query misses failures because of QUERY_HISTORY's default RESULT_LIMIT of 100. It was re-run with RESULT_LIMIT=>10000."
   ]
 }
