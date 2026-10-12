@@ -60,9 +60,8 @@
         "sims_over_60_days_no_usage_proxy": 6870
       },
       "flags": [
-        "Rule changed today: actual TERMINATION_DATE counts, uConnect only, red if MTD < avg of the last 2 MTDs + 500.",
-        "October MTD 18,740 is below the 29,205 threshold, so this is RED. But the baseline is inflated by September's early-month batch: Sep 1-11 had 45,923 terminations vs 11,487 for Aug 1-11 (4x). Full months were Jul 84,803, Aug 52,156, Sep 85,819. October is on par with August's pace and below September's. This looks like batch timing, not a real drop in churn processing.",
-        "Rule note: as specified, this flags red whenever MTD is not at least 500 above the baseline, so a normal month also reads red. Confirm whether the intent is baseline - 500."
+        "Rule changed today: actual TERMINATION_DATE counts, uConnect only, red if MTD < avg of the last 2 MTDs + 500 (threshold confirmed 12 Oct).",
+        "October MTD 18,740 is below the 29,205 threshold, so this is RED. But the baseline is inflated by September's early-month batch: Sep 1-11 had 45,923 terminations vs 11,487 for Aug 1-11 (4x). Full months were Jul 84,803, Aug 52,156, Sep 85,819. October is on par with August's pace and below September's. This looks like batch timing, not a real drop in churn processing."
       ]
     },
     {
