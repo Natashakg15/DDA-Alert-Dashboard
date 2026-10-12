@@ -1,75 +1,74 @@
 {
-  "run_date": "2026-10-09",
-  "run_time": "2026-10-09 05:38 UTC — Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-08, Thursday) vs day before (2026-10-07, Wednesday). Today is excluded as it is an incomplete day.",
+  "run_date": "2026-10-12",
+  "run_time": "2026-10-12 05:27 UTC — Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-11, Sunday) vs day before (2026-10-10, Saturday). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-10-08": 16642,
-        "day_before_2026-10-07": 19242,
-        "same_day_last_month_2026-09-08": 17045,
-        "revenue_cellc_recharge_qty_yesterday": 16840
+        "yesterday_2026-10-11": 16196,
+        "day_before_2026-10-10": 19339,
+        "same_day_last_month_2026-09-11": 19353,
+        "revenue_cellc_recharge_qty_yesterday": 16351
       },
       "flags": [
-        "-13.5% vs day before (threshold -60%) and -2.4% vs same day last month (threshold -20%). Revenue-table quantity (16,840) is within 1.2% of the view count."
+        "-16.3% vs day before (threshold -60%) and -16.3% vs same day last month (threshold -20%). The last-month baseline is a Friday, so a Sunday dip is expected, but it's within 4 points of the threshold. Revenue-table quantity (16,351) is within 1% of the view count."
       ]
     },
     {
       "check": "Active 1",
-      "status": "green",
+      "status": "red",
       "values": {
-        "yesterday_2026-10-08": 4061,
-        "day_before_2026-10-07": 5005,
-        "ratio_vs_day_before": 0.81
+        "yesterday_2026-10-11": 586,
+        "day_before_2026-10-10": 1989,
+        "ratio_vs_day_before": 0.29,
+        "previous_sundays_2026-10-04_and_2026-09-27": "574 / 720"
       },
       "flags": [
-        "Within thresholds (-18.9% vs day before). About 1,023 of yesterday's 4,061 are again the single-store bulk spike, which is not in DIM or Merge. This is the third day running. Treat this green with caution."
+        "-70.5% vs day before breaches the 60% drop rule. This is very likely a false positive caused by a normal Sunday: the previous two Sundays were 574 and 720, and DIM, Merge and Active all agree at exactly 586. A Sunday vs Saturday comparison will trip this rule most weeks. Consider a same-weekday baseline for Active 1."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "red",
+      "status": "green",
       "values": {
-        "dim_subscribers_create_date_2026-10-08": 3038,
-        "uconnect_may_merge_activation_2026-10-08": 3039,
-        "active_subscriptions_usage_2026-10-08": 4061,
-        "pairwise_dim_vs_merge": 1,
-        "pairwise_dim_vs_active": 1023,
-        "pairwise_merge_vs_active": 1022
+        "dim_subscribers_create_date_2026-10-11": 586,
+        "uconnect_may_merge_activation_2026-10-11": 586,
+        "active_subscriptions_usage_2026-10-11": 586,
+        "pairwise_dim_vs_merge": 0,
+        "pairwise_dim_vs_active": 0,
+        "pairwise_merge_vs_active": 0
       },
       "flags": [
-        "Active is 1,023 above DIM and 1,022 above Merge, both over the 300 threshold. DIM and Merge agree (gap of 1).",
-        "The 1,023 excess matches exactly the SmartConnect excess at Fashion Fusion Princess Mkabayi Vryheid (+1,023). This is the third consecutive day of a ~1,023-per-store spike at a different store each time (6 Oct: 3 stores; 7 Oct: A5 C&C Reservoir Hills and ONAIR; 8 Oct: FF Princess Mkabayi Vryheid). It looks like a systematic batch/test load, not organic sales. Data/Ops need to confirm."
+        "All three tables match exactly. There was no bulk spike on Sunday, and Saturday 10 Oct was also clean (Active 1,989 vs Merge 1,990).",
+        "Correction to previous runs: the ~1,022-per-store excess in Active did not start on 6 Oct. A 15-day lookback shows Active above Merge by a multiple of ~1,022 on every weekday since at least 28 Sep: +2,046 (28 Sep), +2,045 (29 Sep), +1,021 (30 Sep), +2,035 (1 Oct), +1,024 (2 Oct), +1,022 (3 Oct, Sat), +1,022 (5 Oct), +3,070 (6 Oct), +2,044 (7 Oct), +1,022 (8 Oct), +2,043 (9 Oct). It was clean on 4, 10 and 11 Oct. This is an ongoing daily pattern that is still unexplained."
       ]
     },
     {
       "check": "Terminations (>60 day usage)",
       "status": "red",
       "values": {
-        "usage_greater_than_60_days_count": 3106
+        "usage_greater_than_60_days_count": 6872
       },
       "flags": [
-        "3,106 is just above the 3,000 RED threshold. It is down 43% from 5,438 on the last run (8 Oct) and 7,460 on 7 Oct, so it looks like a backlog is being cleared. One more small drop would bring it into AMBER."
+        "6,872 is well above the 3,000 RED threshold. It has bounced back up from 3,106 on 9 Oct. Recent readings have swung widely: 5,057 (5 Oct) → 7,460 (7 Oct) → 5,438 (8 Oct) → 3,106 (9 Oct) → 6,872 (12 Oct). Swings of this size suggest the view's population is unstable (refresh timing or logic), not genuine termination movement. Worth checking with whoever owns VW_ACTIVE_SUBSCRIPTIONS_USAGE_DETAILS."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-08": 4012,
-        "uconnect_may_merge_activations_2026-10-08": 3039,
-        "gap": 973,
-        "sc_minus_merge_fashion_fusion_princess_mkabayi_vryheid": 1023,
-        "sc_minus_merge_the_unlimited": 11
+        "smartconnect_activations_2026-10-11": 513,
+        "uconnect_may_merge_activations_2026-10-11": 586,
+        "gap": -73,
+        "merge_minus_sc_spot_connect_app": 70,
+        "sc_minus_merge_the_unlimited": 4
       },
       "flags": [
-        "SmartConnect exceeds Merge by 973 (threshold 10).",
-        "Fashion Fusion Princess Mkabayi Vryheid: 1,040 SC vs 17 Merge (+1,023). This is the same +1,023 per-store signature as the last two days, at a new store.",
-        "Smaller SC > Merge gaps: The Unlimited (+11), Spot Airtime Rewards (+2), Amazing Vouchers (+2), SPAR Kranskop (+1), Build It Hammarsdale (+1). Midas and Pet Pool & Home match exactly.",
-        "Merge > SC (offsetting): Spot Connect App (0 vs 44), Spot Connect (0 vs 12), Uconnect (14 vs 19), Mobile Store (44 vs 48), blank tenant (0 vs 2).",
-        "Note: the TENANT column was used on both tables (the spec's TENANT_NAME / RETAILER_NAME don't exist)."
+        "Merge exceeds SmartConnect by 73 (threshold 10). This time Merge is higher, not SmartConnect.",
+        "Almost all of it is the Spot Connect App channel (3 SC vs 73 Merge), plus Spot Connect (1 vs 6), Mobile Store (9 vs 11) and Uconnect App (5 vs 6). App activations being largely absent from the SC RICA report is a recurring structural offset (43–83 on every recent run). On weekdays the bulk SC excess hid it; on a quiet Sunday it trips the threshold on its own.",
+        "No tenant had SmartConnect above Merge apart from The Unlimited (+4) and Aheers Build and Save (+1). SPAR, Build It, Midas and Pet Pool & Home all match exactly. No bulk-store spike on Sunday."
       ]
     },
     {
@@ -77,12 +76,10 @@
       "status": "green",
       "values": {
         "non_excluded_failures_last_24h": 0,
-        "known_pending_access_failures_excluded": 6,
-        "in_progress_at_check_time": 3
+        "known_pending_access_failures_excluded": 2
       },
       "flags": [
-        "No unexpected failures in the last 24h. The only failures were 6 expected pending-access probes (VW_WHOLESALE_USAGE / DATAWAREHOUSE.MVNX). The 7 Oct failures (VW_TELCO_JOURNEYS_PEL / SFTOENGAIGE timeouts, VW_SIMS_TO_TERMINATE_NEW access) have aged out of the window, and none recurred.",
-        "Checked with QUERY_HISTORY_BY_USER and RESULT_LIMIT=>2000. The spec's QUERY_HISTORY query defaults to 100 rows, and a 10,000-row variant timed out at the MCP layer."
+        "No unexpected failures in the last 24h. The only failures were this run's 2 expected pending-access probes (VW_WHOLESALE_USAGE / DATAWAREHOUSE.MVNX). Checked with QUERY_HISTORY_BY_USER and RESULT_LIMIT=>2000."
       ]
     }
   ],
@@ -97,6 +94,6 @@
   ],
   "errors": [
     "Spec SmartConnect tenant columns (TENANT_NAME / RETAILER_NAME) do not exist, so TENANT was used on both tables.",
-    "A Query Health variant using QUERY_HISTORY with RESULT_LIMIT=>10000 timed out at the MCP layer. QUERY_HISTORY_BY_USER with RESULT_LIMIT=>2000 was used instead."
+    "The Query Health check used QUERY_HISTORY_BY_USER with RESULT_LIMIT=>2000 instead of the spec's QUERY_HISTORY, which defaults to 100 rows."
   ]
 }
