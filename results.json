@@ -1,105 +1,111 @@
 {
-  "run_date": "2026-10-12",
-  "run_time": "2026-10-12 11:30 UTC \u2014 Generated via Snowflake MCP (manual re-run with updated rules + Pargo check)",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-11, Sunday). Today is excluded as it is an incomplete day. Active 1 now compares against the same weekday last month (2026-09-13); Cell C against the day before and 30 days back.",
+  "run_date": "2026-10-13",
+  "run_time": "2026-10-13 05:47 UTC - Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-12, Monday) vs day before (2026-10-11). Today is excluded as it is an incomplete day. Active 1 compares against the same weekday last month (2026-09-14); Cell C against the day before and 30 days back (2026-09-12).",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-10-11": 16196,
-        "day_before_2026-10-10": 19339,
-        "same_day_last_month_2026-09-11": 19353,
-        "pct_vs_day_before": "-16.3%",
-        "pct_vs_same_day_last_month": "-16.3%",
-        "revenue_cellc_recharge_qty_yesterday": 16351
+        "yesterday_2026-10-12": 18157,
+        "day_before_2026-10-11": 16196,
+        "same_day_last_month_2026-09-12": 18269,
+        "pct_vs_day_before": "+12.1%",
+        "pct_vs_same_day_last_month": "-0.6%",
+        "revenue_cellc_recharge_qty_yesterday": 18343
       },
       "flags": [
-        "Within thresholds: -16.3% vs day before (threshold -60%) and -16.3% vs same day last month (threshold -20%). The last-month comparison day is a Friday and yesterday was a Sunday, so a dip is expected. Revenue-table quantity (16,351) is within 1% of the view count."
+        "Within thresholds: +12.1% vs day before (Sunday) and -0.6% vs same day last month (threshold -20%). Revenue-table quantity (18,343) is within 1% of the view count."
       ]
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-10-11": 586,
-        "same_weekday_last_month_2026-09-13": 596,
-        "pct_vs_same_weekday_last_month": "-1.7%"
+        "yesterday_2026-10-12": 3421,
+        "same_weekday_last_month_2026-09-14": 4322,
+        "pct_vs_same_weekday_last_month": "-20.8%"
       },
       "flags": [
-        "Rule changed today: now compared with the same weekday last month (Sunday 13 Sep), not the day before. 586 vs 596 is -1.7%, well within the 60% drop / 2x spike thresholds. Under the old day-before rule this was a false red (Sunday vs Saturday)."
+        "Monday 3,421 vs Monday 14 Sep 4,322 (-20.8%), within the 60% drop / 2x spike thresholds. Neither day is a SA public holiday."
       ]
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "green",
+      "status": "red",
       "values": {
-        "dim_subscribers_create_date_2026-10-11": 586,
-        "uconnect_may_merge_activation_2026-10-11": 586,
-        "active_subscriptions_usage_2026-10-11": 586,
-        "pairwise_dim_vs_merge": 0,
-        "pairwise_dim_vs_active": 0,
-        "pairwise_merge_vs_active": 0
+        "dim_subscribers_create_date_2026-10-12": 2396,
+        "uconnect_may_merge_activation_2026-10-12": 2397,
+        "active_subscriptions_usage_2026-10-12": 3421,
+        "pairwise_dim_vs_merge": 1,
+        "pairwise_dim_vs_active": 1025,
+        "pairwise_merge_vs_active": 1024
       },
       "flags": [
-        "All three tables match exactly (586). No bulk single-store spike on Sunday. The recurring ~1,022-per-store weekday excess in Active/SmartConnect (seen on most weekdays since at least 28 Sep) is still unexplained; expect it to return on weekdays."
+        "RED: Active is 1,025 above DIM and 1,024 above Merge (threshold 300 per pair). DIM and Merge agree within 1.",
+        "This is the recurring ~1,022 weekday excess seen since late Sep. Today it lines up with tenant ONAIR in SmartConnect (1,605 SC vs 580 Merge, +1,025), so the extra records look like ONAIR activations present in Active/SmartConnect but missing from DIM/Merge. Root cause still unexplained."
       ]
     },
     {
       "check": "Terminations",
       "status": "red",
       "values": {
-        "mtd_terminations_2026-10-01_to_10-11": 18740,
-        "prev_mtd_terminations_2026-09-01_to_09-11": 45923,
-        "two_months_ago_mtd_terminations_2026-08-01_to_08-11": 11487,
-        "baseline_avg_last_2_months": 28705,
-        "threshold_baseline_plus_500": 29205,
+        "mtd_terminations_2026-10-01_to_10-12": 19680,
+        "prev_mtd_terminations_2026-09-01_to_09-12": 46352,
+        "two_months_ago_mtd_terminations_2026-08-01_to_08-12": 11487,
+        "baseline_avg_last_2_months": 28919.5,
+        "threshold_baseline_plus_500": 29419.5,
+        "full_month_jun": 72487,
         "full_month_jul": 84803,
         "full_month_aug": 52156,
         "full_month_sep": 85819,
-        "sims_over_60_days_no_usage_proxy": 6870
+        "oct_to_date_all_dates": 22935,
+        "sims_over_60_days_no_usage_proxy": 4222
       },
       "flags": [
-        "Rule changed today: actual TERMINATION_DATE counts, uConnect only, red if MTD < avg of the last 2 MTDs + 500 (threshold confirmed 12 Oct).",
-        "October MTD 18,740 is below the 29,205 threshold, so this is RED. But the baseline is inflated by September's early-month batch: Sep 1-11 had 45,923 terminations vs 11,487 for Aug 1-11 (4x). Full months were Jul 84,803, Aug 52,156, Sep 85,819. October is on par with August's pace and below September's. This looks like batch timing, not a real drop in churn processing."
+        "October MTD 19,680 is below the 29,420 threshold, so RED.",
+        "Looks like batch timing: the baseline is inflated by September's early-month batch (Sep 1-12: 46,352 vs Aug 1-12: 11,487). Full months: Jun 72,487, Jul 84,803, Aug 52,156, Sep 85,819. October's pace is ahead of August's and behind September's."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-11": 513,
-        "uconnect_may_merge_activations_2026-10-11": 586,
-        "gap": -73,
+        "smartconnect_activations_2026-10-12": 3359,
+        "uconnect_may_merge_activations_2026-10-12": 2397,
+        "gap": 962,
         "gap_threshold": 150,
-        "sc_above_merge_tenants": "The Unlimited +4, Aheers Build and Save +1",
-        "merge_above_sc_tenants": "Spot Connect App +70, Spot Connect +5, Mobile Store +2, Uconnect App +1"
+        "sc_above_merge_tenants": "ONAIR +1,025, The Unlimited +9, Amazing Vouchers +2, OnAir Connect 50 +1, Spot Airtime Rewards +1, Spar Eshowe Adams +1, uConnect App +1",
+        "merge_above_sc_tenants": "Spot Connect App +53, uConnect +7, Mobile Store +5, Aheers Build and Save +1, 12 Merge rows with blank tenant"
       },
       "flags": [
-        "Total gap is 73 (Merge higher), within the new 150 threshold (raised from 10 today).",
-        "Still RED on the per-tenant rule (SmartConnect above Merge for any tenant): The Unlimited 476 vs 472 (+4) and Aheers Build and Save 1 vs 0 (+1). Both are tiny. SPAR, Build It, Midas and Pet Pool & Home all match exactly.",
-        "The Merge-side excess is almost entirely Spot Connect App (3 SC vs 73 Merge), the known structural offset: app activations are largely missing from the SC RICA report."
+        "RED: total gap is +962 (SmartConnect higher), above the 150 threshold.",
+        "Driven by ONAIR: 1,605 in SmartConnect vs 580 in Merge (+1,025), the same ~1,025 that shows up in Active vs DIM/Merge.",
+        "Per-tenant rule also trips: The Unlimited 422 vs 413 (+9), Amazing Vouchers +2, OnAir Connect 50 +1, Spot Airtime Rewards +1, Spar Eshowe Adams +1, uConnect App +1. SPAR (other stores), Build It, Midas and Pet Pool & Home all match exactly.",
+        "Spot Connect App (1 SC vs 54 Merge) is the known structural offset."
       ]
     },
     {
       "check": "Pargo Collections",
-      "status": "green",
+      "status": "red",
       "values": {
-        "requests_yesterday_total": 5,
-        "requests_weekday_median_total": 7,
-        "spike_tenants": [],
+        "requests_yesterday_total": 4395,
+        "requests_weekday_median_total": 1596.5,
+        "spike_tenants": [
+          "OnAir Connect 50: 3,263 vs 285.8/day avg28"
+        ],
         "drop_tenants": [],
-        "mature_cohort_collected_pct_total": "32.2% (4,842 orders created 31 Aug-6 Sep)",
-        "mature_cohort_baseline_collected_pct_total": "31.5% (prior 3 weeks)",
+        "mature_cohort_collected_pct_total": "32.3% (4,839 orders created 31 Aug-6 Sep)",
+        "mature_cohort_baseline_collected_pct_total": "31.4% (prior 3 weeks)",
         "collection_drop_tenants": [],
         "newly_overdue_open_total": 0,
         "historic_overdue_open_total": 714
       },
       "flags": [
-        "New check (added today). Sunday: 5 requests vs a same-weekday median of 7, with no spikes or drops.",
-        "Fully resolved cohort (created 31 Aug-6 Sep): 32.2% collected vs 31.5% baseline, no tenant down 10+ points on meaningful volume. Expiry is working: 0 orders overdue in the newly-resolved week.",
-        "Known issue (raised 12 Oct, with Sasha): OnAir Connect 50 had ~10.6k bulk-loaded orders on 11/14/16/21/30 Sep, ~95% uncollected. WhatsApp Self RICA had a similar 2,770-order batch on 16 Sep (not yet raised). These enter the collection/expiry windows from ~22 Oct.",
-        "714 historic orders (Apr-early May, plus 6 Gumtree in July) were never expired. This is a known backlog and is not flagged."
+        "RED: OnAir Connect 50 had 3,263 requests yesterday vs a 285.8/day 28-day average (11x). This is a NEW bulk batch on 12 Oct, on top of the known Sep batches (11/14/16/21/30 Sep, ~10.6k orders, raised with Sasha on 12 Oct). Worth telling Sasha the bulk loading is continuing.",
+        "No drops: excluding OnAir Connect 50, requests were 1,132 vs a same-weekday median of ~1,000 (The Unlimited 718 vs 685, Mobile Store 178 vs 138).",
+        "Fully resolved cohort (created 31 Aug-6 Sep): 32.3% collected vs 31.4% baseline. No tenant down 10+ points on 50+ orders (WhatsApp Self RICA -15.2 pp and First Group -18.5 pp are on only 31 and 21 orders). Expiry is working: 0 newly overdue.",
+        "714 historic never-expired orders, unchanged from yesterday (known backlog, not flagged). The OnAir Connect 50 / WhatsApp Self RICA Sep batches enter these windows from ~22 Oct."
       ]
     },
     {
@@ -107,12 +113,10 @@
       "status": "green",
       "values": {
         "non_excluded_failures_last_24h": 0,
-        "known_pending_access_failures_excluded": 4,
-        "adhoc_diagnostic_failures_noted": 3
+        "known_pending_access_failures_excluded": 2
       },
       "flags": [
-        "No unexpected pipeline failures. 4 failures were the expected pending-access probes (VW_WHOLESALE_USAGE / DATAWAREHOUSE.MVNX).",
-        "3 failures on VW_SC_COLLECTION_STATUS_REPORT were ad-hoc diagnostic queries run by hand on 12 Oct during the Pargo investigation (the MCP role has no access to that table). They are not dashboard queries."
+        "No unexpected failures. 2 failures were the expected pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX)."
       ]
     }
   ],
@@ -120,25 +124,25 @@
     {
       "check": "Wholesale Usage",
       "status": "pending",
-      "note": "MCP access not yet granted \u2014 UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized for MCP_SPOT_ROLE.",
+      "note": "MCP access not yet granted - UCONNECT_DW.ANALYTICS.VW_WHOLESALE_USAGE does not exist or not authorized for MCP_SPOT_ROLE.",
       "flags": []
     },
     {
       "check": "CDR Recon",
       "status": "pending",
-      "note": "MCP access not yet granted \u2014 schema DATAWAREHOUSE.MVNX does not exist or not authorized for MCP_SPOT_ROLE.",
+      "note": "MCP access not yet granted - schema DATAWAREHOUSE.MVNX does not exist or not authorized for MCP_SPOT_ROLE.",
       "flags": []
     }
   ],
   "manual": [
     {
-      "check": "Cell C Recharges \u2014 Telco Dashboard Alignment",
+      "check": "Cell C Recharges - Telco Dashboard Alignment",
       "status": "manual",
-      "note": "Verify recharges on Telco BI dashboard \u2014 App, V Redemptions & Subs",
+      "note": "Verify recharges on Telco BI dashboard - App, V Redemptions & Subs",
       "flags": []
     },
     {
-      "check": "Wholesale Usage \u2014 Telco Dashboard",
+      "check": "Wholesale Usage - Telco Dashboard",
       "status": "manual",
       "note": "Cross-check usage totals on Telco dashboard",
       "flags": []
