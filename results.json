@@ -1,121 +1,118 @@
 {
-  "run_date": "2026-10-14",
-  "run_time": "2026-10-14 05:04 UTC - Generated via Snowflake MCP",
-  "comparison_note": "All comparisons use completed days: yesterday (2026-10-13, Tuesday) vs day before (2026-10-12). Today is excluded as it is an incomplete day. Active 1 compares against the same weekday last month (2026-09-15); Cell C against the day before and 30 days back (2026-09-13).",
+  "run_date": "2026-10-15",
+  "run_time": "2026-10-15 05:06 UTC - Generated via Snowflake MCP",
+  "comparison_note": "All comparisons use completed days: yesterday (2026-10-14) vs day before (2026-10-13). Today is excluded as it is an incomplete day.",
   "automated": [
     {
       "check": "Cell C Recharges",
       "status": "green",
       "values": {
-        "yesterday_2026-10-13": 17075,
-        "day_before_2026-10-12": 18157,
-        "same_day_last_month_2026-09-13": 15107,
-        "pct_vs_day_before": "-6.0%",
-        "pct_vs_same_day_last_month": "+13.0%",
-        "revenue_cellc_recharge_qty_yesterday": 17262
+        "yesterday": 17140,
+        "day_before": 17075,
+        "same_day_last_month": 17005,
+        "same_day_last_month_date": "2026-09-14",
+        "pct_vs_day_before": 0.4,
+        "pct_vs_same_day_last_month": 0.8,
+        "merge_revenue_recharge_quantity_yesterday": 17316
       },
-      "flags": [
-        "Within thresholds: -6.0% vs day before (threshold -60%) and +13.0% vs same day last month (13 Sep was a Sunday; threshold -20%). Revenue-table quantity (17,262) is within 1.1% of the view count."
-      ]
+      "flags": []
     },
     {
       "check": "Active 1",
       "status": "green",
       "values": {
-        "yesterday_2026-10-13": 3452,
-        "same_weekday_last_month_2026-09-15": 4538,
-        "pct_vs_same_weekday_last_month": "-23.9%"
+        "yesterday": 2313,
+        "same_weekday_last_month": 3578,
+        "same_weekday_last_month_date": "2026-09-16 (Wed)",
+        "pct_vs_same_weekday_last_month": -35.4
       },
-      "flags": [
-        "Tuesday 3,452 vs Tuesday 15 Sep 4,538 (-23.9%), within the 60% drop / 2x spike thresholds. Neither day is a SA public holiday."
-      ]
+      "flags": []
     },
     {
       "check": "DIM Subscriber Alignment",
-      "status": "red",
+      "status": "green",
       "values": {
-        "dim_subscribers_create_date_2026-10-13": 2429,
-        "uconnect_may_merge_activation_2026-10-13": 2430,
-        "active_subscriptions_usage_2026-10-13": 3452,
-        "pairwise_dim_vs_merge": 1,
-        "pairwise_dim_vs_active": 1023,
-        "pairwise_merge_vs_active": 1022
+        "dim_subscribers": 2313,
+        "merge": 2313,
+        "active": 2313,
+        "diff_dim_vs_merge": 0,
+        "diff_dim_vs_active": 0,
+        "diff_merge_vs_active": 0
       },
-      "flags": [
-        "RED: Active is 1,023 above DIM and 1,022 above Merge (threshold 300 per pair). DIM and Merge agree within 1.",
-        "Same recurring ~1,022 weekday excess. Today the matching SmartConnect excess sits under tenant 'Spar Maphumulo' (1,029 SC vs 6 Merge, +1,023) rather than ONAIR as yesterday (ONAIR now matches: 575 vs 576). The extra ~1,022 records appear to move between tenant labels day to day, which points at a loading/tenant-assignment issue upstream rather than real store volume. Root cause still unexplained."
-      ]
+      "flags": []
     },
     {
       "check": "Terminations",
       "status": "red",
       "values": {
-        "mtd_terminations_2026-10-01_to_10-13": 24343,
-        "prev_mtd_terminations_2026-09-01_to_09-13": 46352,
-        "two_months_ago_mtd_terminations_2026-08-01_to_08-13": 11488,
-        "baseline_avg_last_2_months": 28920.0,
-        "threshold_baseline_plus_500": 29420.0,
-        "full_month_jun": 72487,
-        "full_month_jul": 84803,
-        "full_month_aug": 52156,
-        "full_month_sep": 85819,
-        "oct_to_date_all_dates": 25951,
-        "sims_over_60_days_no_usage_proxy": 4044
+        "mtd_terminations": 25952,
+        "prev_mtd_terminations": 46359,
+        "two_months_ago_mtd_terminations": 11491,
+        "baseline_avg_last_2_months": 28925,
+        "threshold_baseline_plus_500": 29425,
+        "sims_over_60_days_no_usage_proxy": 5106,
+        "full_month_totals": {
+          "2026-06": 72487,
+          "2026-07": 84803,
+          "2026-08": 52156,
+          "2026-09": 85819,
+          "2026-10 (to 14th)": 25952
+        }
       },
       "flags": [
-        "October MTD 24,343 is below the 29,420 threshold, so RED.",
-        "Looks like batch timing: the baseline is inflated by September's early-month batch (Sep 1-13: 46,352 vs Aug 1-13: 11,488). October MTD rose 4,663 since yesterday's run (19,680) and is well ahead of August's pace. Full months: Jun 72,487, Jul 84,803, Aug 52,156, Sep 85,819."
+        "Oct MTD terminations to the 14th = 25,952 vs threshold 29,425 (baseline 28,925 = avg of Sep MTD 46,359 and Aug MTD 11,491, +500). Looks like batch timing rather than a real drop: Oct to the 14th is already ~50% of Aug's full month (52,156) and ~30% of Sep's (85,819), and the baseline is skewed by Sep's early batch (46,359 by the 14th vs 11,491 for Aug)."
       ]
     },
     {
       "check": "SmartConnect vs Datawarehouse",
       "status": "red",
       "values": {
-        "smartconnect_activations_2026-10-13": 3412,
-        "uconnect_may_merge_activations_2026-10-13": 2430,
-        "gap": 982,
-        "gap_threshold": 150,
-        "sc_above_merge_tenants": "Spar Maphumulo +1,023, Ignition Meridian Office +18, The Unlimited +15, Build It Burmeisters Beacon bay +9, OnAir Connect 50 +3, WhatsApp Self RICA +2, Fashion Fusion Bridge City +1, Spot Airtime Rewards +1",
-        "merge_above_sc_tenants": "Spot Connect App +51, Spot Connect +20, Mobile Store +13, uConnect +4, OnAir +1, 1 Merge row with blank tenant"
+        "smartconnect_total": 2216,
+        "merge_total": 2313,
+        "total_diff": -97,
+        "tenants_sc_exceeds_merge": [
+          "THE UNLIMITED: SC 190 vs merge 184 (+6)",
+          "IGNITION MERIDIAN OFFICE: SC 50 vs merge 47 (+3)",
+          "SPAR ESIKHAWINI: SC 20 vs merge 18 (+2)",
+          "SPOT AIRTIME REWARDS: SC 20 vs merge 18 (+2)",
+          "ONAIR CONNECT 50: SC 26 vs merge 25 (+1)"
+        ]
       },
       "flags": [
-        "RED: total gap is +982 (SmartConnect higher), above the 150 threshold.",
-        "Driven by Spar Maphumulo: 1,029 in SmartConnect vs 6 in Merge (+1,023), the same ~1,022 that shows up in Active vs DIM/Merge. Yesterday this excess was under ONAIR.",
-        "Per-tenant rule also trips (SC > Merge): Ignition Meridian Office 36 vs 18 (+18), The Unlimited 390 vs 375 (+15), Build It Burmeisters Beacon bay 13 vs 4 (+9), OnAir Connect 50 41 vs 38 (+3), WhatsApp Self RICA 11 vs 9 (+2), Fashion Fusion Bridge City 15 vs 14 (+1), Spot Airtime Rewards 21 vs 20 (+1). All other SPAR, Midas and Pet Pool & Home stores match exactly.",
-        "Spot Connect App (0 SC vs 51 Merge) and Spot Connect (0 vs 20) are the known structural offset."
+        "Total gap 97 is within the 150 tolerance (merge higher; Spot Connect App 0 vs 67 and Spot Connect 0 vs 18 are the known structural offset).",
+        "SmartConnect exceeds merge for 5 tenants: THE UNLIMITED +6 (190 vs 184), IGNITION MERIDIAN OFFICE +3 (50 vs 47), SPAR ESIKHAWINI +2 (20 vs 18), SPOT AIRTIME REWARDS +2 (20 vs 18), ONAIR CONNECT 50 +1 (26 vs 25)."
       ]
     },
     {
       "check": "Pargo Collections",
-      "status": "green",
+      "status": "red",
       "values": {
-        "requests_yesterday_total": 1279,
-        "requests_weekday_median_total": 986.5,
+        "requests_yesterday_total": 959,
+        "requests_weekday_median_total": 1745,
+        "requests_weekday_median_total_excl_onair_connect_50": 1021,
         "spike_tenants": [],
         "drop_tenants": [],
-        "mature_cohort_collected_pct_total": "33.2% (5,012 orders created 1-7 Sep)",
-        "mature_cohort_baseline_collected_pct_total": "31.5% (16,649 orders created 11-31 Aug)",
+        "mature_cohort_collected_pct_total": 32.9,
+        "mature_cohort_baseline_collected_pct_total": 31.9,
         "collection_drop_tenants": [],
         "newly_overdue_open_total": 0,
         "historic_overdue_open_total": 714
       },
       "flags": [
-        "No spikes by rule. Note: OnAir Connect 50 still had 321 requests yesterday (normal is ~2-10/month); it does not trip the 3x rule only because its 28-day average is inflated by the Sep and 12 Oct bulk batches. Bulk loading appears to be continuing - see the known open issue raised with Sasha.",
-        "No drops: 1,279 requests vs a same-weekday median of 986.5 (The Unlimited 585 vs 680.5, Mobile Store 162 vs 147).",
-        "Fully resolved cohort (created 1-7 Sep): 33.2% collected vs 31.5% baseline. No tenant down 10+ points on 50+ orders (WhatsApp Self RICA -14.9 pp on 31, OnAir -14.9 pp on 26, First Group -11.4 pp on 23). Expiry is working: 0 newly overdue.",
-        "714 historic never-expired orders, unchanged (known backlog, not flagged). The OnAir Connect 50 / WhatsApp Self RICA Sep batches enter these windows from ~22 Oct."
+        "Total requests yesterday 959 = 55% of the summed same-weekday median 1,745 (rule: <60% = RED). This is an artefact of the known OnAir Connect 50 bulk batches (see 2026-10-12 open issue): its weekday median is 724 because the 16 Sep and 30 Sep batch days fall on the same weekday. Excluding OnAir Connect 50 the median total is 1,021 and yesterday is 94% of it - normal weekday volume. No individual tenant drop or spike.",
+        "Mature cohort (created 2-8 Sep) collected 32.9% vs 31.9% baseline; no tenant drop meets the amber/red size gates (WhatsApp Self RICA -16.1pp but only 32 requests). The Sep OnAir Connect 50 / WhatsApp Self RICA batches have not entered the cohort window yet (from ~22 Oct).",
+        "Newly overdue open = 0. Historic overdue backlog 714 (The Unlimited 334, Spot Connect 193, uConnect 181, Gumtree 6) - unchanged known backlog, not flagged."
       ]
     },
     {
       "check": "Snowflake Query Health (Spot MCP)",
       "status": "green",
       "values": {
-        "non_excluded_failures_last_24h": 0,
-        "known_pending_access_failures_excluded": 2
+        "failed_queries_24h": 2,
+        "excluded_expected_failures": 2,
+        "unexpected_failures": 0
       },
-      "flags": [
-        "No unexpected failures. 2 failures were the expected pending-access probes (VW_WHOLESALE_USAGE, DATAWAREHOUSE.MVNX)."
-      ]
+      "flags": []
     }
   ],
   "pending": [
@@ -152,7 +149,5 @@
       "flags": []
     }
   ],
-  "errors": [
-    "SmartConnect spec columns TENANT_NAME / RETAILER_NAME don't exist, so TENANT was used on both tables."
-  ]
+  "errors": []
 }
